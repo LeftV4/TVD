@@ -1,5 +1,3 @@
-package org.example.tvd;
-
 import javafx.application.Application;
 
 public class Launcher {
