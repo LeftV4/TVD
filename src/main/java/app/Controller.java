@@ -1,3 +1,5 @@
+package app;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -11,7 +13,7 @@ public class Controller {
 
     @FXML
     public void connectDB(){
-        try (Connection conn = Database.getConnection();) {
+        try (Connection conn = Database.getConnection()) {
             connLabel.setText("Connected!");
             connLabel.setStyle("-fx-text-fill: green");
         }catch (Exception e){
