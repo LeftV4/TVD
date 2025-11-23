@@ -1,5 +1,5 @@
 CREATE TABLE users (
-    user_id SERIAL PRIMARY KEY, --Serial Auto gnerates the id with increasing numbers (First user has id 1, second id 2 etc)
+    user_id SERIAL PRIMARY KEY, --Serial Auto generates the id with increasing numbers (First user has id 1, second id 2 etc.)
     username VARCHAR(50) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     role VARCHAR(20) NOT NULL CHECK (role IN ('admin', 'staff'))
