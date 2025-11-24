@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1280.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.Controller">
-      <Label layoutX="424.0" layoutY="73.0" stylesheets="@style.css" text="Hotel Management System">
+<AnchorPane fx:id="rootPane" prefHeight="800.0" prefWidth="1280.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.Controller">
+      <Label layoutX="403.0" layoutY="82.0" text="Hotel Management System">
          <font>
-            <Font size="36.0" />
+            <Font name="Century Gothic" size="36.0" />
          </font>
       </Label>
    <Label fx:id="connLabel" layoutX="14.0" layoutY="751.0" text="ConnectionLabel" textAlignment="CENTER">
@@ -15,9 +22,133 @@
          <Font size="24.0" />
       </font>
    </Label>
-   <Label layoutX="14.0" layoutY="716.0" stylesheets="@style.css" text="Status:">
+   <Label layoutX="14.0" layoutY="716.0" prefHeight="35.0" prefWidth="154.0" text="Server Status:">
       <font>
          <Font size="24.0" />
       </font>
    </Label>
+   <Label fx:id="messLabel" alignment="CENTER" layoutX="468.0" layoutY="215.0" prefHeight="17.0" prefWidth="344.0" textAlignment="CENTER" />
+    <StackPane fx:id="signInBox" layoutX="468.0" layoutY="223.0" prefHeight="355.0" prefWidth="344.0">
+        <VBox fx:id="registerBox" alignment="CENTER" disable="true" prefHeight="200.0" prefWidth="249.0" spacing="5.0" visible="false">
+            <TextField promptText="Enter Email">
+                <font>
+                    <Font size="18.0" />
+                </font>
+            </TextField>
+            <PasswordField promptText="Enter Password">
+                <font>
+                    <Font size="18.0" />
+                </font>
+            </PasswordField>
+            <PasswordField promptText="Confirm Password">
+                <font>
+                    <Font size="18.0" />
+                </font>
+            </PasswordField>
+            <Label text="I am a:">
+                <font>
+                    <Font size="18.0" />
+                </font>
+            </Label>
+            <RadioButton mnemonicParsing="false" text="User">
+                <toggleGroup>
+                    <ToggleGroup fx:id="roleGroup" />
+                </toggleGroup>
+                <font>
+                    <Font size="18.0" />
+                </font>
+            </RadioButton>
+            <RadioButton mnemonicParsing="false" text="Staff" toggleGroup="$roleGroup">
+                <font>
+                    <Font size="18.0" />
+                </font>
+            </RadioButton>
+            <RadioButton mnemonicParsing="false" text="Admin" toggleGroup="$roleGroup">
+                <font>
+                    <Font size="18.0" />
+                </font>
+            </RadioButton>
+            <Button mnemonicParsing="false" text="Register">
+                <font>
+                    <Font size="24.0" />
+                </font>
+            </Button>
+            <Button mnemonicParsing="false" onMouseClicked="#backStart" text="Back">
+                <font>
+                    <Font size="18.0" />
+                </font>
+            </Button>
+        </VBox>
+        <VBox fx:id="loginBox" alignment="CENTER" disable="true" prefHeight="200.0" prefWidth="249.0" spacing="5.0" visible="false">
+            <TextField fx:id="loginEmail" prefHeight="34.0" prefWidth="194.0" promptText="Enter email">
+                <font>
+                    <Font size="18.0" />
+                </font>
+            </TextField>
+            <PasswordField fx:id="loginPassword" promptText="Enter Password">
+                <font>
+                    <Font size="18.0" />
+                </font>
+            </PasswordField>
+            <PasswordField fx:id="rolePass" promptText="Enter Role Passphrase">
+                <font>
+                    <Font size="18.0" />
+                </font>
+            </PasswordField>
+            <Button mnemonicParsing="false" onMouseClicked="#logIn" text="Log In">
+                <font>
+                    <Font size="24.0" />
+                </font>
+            </Button>
+            <Button mnemonicParsing="false" onMouseClicked="#backStart" text="Back">
+                <font>
+                    <Font size="18.0" />
+                </font>
+            </Button>
+        </VBox>
+        <VBox fx:id="infoBox" alignment="CENTER" disable="true" prefHeight="355.0" prefWidth="242.0" spacing="5.0" visible="false">
+            <Label text="Please Register your info:">
+                <font>
+                    <Font size="18.0" />
+                </font>
+            </Label>
+            <TextField promptText="First Name">
+                <font>
+                    <Font size="18.0" />
+                </font>
+            </TextField>
+            <TextField promptText="Last Name">
+                <font>
+                    <Font size="18.0" />
+                </font>
+            </TextField>
+            <TextField promptText="Phone Number">
+                <font>
+                    <Font size="18.0" />
+                </font>
+            </TextField>
+            <Button mnemonicParsing="false" text="Confirm">
+                <font>
+                    <Font size="18.0" />
+                </font>
+            </Button>
+            <Button mnemonicParsing="false" text="Back">
+                <font>
+                    <Font size="18.0" />
+                </font>
+            </Button>
+        </VBox>
+        <VBox fx:id="startBox" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="355.0" prefWidth="241.0" spacing="20.0">
+            <Button mnemonicParsing="false" onMouseClicked="#startRegister" text="Register">
+                <font>
+                    <Font size="24.0" />
+                </font>
+            </Button>
+            <Button mnemonicParsing="false" onMouseClicked="#startLogin" text="Log In">
+                <font>
+                    <Font size="24.0" />
+                </font>
+            </Button>
+        </VBox>
+    </StackPane>
 </AnchorPane>

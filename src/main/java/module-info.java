@@ -5,6 +5,5 @@ module TVD {
     requires javafx.graphics;
 
     opens app to javafx.fxml;
-
     exports app;
 }

@@ -1,16 +1,40 @@
+DROP TABLE IF EXISTS users cascade;
+DROP TABLE IF EXISTS guests cascade;
+DROP TABLE IF EXISTS admins cascade;
+DROP TABLE IF EXISTS staff CASCADE;
+DROP TABLE IF EXISTS room_types cascade;
+DROP TABLE IF EXISTS rooms cascade;
+DROP TABLE IF EXISTS reservations cascade;
+DROP TABLE IF EXISTS payments cascade;
+DROP TABLE IF EXISTS logfile cascade;
+
+
+
 CREATE TABLE users (
-    user_id SERIAL PRIMARY KEY, --Serial Auto generates the id with increasing numbers (First user has id 1, second id 2 etc.)
-    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(50) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    role VARCHAR(20) NOT NULL CHECK (role IN ('admin', 'staff'))
+    role VARCHAR(20) NOT NULL CHECK (role IN ('admin', 'staff', 'guest'))
 );
 
 CREATE TABLE guests (
-    guest_id SERIAL PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     phone VARCHAR(20),
-    email VARCHAR(100)
+    email VARCHAR(50)PRIMARY KEY NOT NULL REFERENCES users(email)
+);
+
+CREATE TABLE admins (
+    first_name varchar(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    phone varchar(20),
+    email VARCHAR(50)PRIMARY KEY NOT NULL REFERENCES users(email)
+);
+
+CREATE TABLE staff (
+    first_name varchar(50) NOT NULL,
+    last_name VARCHAR(50) not null,
+    phone varchar(20),
+    email VARCHAR(50) PRIMARY KEY NOT NULL REFERENCES users(email)
 );
 
 CREATE TABLE room_types (
@@ -28,11 +52,10 @@ CREATE TABLE rooms (
 
 CREATE TABLE reservations (
     reservation_id SERIAL PRIMARY KEY,
-    guest_id INT NOT NULL REFERENCES guests(guest_id) ON DELETE CASCADE,
+    guest_email VARCHAR(50) NOT NULL REFERENCES guests(email) ON DELETE CASCADE,
     room_id INT NOT NULL REFERENCES rooms(room_id) ON DELETE RESTRICT,
     check_in DATE NOT NULL,
-    check_out DATE NOT NULL CHECK (check_out > check_in),
-    created_by INT NOT NULL REFERENCES users(user_id) ON DELETE RESTRICT 
+    check_out DATE NOT NULL CHECK (check_out > check_in)
 );
 
 CREATE TABLE payments (

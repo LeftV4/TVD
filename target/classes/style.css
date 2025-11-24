@@ -1,9 +1,7 @@
-@font-face{
-    font-family: "Montserrat";
+@font-face {
     src: url("/Montserrat.ttf");
 }
-
-
 .label{
-    -fx-font-family: "Montserrat";
+    -fx-font-family: 'Century Gothic';
+    -fx-font-size: 30px;
 }
