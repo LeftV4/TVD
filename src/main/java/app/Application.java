@@ -1,5 +1,6 @@
 package app;
 
+import javafx.animation.AnimationTimer;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -16,5 +17,11 @@ public class Application extends javafx.application.Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.setTitle("Hotel Management System");
         primaryStage.show();
+
+
+
+
+
+
     }
 }
