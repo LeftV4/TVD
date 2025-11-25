@@ -3,5 +3,6 @@
 }
 .label{
     -fx-font-family: 'Century Gothic';
-    -fx-font-size: 30px;
 }
+
+#header {-fx-font-size: 36px}

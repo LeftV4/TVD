@@ -12,35 +12,35 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="rootPane" prefHeight="800.0" prefWidth="1280.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.Controller">
-      <Label layoutX="403.0" layoutY="82.0" text="Hotel Management System">
+      <Label layoutX="403.0" layoutY="82.0" style="-fx-font-size: 36;" text="Hotel Management System">
          <font>
             <Font name="Century Gothic" size="36.0" />
          </font>
       </Label>
-   <Label fx:id="connLabel" layoutX="14.0" layoutY="751.0" text="ConnectionLabel" textAlignment="CENTER">
+   <Label fx:id="connLabel" layoutX="14.0" layoutY="751.0" prefHeight="35.0" prefWidth="200.0" style="-fx-text-fill: red;" text="Not Connected" textAlignment="CENTER">
       <font>
          <Font size="24.0" />
       </font>
    </Label>
-   <Label layoutX="14.0" layoutY="716.0" prefHeight="35.0" prefWidth="154.0" text="Server Status:">
+   <Label layoutX="14.0" layoutY="716.0" prefHeight="35.0" prefWidth="200.0" text="Server Status:">
       <font>
          <Font size="24.0" />
       </font>
    </Label>
-   <Label fx:id="messLabel" alignment="CENTER" layoutX="468.0" layoutY="215.0" prefHeight="17.0" prefWidth="344.0" textAlignment="CENTER" />
+   <Label fx:id="messLabel" alignment="CENTER" layoutX="403.0" layoutY="173.0" prefHeight="17.0" prefWidth="475.0" style="-fx-text-fill: red;" textAlignment="CENTER" />
     <StackPane fx:id="signInBox" layoutX="468.0" layoutY="223.0" prefHeight="355.0" prefWidth="344.0">
-        <VBox fx:id="registerBox" alignment="CENTER" disable="true" prefHeight="200.0" prefWidth="249.0" spacing="5.0" visible="false">
-            <TextField promptText="Enter Email">
+        <VBox fx:id="registerBox" alignment="CENTER" cacheShape="false" disable="true" prefHeight="200.0" prefWidth="249.0" spacing="5.0" visible="false">
+            <TextField fx:id="regEmail" promptText="Enter Email">
                 <font>
                     <Font size="18.0" />
                 </font>
             </TextField>
-            <PasswordField promptText="Enter Password">
+            <PasswordField fx:id="regPassword" promptText="Enter Password">
                 <font>
                     <Font size="18.0" />
                 </font>
             </PasswordField>
-            <PasswordField promptText="Confirm Password">
+            <PasswordField fx:id="regConfirm" promptText="Confirm Password">
                 <font>
                     <Font size="18.0" />
                 </font>
@@ -50,7 +50,7 @@
                     <Font size="18.0" />
                 </font>
             </Label>
-            <RadioButton mnemonicParsing="false" text="User">
+            <RadioButton fx:id="userRadio" mnemonicParsing="false" text="User">
                 <toggleGroup>
                     <ToggleGroup fx:id="roleGroup" />
                 </toggleGroup>
@@ -58,24 +58,29 @@
                     <Font size="18.0" />
                 </font>
             </RadioButton>
-            <RadioButton mnemonicParsing="false" text="Staff" toggleGroup="$roleGroup">
+            <RadioButton fx:id="staffRadio" mnemonicParsing="false" text="Staff" toggleGroup="$roleGroup">
                 <font>
                     <Font size="18.0" />
                 </font>
             </RadioButton>
-            <RadioButton mnemonicParsing="false" text="Admin" toggleGroup="$roleGroup">
+            <RadioButton fx:id="adminRadio" mnemonicParsing="false" text="Admin" toggleGroup="$roleGroup">
                 <font>
                     <Font size="18.0" />
                 </font>
             </RadioButton>
-            <Button mnemonicParsing="false" text="Register">
+            <PasswordField fx:id="rolePass" disable="true" promptText="Enter Role Passphrase" visible="false">
+                <font>
+                    <Font size="18.0" />
+                </font>
+            </PasswordField>
+            <Button mnemonicParsing="false" onMouseClicked="#registerUser" text="Register">
                 <font>
                     <Font size="24.0" />
                 </font>
             </Button>
             <Button mnemonicParsing="false" onMouseClicked="#backStart" text="Back">
                 <font>
-                    <Font size="18.0" />
+                    <Font size="24.0" />
                 </font>
             </Button>
         </VBox>
@@ -86,11 +91,6 @@
                 </font>
             </TextField>
             <PasswordField fx:id="loginPassword" promptText="Enter Password">
-                <font>
-                    <Font size="18.0" />
-                </font>
-            </PasswordField>
-            <PasswordField fx:id="rolePass" promptText="Enter Role Passphrase">
                 <font>
                     <Font size="18.0" />
                 </font>
@@ -112,27 +112,27 @@
                     <Font size="18.0" />
                 </font>
             </Label>
-            <TextField promptText="First Name">
+            <TextField fx:id="regFname" promptText="First Name">
                 <font>
                     <Font size="18.0" />
                 </font>
             </TextField>
-            <TextField promptText="Last Name">
+            <TextField fx:id="regLname" promptText="Last Name">
                 <font>
                     <Font size="18.0" />
                 </font>
             </TextField>
-            <TextField promptText="Phone Number">
+            <TextField fx:id="regPhone" promptText="Phone Number">
                 <font>
                     <Font size="18.0" />
                 </font>
             </TextField>
-            <Button mnemonicParsing="false" text="Confirm">
+            <Button mnemonicParsing="false" onMouseClicked="#registerInfo" text="Confirm">
                 <font>
                     <Font size="18.0" />
                 </font>
             </Button>
-            <Button mnemonicParsing="false" text="Back">
+            <Button mnemonicParsing="false" onMouseClicked="#backStart" text="Back">
                 <font>
                     <Font size="18.0" />
                 </font>

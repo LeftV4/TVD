@@ -10,7 +10,6 @@ public class Database {
     private static final String PASSWORD = "smth2025";
 
     public static Connection getConnection() throws SQLException {
-        System.out.print("Connecting to database...");
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 }
