@@ -118,16 +118,38 @@ public class Controller{
         signInBox.getChildren().remove(loginBox);
         signInBox.getChildren().remove(registerBox);
         signInBox.getChildren().remove(startBox);
-        signInBox.getChildren().remove(loginBox);
+        signInBox.getChildren().remove(infoBox);
         rootPane.getChildren().remove(messLabel);
         Label welcLabel = new Label("Welcome!");
         signInBox.getChildren().add(welcLabel);
 
     }
     public void registerUser(){
+        if(regEmail.getText().isEmpty() || regPassword.getText().isEmpty()){
+            messLabel.setText("Please fill all Fields!");
+            messLabel.setStyle("-fx-text-fill: red");
+            return;
+        }
+		infoBox.setVisible(true);
+		infoBox.setDisable(false);
+		registerBox.setVisible(false);
+		registerBox.setDisable(true);
 
+		//radiochoices logic here
+		
     }
     public void registerInfo(){
-
+        if(regPhone.getText().isEmpty() || regFname.getText().isEmpty() || regLname.getText().isEmpty()){
+            messLabel.setText("Please fill all Fields!");
+            messLabel.setStyle("-fx-text-fill: red");
+            return;
+		}
+		signInBox.getChildren().remove(loginBox);
+        signInBox.getChildren().remove(registerBox);
+        signInBox.getChildren().remove(startBox);
+        signInBox.getChildren().remove(infoBox);
+        rootPane.getChildren().remove(messLabel);
+        Label welcLabel = new Label("Welcome!");
+        signInBox.getChildren().add(welcLabel);
     }
 }
