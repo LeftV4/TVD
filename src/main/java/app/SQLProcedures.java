@@ -34,13 +34,14 @@ public class SQLProcedures {
     public static int registerInfo(Connection conn, String fname, String lname, String phone, String role, String email) {
         int status = -1;
         System.out.println("Registering Info...");
-        String sql = "SELECT register_info(?, ?, ?, ?)";
+        String sql = "SELECT register_info(?, ?, ?, ?, ?)";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, fname);
             stmt.setString(2, lname);
             stmt.setString(3, phone);
             stmt.setString(4, role);
+            stmt.setString(5, email);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {

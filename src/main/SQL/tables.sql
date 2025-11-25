@@ -20,14 +20,14 @@ CREATE TABLE guests (
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     phone VARCHAR(20),
-    email VARCHAR(50)PRIMARY KEY NOT NULL REFERENCES users(email)
+    email VARCHAR(50) PRIMARY KEY NOT NULL REFERENCES users(email)
 );
 
 CREATE TABLE admins (
     first_name varchar(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     phone varchar(20),
-    email VARCHAR(50)PRIMARY KEY NOT NULL REFERENCES users(email)
+    email VARCHAR(50) PRIMARY KEY NOT NULL REFERENCES users(email)
 );
 
 CREATE TABLE staff (

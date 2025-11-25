@@ -151,8 +151,11 @@ public class Controller{
         signInBox.getChildren().remove(startBox);
         signInBox.getChildren().remove(infoBox);
         rootPane.getChildren().remove(messLabel);
-        Label welcLabel = new Label("Welcome!");
-        signInBox.getChildren().add(welcLabel);
+        appEmail = email;
+        try (Connection conn = Database.getConnection()){
+            Label welcLabel = new Label("Welcome! " + SQLProcedures.getFirstName(conn, appEmail));
+            signInBox.getChildren().add(welcLabel);
+        }catch (SQLException e) {e.printStackTrace();}
 
     }
     public void registerUser(){
@@ -233,7 +236,7 @@ public class Controller{
         signInBox.getChildren().remove(infoBox);
         rootPane.getChildren().remove(messLabel);
         try (Connection conn = Database.getConnection()){
-            Label welcLabel = new Label("Welcome!" + SQLProcedures.getFirstName(conn, appEmail));
+            Label welcLabel = new Label("Welcome! " + SQLProcedures.getFirstName(conn, appEmail));
             signInBox.getChildren().add(welcLabel);
         }catch (SQLException e) {e.printStackTrace();}
 
