@@ -1,8 +1,3 @@
-@font-face {
-    src: url("/Montserrat.ttf");
-}
 .label{
     -fx-font-family: 'Century Gothic';
 }
-
-#header {-fx-font-size: 36px}

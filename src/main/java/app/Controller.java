@@ -1,25 +1,19 @@
 package app;
 
 import javafx.animation.*;
-import javafx.animation.Timeline;
 
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.util.Duration;
 
-import java.io.IOException;
 import java.sql.*;
-import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Controller{
     @FXML RadioButton adminRadio;
@@ -46,6 +40,7 @@ public class Controller{
 
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private boolean checking=false;
+    private static final Logger LOGGER = Logger.getLogger(Controller.class.getName());
 
     String appEmail;
     String appFname;
@@ -60,8 +55,10 @@ public class Controller{
             boolean connected;
 
             try (Connection conn = Database.getConnection()) {
-                connected = true;
-            } catch (Exception e) {
+                connected = conn.isValid(1);
+            } catch (SQLException e) {
+                // Log the specific error (Network timeout? Wrong password?)
+                LOGGER.log(Level.WARNING, "Health check failed: " + e.getMessage());
                 connected = false;
             }
 
@@ -94,8 +91,7 @@ public class Controller{
 
     public boolean testConnection(){
         if (connLabel.getText().equals("Not Connected")) {messLabel.setText("Database not connected");return false;}
-        if (connLabel.getText().equals("Connected")) {return true;}
-        return false;
+        return connLabel.getText().equals("Connected");
     }
 
     public void initialize(){ connectDB(); check();}
@@ -133,18 +129,20 @@ public class Controller{
         String email = loginEmail.getText();
         String password = loginPassword.getText();
 
-        System.out.println("email: " + email);
-        System.out.println("password: " + password);
         try (Connection conn = Database.getConnection()) {
             String role = SQLProcedures.login(conn, email, password);
             System.out.println(role);
 
             if (role !=null){
+                //noinspection StatementWithEmptyBody
                 if (role.equals("admin")) { /*ADMIN PANEL*/}
-                else if (role.equals("staff")) { /*STAFF PANEL*/}
+                else //noinspection StatementWithEmptyBody
+                    if (role.equals("staff")) { /*STAFF PANEL*/}
                 else {/*USER PANEL*/}
             }else {messLabel.setText("Invalid Email or Password!"); return;}
-        }catch (SQLException e) {e.printStackTrace();}
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Login failed", e);
+        }
 
         signInBox.getChildren().remove(loginBox);
         signInBox.getChildren().remove(registerBox);
@@ -153,9 +151,11 @@ public class Controller{
         rootPane.getChildren().remove(messLabel);
         appEmail = email;
         try (Connection conn = Database.getConnection()){
+            appFname = SQLProcedures.getFirstName(conn, appEmail);
+            appLname = SQLProcedures.getLastName(conn, appEmail);
             Label welcLabel = new Label("Welcome! " + SQLProcedures.getFirstName(conn, appEmail));
             signInBox.getChildren().add(welcLabel);
-        }catch (SQLException e) {e.printStackTrace();}
+        }catch (SQLException e) {LOGGER.log(Level.SEVERE, "Error Retrieving First Name", e);}
 
     }
     public void registerUser(){
@@ -182,18 +182,26 @@ public class Controller{
         else if (adminRadio.isSelected()) {role = "admin"; rolePass.setVisible(true); rolePass.setDisable(false); passcode = "admin";}
         appRole = role;
         if (rolePass.isVisible() && !rolePass.getText().equals(passcode)){messLabel.setText("Please enter passcode"); return;}
-        Connection conn = null;
-        try {
-            conn = Database.getConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        if (conn != null) {
+
+
+        try (Connection conn = Database.getConnection()) {
             int result = SQLProcedures.registerUser(conn, email, role, password);
             switch (result) {
-                case 0: {messLabel.setText("User successfully registered"); break;}
+                case 0: {
+                    messLabel.setText("User successfully registered");
+                    // Only advance UI if registration was successful
+                    infoBox.setVisible(true);
+                    infoBox.setDisable(false);
+                    registerBox.setVisible(false);
+                    registerBox.setDisable(true);
+                    break;
+                }
                 case 1: {messLabel.setText("Email already registered!"); return;}
+                default: {messLabel.setText("Registration failed."); return;}
             }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Database Error", e);
+            messLabel.setText("Database connection error");
         }
 
 
@@ -220,15 +228,19 @@ public class Controller{
             switch (result) {
                 case 0: {
                     if (appRole !=null){
+                        //noinspection StatementWithEmptyBody
                         if (appRole.equals("admin")) { /*ADMIN PANEL*/}
-                        else if (appRole.equals("staff")) { /*STAFF PANEL*/}
+                        else //noinspection StatementWithEmptyBody
+                            if (appRole.equals("staff")) { /*STAFF PANEL*/}
                         else {/*USER PANEL*/}
                     }else {messLabel.setText("Invalid Email or Password!"); return;}
                     break;
                 }
                 case 1: {messLabel.setText("Error registering info!"); return;}
             }
-        }catch (SQLException e) {e.printStackTrace();}
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error registering info", e);
+        }
 
 		signInBox.getChildren().remove(loginBox);
         signInBox.getChildren().remove(registerBox);
@@ -238,7 +250,9 @@ public class Controller{
         try (Connection conn = Database.getConnection()){
             Label welcLabel = new Label("Welcome! " + SQLProcedures.getFirstName(conn, appEmail));
             signInBox.getChildren().add(welcLabel);
-        }catch (SQLException e) {e.printStackTrace();}
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error retrieving First Name", e);
+        }
 
     }
 }

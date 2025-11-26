@@ -86,3 +86,25 @@ EXCEPTION
         RETURN NULL;
 END;
 $$;
+
+CREATE OR REPLACE FUNCTION get_lname_by_email(r_email VARCHAR)
+    RETURNS VARCHAR
+    LANGUAGE plpgsql
+AS $$
+DECLARE
+    fname VARCHAR;
+BEGIN
+    IF ( (SELECT role FROM users where r_email = email) = 'admin') THEN
+        select last_name INTO fname from admins where email = r_email;
+    ELSIF ((SELECT role FROM users where r_email = email) = 'staff') THEN
+        select last_name INTO fname from staff where email = r_email;
+    ELSE
+        select last_name INTO fname from guests where email = r_email;
+    END IF;
+    RETURN fname;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN NULL;
+END;
+$$;
