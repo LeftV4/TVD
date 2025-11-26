@@ -10,12 +10,17 @@ import java.util.Objects;
 
 
 
-
 public class Application extends javafx.application.Application {
+
+    public static Stage primaryStage;
+    public static String appEmail;
+    public static String appFname;
+    public static String appLname;
+
     @Override
     public void start(Stage primaryStage) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/layout.fxml")));
-        root.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style.css")).toExternalForm());
+        root.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
         primaryStage.setScene(new Scene(root));
         primaryStage.setTitle("Hotel Management System");
         primaryStage.show();

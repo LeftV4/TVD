@@ -1,14 +1,13 @@
 package app;
 
 import javafx.animation.*;
-
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -39,54 +38,28 @@ public class Controller{
     @FXML TextField loginPassword;
 
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
-    private boolean checking=false;
     private static final Logger LOGGER = Logger.getLogger(Controller.class.getName());
 
-    String appEmail;
-    String appFname;
-    String appLname;
     String appRole;
 
-    @FXML private void connectDB() {
-        if (checking) return;
-        checking = true;
+    static AnimationTimer timer;
 
-        executor.submit(() -> {
-            boolean connected;
-
-            try (Connection conn = Database.getConnection()) {
-                connected = conn.isValid(1);
-            } catch (SQLException e) {
-                // Log the specific error (Network timeout? Wrong password?)
-                LOGGER.log(Level.WARNING, "Health check failed: " + e.getMessage());
-                connected = false;
-            }
-
-            boolean finalConnected = connected;
-
-            Platform.runLater(() -> {
-                if (finalConnected) {
-                    connLabel.setText("Connected");
-                    connLabel.setStyle("-fx-text-fill: green");
-                } else {
-                    connLabel.setText("Not Connected");
-                    connLabel.setStyle("-fx-text-fill: red");
-                }
-
-                checking = false;
-            });
-        });
-    }
-
-
-    public void check(){
-        AnimationTimer timer = new AnimationTimer() {
+    public void check2(){
+        timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                connectDB();
+                Database.connectDB(connLabel,executor);
             }
         };
         timer.start();
+    }
+    boolean i=false;
+    public void check(){
+        Database.connectDB(connLabel,executor);
+        if(!i){
+            check2();
+            i=true;
+        }
     }
 
     public boolean testConnection(){
@@ -94,7 +67,7 @@ public class Controller{
         return connLabel.getText().equals("Connected");
     }
 
-    public void initialize(){ connectDB(); check();}
+    //public void initialize(){ Database.connectDB(connLabel,executor); check();}
 
     public void startRegister(){
         registerBox.setVisible(true);
@@ -135,29 +108,20 @@ public class Controller{
 
             if (role !=null){
                 //noinspection StatementWithEmptyBody
-                if (role.equals("admin")) { /*ADMIN PANEL*/}
+                if (role.equals("admin")) { timer.stop(); new app.SceneSwitch(rootPane, "/adminpanel.fxml");}
                 else //noinspection StatementWithEmptyBody
                     if (role.equals("staff")) { /*STAFF PANEL*/}
                 else {/*USER PANEL*/}
             }else {messLabel.setText("Invalid Email or Password!"); return;}
-        }catch (SQLException e) {
+        }catch (SQLException | IOException e) {
             LOGGER.log(Level.SEVERE, "Login failed", e);
         }
-
-        signInBox.getChildren().remove(loginBox);
-        signInBox.getChildren().remove(registerBox);
-        signInBox.getChildren().remove(startBox);
-        signInBox.getChildren().remove(infoBox);
-        rootPane.getChildren().remove(messLabel);
-        appEmail = email;
-        try (Connection conn = Database.getConnection()){
-            appFname = SQLProcedures.getFirstName(conn, appEmail);
-            appLname = SQLProcedures.getLastName(conn, appEmail);
-            Label welcLabel = new Label("Welcome! " + SQLProcedures.getFirstName(conn, appEmail));
-            signInBox.getChildren().add(welcLabel);
-        }catch (SQLException e) {LOGGER.log(Level.SEVERE, "Error Retrieving First Name", e);}
-
+        Application.appEmail = email;
     }
+
+
+
+
     public void registerUser(){
         boolean connTest = testConnection();
         if (!connTest) {return;}
@@ -176,7 +140,7 @@ public class Controller{
         String email = regEmail.getText();
         String password = regPassword.getText();
 
-        appEmail = email;
+        Application.appEmail = email;
         if (userRadio.isSelected()) {role = "user"; rolePass.setVisible(false); rolePass.setDisable(true);}
         else if (staffRadio.isSelected()) {role = "staff"; rolePass.setVisible(true); rolePass.setDisable(false); passcode = "staff";}
         else if (adminRadio.isSelected()) {role = "admin"; rolePass.setVisible(true); rolePass.setDisable(false); passcode = "admin";}
@@ -222,9 +186,9 @@ public class Controller{
         String phone = regPhone.getText();
 
         try (Connection conn = Database.getConnection()) {
-            int result = SQLProcedures.registerInfo(conn, fname, lname, phone, appRole, appEmail);
+            int result = SQLProcedures.registerInfo(conn, fname, lname, phone, appRole, Application.appEmail);
             System.out.println(appRole);
-            System.out.println(appEmail);
+            System.out.println(Application.appEmail);
             switch (result) {
                 case 0: {
                     if (appRole !=null){
@@ -248,7 +212,7 @@ public class Controller{
         signInBox.getChildren().remove(infoBox);
         rootPane.getChildren().remove(messLabel);
         try (Connection conn = Database.getConnection()){
-            Label welcLabel = new Label("Welcome! " + SQLProcedures.getFirstName(conn, appEmail));
+            Label welcLabel = new Label("Welcome! " + SQLProcedures.getFirstName(conn, Application.appEmail));
             signInBox.getChildren().add(welcLabel);
         }catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error retrieving First Name", e);
