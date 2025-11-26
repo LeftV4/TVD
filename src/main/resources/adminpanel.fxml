@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="rootPane2" prefHeight="800.0" prefWidth="1280.0" styleClass="style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.Controller2">
+   <children>
+      <SplitPane fx:id="rootSplitPane" dividerPositions="0.3" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" scaleShape="false" stylesheets="@style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <items>
+          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="420.0" prefHeight="802.0" prefWidth="420.0">
+               <children>
+                  <StackPane prefHeight="65.0" prefWidth="387.0">
+                     <children>
+                        <VBox fx:id="WelcomeBox" alignment="CENTER" minHeight="-Infinity" minWidth="420.0" prefHeight="90.0" prefWidth="420.0">
+                           <children>
+                              <Label prefHeight="47.0" prefWidth="266.0" text="WELCOME ADMIN">
+                                 <font>
+                                    <Font size="32.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                  </StackPane>
+                  <VBox alignment="CENTER" fillWidth="false" focusTraversable="true" layoutY="90.0" prefHeight="711.0" prefWidth="420.0" spacing="30.0">
+                     <children>
+                        <Button fx:id="billing" alignment="CENTER" cacheShape="false" centerShape="false" contentDisplay="TOP" mnemonicParsing="false" prefHeight="84.0" prefWidth="344.0" text="Billing &amp; Payments">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <font>
+                              <Font size="24.0" />
+                           </font></Button>
+                        <Button fx:id="logfile" cacheShape="false" centerShape="false" layoutX="48.0" layoutY="324.0" mnemonicParsing="false" prefHeight="84.0" prefWidth="344.0" text="Create Log File">
+                           <font>
+                              <Font size="24.0" />
+                           </font></Button>
+                        <Button fx:id="accountman" cacheShape="false" centerShape="false" layoutX="48.0" layoutY="366.0" mnemonicParsing="false" prefHeight="84.0" prefWidth="344.0" text="Account Management">
+                           <font>
+                              <Font size="24.0" />
+                           </font></Button>
+                        <Button fx:id="reservationman" cacheShape="false" centerShape="false" layoutX="48.0" layoutY="408.0" mnemonicParsing="false" prefHeight="84.0" prefWidth="344.0" text="Reservation Management">
+                           <font>
+                              <Font size="24.0" />
+                           </font></Button>
+                        <Button fx:id="roomman" cacheShape="false" centerShape="false" layoutX="48.0" layoutY="450.0" mnemonicParsing="false" prefHeight="84.0" prefWidth="344.0" text="Room Management" textAlignment="CENTER">
+                           <font>
+                              <Font size="24.0" />
+                           </font></Button>
+                        <Button fx:id="logOutbtn" cacheShape="false" centerShape="false" layoutX="48.0" layoutY="492.0" mnemonicParsing="false" onMouseClicked="#logOut" prefHeight="84.0" prefWidth="344.0" text="Log Out" textAlignment="CENTER">
+                           <font>
+                              <Font size="24.0" />
+                           </font></Button>
+                     </children>
+                  </VBox>
+               </children></AnchorPane>
+          <AnchorPane minHeight="720.0" minWidth="860.0" prefHeight="160.0" prefWidth="100.0" />
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>
