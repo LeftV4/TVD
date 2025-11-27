@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="rootPane2" prefHeight="800.0" prefWidth="1280.0" styleClass="style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.StaffController">
+<AnchorPane fx:id="StaffRootPane" prefHeight="800.0" prefWidth="1280.0" styleClass="style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.StaffController">
     <children>
         <SplitPane fx:id="rootSplitPane" dividerPositions="0.3" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" scaleShape="false" stylesheets="@style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <items>
@@ -33,7 +33,7 @@
                                     <font>
                                         <Font size="24.0" />
                                     </font></Button>
-                                <Button cacheShape="false" centerShape="false" layoutX="48.0" layoutY="324.0" mnemonicParsing="false" onMouseClicked="#showLogFile" prefHeight="84.0" prefWidth="344.0" text="Room Availability">
+                                <Button cacheShape="false" centerShape="false" layoutX="48.0" layoutY="324.0" mnemonicParsing="false" prefHeight="84.0" prefWidth="344.0" text="Room Availability">
                                     <font>
                                         <Font size="24.0" />
                                     </font></Button>

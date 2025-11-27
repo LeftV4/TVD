@@ -110,8 +110,8 @@ public class signInController {
                 //noinspection StatementWithEmptyBody
                 if (role.equals("admin")) { timer.stop(); new app.SceneSwitch(rootPane, "/adminPanel.fxml");}
                 else //noinspection StatementWithEmptyBody
-                    if (role.equals("staff")) { /*STAFF PANEL*/}
-                else {/*USER PANEL*/}
+                    if (role.equals("staff")) { timer.stop(); new app.SceneSwitch(rootPane, "/staffPanel.fxml");}
+                else {timer.stop(); new app.SceneSwitch(rootPane, "/userPanel.fxml");}
             }else {messLabel.setText("Invalid Email or Password!"); return;}
         }catch (SQLException | IOException e) {
             LOGGER.log(Level.SEVERE, "Login failed", e);
@@ -141,7 +141,7 @@ public class signInController {
         String password = regPassword.getText();
 
         Application.appEmail = email;
-        if (userRadio.isSelected()) {role = "user"; rolePass.setVisible(false); rolePass.setDisable(true);}
+        if (userRadio.isSelected()) {role = "guest"; rolePass.setVisible(false); rolePass.setDisable(true);}
         else if (staffRadio.isSelected()) {role = "staff"; rolePass.setVisible(true); rolePass.setDisable(false); passcode = "staff";}
         else if (adminRadio.isSelected()) {role = "admin"; rolePass.setVisible(true); rolePass.setDisable(false); passcode = "admin";}
         appRole = role;
@@ -193,16 +193,16 @@ public class signInController {
                 case 0: {
                     if (appRole !=null){
                         //noinspection StatementWithEmptyBody
-                        if (appRole.equals("admin")) { /*ADMIN PANEL*/}
+                        if (appRole.equals("admin")) { timer.stop(); new app.SceneSwitch(rootPane, "/adminPanel.fxml"); }
                         else //noinspection StatementWithEmptyBody
-                            if (appRole.equals("staff")) { /*STAFF PANEL*/}
-                        else {/*USER PANEL*/}
+                            if (appRole.equals("staff")) { timer.stop(); new app.SceneSwitch(rootPane, "/staffPanel.fxml"); }
+                        else {timer.stop(); new app.SceneSwitch(rootPane, "/userPanel.fxml"); }
                     }else {messLabel.setText("Invalid Email or Password!"); return;}
                     break;
                 }
                 case 1: {messLabel.setText("Error registering info!"); return;}
             }
-        }catch (SQLException e) {
+        }catch (SQLException | IOException e) {
             LOGGER.log(Level.SEVERE, "Error registering info", e);
         }
 

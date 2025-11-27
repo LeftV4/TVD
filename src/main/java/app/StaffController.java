@@ -3,8 +3,10 @@ package app;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -12,6 +14,7 @@ import java.util.logging.Logger;
 
 public class StaffController {
 
+    @FXML private AnchorPane StaffRootPane;
     @FXML private Label helloLabel;
     @FXML private VBox WelcomeBox;
 
@@ -26,5 +29,14 @@ public class StaffController {
             }catch (SQLException e) {
                 LOGGER.log(Level.SEVERE, "Error retrieving First Name", e);
             }});
+    }
+    @FXML
+    public void logOut(){
+        Application.appEmail = null;
+        try {
+            new SceneSwitch(StaffRootPane, "/signIn.fxml");
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Incapability to leave Scene", e);
+        }
     }
 }
