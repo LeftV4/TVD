@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 
 
 public class AdminController {
+    @FXML Label helloLabel;
     @FXML AnchorPane adminButtonPane;
     @FXML StackPane adminStackPane;
     @FXML TextArea logFileArea;
@@ -36,10 +37,10 @@ public class AdminController {
     private static final Logger LOGGER = Logger.getLogger(AdminController.class.getName());
 
     public void initialize(){
-
         Platform.runLater(()->{
             try (Connection conn = Database.getConnection()){
-            Label welcLabel = new Label("Hi, "+ SQLProcedures.getFirstName(conn, Application.appEmail));
+            helloLabel.setText("Welcome "+ SQLProcedures.getFirstName(conn, Application.appEmail) + "!");
+            Label welcLabel = new Label("Admin Privileges");
             WelcomeBox.getChildren().add(welcLabel);
         }catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error retrieving First Name", e);

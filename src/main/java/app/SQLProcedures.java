@@ -111,6 +111,22 @@ public class SQLProcedures {
         return fname;
     }
 
+    public static String getRole(Connection conn, String email) {
+        String role = null;
+        String sql = "SELECT get_role_by_email(?)";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setString(1,email);
+
+            try (ResultSet rs = stmt.executeQuery()){
+                if (rs.next()) {role = rs.getString(1);}
+                return role;
+            }
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error fetching role", e);
+        }
+        return role;
+    }
     public static String getLogFileContent(Connection conn) {
         LOGGER.info("Fetching Log File content...");
         StringBuilder logContent = new StringBuilder();

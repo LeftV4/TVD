@@ -1,3 +1,8 @@
 .label{
     -fx-font-family: 'Century Gothic';
 }
+
+.button{
+    -fx-font-size: 24px;
+    -fx-font-family: 'Century Gothic';
+}

@@ -109,6 +109,18 @@ EXCEPTION
 END;
 $$;
 
+CREATE OR REPLACE FUNCTION get_role_by_email(r_email VARCHAR)
+    RETURNS VARCHAR
+    LANGUAGE plpgsql
+AS $$
+DECLARE
+    role VARCHAR;
+BEGIN
+    select role INTO role from users where email = r_email;
+
+end;
+$$;
+
 --LOG FILE FUNCTIONS
 CREATE OR REPLACE FUNCTION log_changes_function()
     RETURNS TRIGGER

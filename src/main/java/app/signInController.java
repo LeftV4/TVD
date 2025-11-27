@@ -108,7 +108,7 @@ public class signInController {
 
             if (role !=null){
                 //noinspection StatementWithEmptyBody
-                if (role.equals("admin")) { timer.stop(); new app.SceneSwitch(rootPane, "/adminpanel.fxml");}
+                if (role.equals("admin")) { timer.stop(); new app.SceneSwitch(rootPane, "/adminPanel.fxml");}
                 else //noinspection StatementWithEmptyBody
                     if (role.equals("staff")) { /*STAFF PANEL*/}
                 else {/*USER PANEL*/}
