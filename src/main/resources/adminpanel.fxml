@@ -1,21 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane2" prefHeight="800.0" prefWidth="1280.0" styleClass="style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.Controller2">
+<AnchorPane fx:id="rootPane2" prefHeight="800.0" prefWidth="1280.0" styleClass="style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.AdminController">
    <children>
       <SplitPane fx:id="rootSplitPane" dividerPositions="0.3" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" scaleShape="false" stylesheets="@style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
-          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="420.0" prefHeight="802.0" prefWidth="420.0">
+          <AnchorPane fx:id="adminButtonPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="420.0" prefHeight="802.0" prefWidth="420.0">
                <children>
                   <StackPane prefHeight="65.0" prefWidth="387.0">
                      <children>
                         <VBox fx:id="WelcomeBox" alignment="CENTER" minHeight="-Infinity" minWidth="420.0" prefHeight="90.0" prefWidth="420.0">
                            <children>
-                              <Label prefHeight="47.0" prefWidth="266.0" text="WELCOME ADMIN">
+                              <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="47.0" prefWidth="286.0" text="WELCOME ADMIN">
                                  <font>
                                     <Font size="32.0" />
                                  </font>
@@ -33,7 +38,7 @@
                            <font>
                               <Font size="24.0" />
                            </font></Button>
-                        <Button fx:id="logfile" cacheShape="false" centerShape="false" layoutX="48.0" layoutY="324.0" mnemonicParsing="false" prefHeight="84.0" prefWidth="344.0" text="Create Log File">
+                        <Button fx:id="logfile" cacheShape="false" centerShape="false" layoutX="48.0" layoutY="324.0" mnemonicParsing="false" onMouseClicked="#showLogFile" prefHeight="84.0" prefWidth="344.0" text="Generate Log File">
                            <font>
                               <Font size="24.0" />
                            </font></Button>
@@ -56,7 +61,16 @@
                      </children>
                   </VBox>
                </children></AnchorPane>
-          <AnchorPane minHeight="720.0" minWidth="860.0" prefHeight="160.0" prefWidth="100.0" />
+          <AnchorPane fx:id="adminContentPane" minHeight="720.0" minWidth="860.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                   <StackPane fx:id="adminStackPane" prefHeight="800.0" prefWidth="860.0">
+                       <TextArea fx:id="logFileArea" disable="true" prefHeight="200.0" prefWidth="200.0" visible="false">
+                          <font>
+                              <Font size="18.0" />
+                          </font>
+                       </TextArea>
+                   </StackPane>
+               </children></AnchorPane>
         </items>
       </SplitPane>
    </children>

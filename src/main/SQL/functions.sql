@@ -108,3 +108,66 @@ EXCEPTION
         RETURN NULL;
 END;
 $$;
+
+--LOG FILE FUNCTIONS
+CREATE OR REPLACE FUNCTION log_changes_function()
+    RETURNS TRIGGER
+    LANGUAGE plpgsql
+AS $$
+BEGIN
+    IF (TG_OP = 'INSERT') THEN
+        INSERT INTO logfile (table_name, operation, new_data, modified_by)
+        VALUES (TG_TABLE_NAME, TG_OP, row_to_json(NEW), current_user);
+        RETURN NEW;
+    ELSIF (TG_OP = 'UPDATE') THEN
+        INSERT INTO logfile (table_name, operation, old_data, new_data, modified_by)
+        VALUES (TG_TABLE_NAME, TG_OP, row_to_json(OLD), row_to_json(NEW), current_user);
+        RETURN NEW;
+    ELSIF (TG_OP = 'DELETE') THEN
+        INSERT INTO logfile (table_name, operation, old_data, modified_by)
+        VALUES (TG_TABLE_NAME, TG_OP, row_to_json(OLD), current_user);
+        RETURN OLD;
+    END IF;
+    RETURN NULL;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS log_users_changes ON users;
+CREATE TRIGGER log_users_changes
+    AFTER INSERT OR UPDATE OR DELETE ON users
+    FOR EACH ROW EXECUTE FUNCTION log_changes_function();
+
+DROP TRIGGER IF EXISTS log_guests_changes ON guests;
+CREATE TRIGGER log_guests_changes
+    AFTER INSERT OR UPDATE OR DELETE ON guests
+    FOR EACH ROW EXECUTE FUNCTION log_changes_function();
+
+DROP TRIGGER IF EXISTS log_admins_changes ON admins;
+CREATE TRIGGER log_admins_changes
+    AFTER INSERT OR UPDATE OR DELETE ON admins
+    FOR EACH ROW EXECUTE FUNCTION log_changes_function();
+
+DROP TRIGGER IF EXISTS log_staff_changes ON staff;
+CREATE TRIGGER log_staff_changes
+    AFTER INSERT OR UPDATE OR DELETE ON staff
+    FOR EACH ROW EXECUTE FUNCTION log_changes_function();
+
+DROP TRIGGER IF EXISTS log_room_types_changes ON room_types;
+CREATE TRIGGER log_room_types_changes
+    AFTER INSERT OR UPDATE OR DELETE ON room_types
+    FOR EACH ROW EXECUTE FUNCTION log_changes_function();
+
+DROP TRIGGER IF EXISTS log_rooms_changes ON rooms;
+CREATE TRIGGER log_rooms_changes
+    AFTER INSERT OR UPDATE OR DELETE ON rooms
+    FOR EACH ROW EXECUTE FUNCTION log_changes_function();
+
+DROP TRIGGER IF EXISTS log_reservations_changes ON reservations;
+CREATE TRIGGER log_reservations_changes
+    AFTER INSERT OR UPDATE OR DELETE ON reservations
+    FOR EACH ROW EXECUTE FUNCTION log_changes_function();
+
+DROP TRIGGER IF EXISTS log_payments_changes ON payments;
+CREATE TRIGGER log_payments_changes
+    AFTER INSERT OR UPDATE OR DELETE ON payments
+    FOR EACH ROW EXECUTE FUNCTION log_changes_function();

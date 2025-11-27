@@ -14,7 +14,7 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Controller{
+public class signInController {
     @FXML RadioButton adminRadio;
     @FXML RadioButton staffRadio;
     @FXML RadioButton userRadio;
@@ -38,7 +38,7 @@ public class Controller{
     @FXML TextField loginPassword;
 
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
-    private static final Logger LOGGER = Logger.getLogger(Controller.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(signInController.class.getName());
 
     String appRole;
 

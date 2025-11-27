@@ -75,3 +75,4 @@ CREATE TABLE logfile (
     modified_by TEXT,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+

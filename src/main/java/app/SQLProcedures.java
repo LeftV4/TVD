@@ -110,4 +110,33 @@ public class SQLProcedures {
         }
         return fname;
     }
+
+    public static String getLogFileContent(Connection conn) {
+        LOGGER.info("Fetching Log File content...");
+        StringBuilder logContent = new StringBuilder();
+        String sql = "SELECT * FROM logfile ORDER BY timestamp DESC";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                logContent.append("ID: ").append(rs.getInt("log_id"))
+                        .append(" | Table: ").append(rs.getString("table_name"))
+                        .append(" | Op: ").append(rs.getString("operation"))
+                        .append(" | Old: ").append(rs.getString("old_data"))
+                        .append(" | New: ").append(rs.getString("new_data"))
+                        .append(" | By: ").append(rs.getString("modified_by"))
+                        .append(" | Time: ").append(rs.getTimestamp("timestamp"))
+                        .append("\n");
+            }
+
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error viewing log file", e);
+            return "Error fetching logs.";
+        }
+        return logContent.toString();
+    }
 }
+
+
+

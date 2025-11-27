@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="rootPane" onMouseMoved="#check" prefHeight="800.0" prefWidth="1280.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.Controller">
+<AnchorPane fx:id="rootPane" onMouseMoved="#check" prefHeight="800.0" prefWidth="1280.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.signInController">
       <Label layoutX="403.0" layoutY="82.0" style="-fx-font-size: 36;" text="Hotel Management System">
          <font>
             <Font name="Century Gothic" size="36.0" />

@@ -19,7 +19,7 @@ public class Application extends javafx.application.Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/layout.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/signIn.fxml")));
         root.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
         primaryStage.setScene(new Scene(root));
         primaryStage.setTitle("Hotel Management System");
