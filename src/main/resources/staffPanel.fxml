@@ -24,7 +24,7 @@
                                 </VBox>
                             </children>
                         </StackPane>
-                        <VBox alignment="CENTER" fillWidth="false" focusTraversable="true" layoutY="90.0" prefHeight="711.0" prefWidth="420.0" spacing="30.0">
+                        <VBox alignment="CENTER" fillWidth="false" focusTraversable="true" layoutY="90.0" prefHeight="711.0" prefWidth="420.0" spacing="80.0">
                             <children>
                                 <Button alignment="CENTER" cacheShape="false" centerShape="false" contentDisplay="TOP" mnemonicParsing="false" prefHeight="84.0" prefWidth="344.0" text="Hotel Reservations">
                                     <VBox.margin>

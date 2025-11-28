@@ -152,6 +152,25 @@ public class SQLProcedures {
         }
         return logContent.toString();
     }
+    public static String getUsers(Connection conn) {
+        LOGGER.info("Fetching Users...");
+        StringBuilder users = new StringBuilder();
+        String sql = "SELECT * FROM users";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                users.append(rs.getString("email"))
+                        .append("\n");
+            }
+
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error viewing users file", e);
+            return "Error fetching logs.";
+        }
+        return users.toString();
+    }
 }
 
 

@@ -37,7 +37,7 @@
                            <font>
                               <Font size="24.0" />
                            </font></Button>
-                        <Button cacheShape="false" centerShape="false" layoutX="48.0" layoutY="366.0" mnemonicParsing="false" prefHeight="84.0" prefWidth="344.0" text="Account Management">
+                        <Button cacheShape="false" centerShape="false" layoutX="48.0" layoutY="366.0" mnemonicParsing="false" onMouseClicked="#showUsers" prefHeight="84.0" prefWidth="344.0" text="Account Management">
                            <font>
                               <Font name="Century Gothic" size="24.0" />
                            </font></Button>
@@ -58,13 +58,61 @@
                </children></AnchorPane>
           <AnchorPane fx:id="adminContentPane" minHeight="720.0" minWidth="860.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                   <StackPane fx:id="adminStackPane" prefHeight="800.0" prefWidth="860.0">
-                       <TextArea fx:id="logFileArea" disable="true" prefHeight="200.0" prefWidth="200.0" visible="false">
-                          <font>
-                              <Font size="18.0" />
-                          </font>
-                       </TextArea>
-                   </StackPane>
+                   <StackPane fx:id="adminStackPane" layoutY="-1.0" prefHeight="800.0" prefWidth="860.0">
+                     <children>
+                        <TextArea fx:id="logFileArea" prefHeight="200.0" prefWidth="200.0" visible="false" />
+                        <AnchorPane fx:id="userArea" disable="true" nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="200.0" visible="false">
+                           <children>
+                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="47.0" prefWidth="449.0" text="Accounts">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <ScrollPane fx:id="userScrollPane" hbarPolicy="NEVER" layoutX="2.0" layoutY="47.0" prefHeight="751.0" prefWidth="445.0" vbarPolicy="ALWAYS" AnchorPane.topAnchor="47.0">
+                                 <content>
+                                    <VBox fx:id="userList" prefHeight="753.0" prefWidth="420.0" />
+                                 </content>
+                              </ScrollPane>
+                              <AnchorPane fx:id="accountDetails" layoutX="447.0" prefHeight="800.0" prefWidth="410.0">
+                                 <children>
+                                    <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="47.0" prefWidth="410.0" text="Account Details">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="2.0" layoutY="73.0" prefHeight="47.0" prefWidth="127.0" text="First Name:">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="selUserfName" layoutX="129.0" layoutY="71.0" prefHeight="47.0" prefWidth="270.0">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </TextField>
+                                    <Label layoutX="2.0" layoutY="139.0" prefHeight="47.0" prefWidth="127.0" text="Last Name:">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="selUserlName" layoutX="129.0" layoutY="137.0" prefHeight="47.0" prefWidth="270.0">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </TextField>
+                                    <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="207.0" prefHeight="47.0" prefWidth="103.0" text="Email:">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="selUserEmail" layoutX="129.0" layoutY="205.0" prefHeight="47.0" prefWidth="270.0">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </TextField>
+                                 </children></AnchorPane>
+                           </children></AnchorPane>
+                     </children></StackPane>
                </children></AnchorPane>
         </items>
       </SplitPane>
