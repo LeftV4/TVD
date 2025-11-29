@@ -111,6 +111,22 @@ public class SQLProcedures {
         return fname;
     }
 
+    public static String getPhone(Connection conn, String email) {
+        String phone = null;
+        String sql = "SELECT get_phone_by_email(?)";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setString(1,email);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {phone = rs.getString(1);}
+            }
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error getting phone", e);
+        }
+        return phone;
+    }
+
     public static String getRole(Connection conn, String email) {
         String role = null;
         String sql = "SELECT get_role_by_email(?)";
@@ -171,6 +187,53 @@ public class SQLProcedures {
         }
         return users.toString();
     }
+
+    public static int deleteUser(Connection conn, String email) {
+        LOGGER.info("Deleting User " + SQLProcedures.getFirstName(conn, email) + "..." );
+        String sql = "SELECT * from deleteUser_by_email(?)";
+        int state = 0;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setString(1,email);
+
+            try (ResultSet rs = stmt.executeQuery()){
+                if (rs.next()) {state = rs.getInt(1);}
+
+            }
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error deleting user", e);
+        }
+        return state;
+    }
+
+    public static int updateInfo(Connection conn, String fname, String lname, String phone, String role, String email, String email2) {
+        int status = -1;
+        LOGGER.info("Updating Info...");
+        String sql = "SELECT update_info(?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, fname);
+            stmt.setString(2, lname);
+            stmt.setString(3, phone);
+            stmt.setString(4, role);
+            stmt.setString(5, email);
+            stmt.setString(6, email2);
+
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    status = rs.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error updating user info", e);
+            status = 1;
+        }
+        return status;
+    }
+
+
+
 }
 
 

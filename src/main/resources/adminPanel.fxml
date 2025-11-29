@@ -9,9 +9,9 @@
    <children>
       <SplitPane fx:id="rootSplitPane" dividerPositions="0.3" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" scaleShape="false" stylesheets="@style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
-          <AnchorPane fx:id="adminButtonPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="420.0" prefHeight="802.0" prefWidth="420.0">
+          <AnchorPane fx:id="adminButtonPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="420.0" prefHeight="802.0" prefWidth="420.0" stylesheets="@style.css">
                <children>
-                  <StackPane prefHeight="65.0" prefWidth="387.0">
+                  <StackPane prefHeight="65.0" prefWidth="387.0" stylesheets="@style.css">
                      <children>
                         <VBox fx:id="WelcomeBox" alignment="CENTER" minHeight="-Infinity" minWidth="420.0" prefHeight="90.0" prefWidth="420.0">
                            <children>
@@ -24,7 +24,7 @@
                         </VBox>
                      </children>
                   </StackPane>
-                  <VBox alignment="CENTER" fillWidth="false" focusTraversable="true" layoutY="90.0" prefHeight="711.0" prefWidth="420.0" spacing="30.0">
+                  <VBox alignment="CENTER" fillWidth="false" focusTraversable="true" layoutY="90.0" prefHeight="711.0" prefWidth="420.0" spacing="30.0" stylesheets="@style.css">
                      <children>
                         <Button alignment="CENTER" cacheShape="false" centerShape="false" contentDisplay="TOP" mnemonicParsing="false" prefHeight="84.0" prefWidth="344.0" text="Billing &amp; Payments">
                            <VBox.margin>
@@ -56,12 +56,12 @@
                      </children>
                   </VBox>
                </children></AnchorPane>
-          <AnchorPane fx:id="adminContentPane" minHeight="720.0" minWidth="860.0" prefHeight="160.0" prefWidth="100.0">
+          <AnchorPane fx:id="adminContentPane" minHeight="720.0" minWidth="860.0" prefHeight="160.0" prefWidth="100.0" stylesheets="@style.css">
                <children>
-                   <StackPane fx:id="adminStackPane" layoutY="-1.0" prefHeight="800.0" prefWidth="860.0">
+                   <StackPane fx:id="adminStackPane" layoutY="-1.0" prefHeight="800.0" prefWidth="860.0" stylesheets="@style.css">
                      <children>
                         <TextArea fx:id="logFileArea" prefHeight="200.0" prefWidth="200.0" visible="false" />
-                        <AnchorPane fx:id="userArea" disable="true" nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="200.0" visible="false">
+                        <AnchorPane fx:id="userArea" disable="true" nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="200.0" stylesheets="@style.css" visible="false">
                            <children>
                               <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="47.0" prefWidth="449.0" text="Accounts">
                                  <font>
@@ -110,6 +110,17 @@
                                           <Font size="24.0" />
                                        </font>
                                     </TextField>
+                                    <Button fx:id="updateBtn" layoutX="129.0" layoutY="343.0" mnemonicParsing="false" onMouseClicked="#updateUser" prefHeight="51.0" prefWidth="270.0" text="Update" />
+                                    <TextField fx:id="selUserPhone" layoutX="129.0" layoutY="268.0" prefHeight="47.0" prefWidth="270.0">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </TextField>
+                                    <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="272.0" prefHeight="47.0" prefWidth="103.0" text="Phone:">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </Label>
                                  </children></AnchorPane>
                            </children></AnchorPane>
                      </children></StackPane>

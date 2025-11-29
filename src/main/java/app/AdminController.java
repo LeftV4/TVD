@@ -21,6 +21,7 @@ public class AdminController {
     @FXML TextField selUserfName;
     @FXML TextField selUserlName;
     @FXML TextField selUserEmail;
+    @FXML TextField selUserPhone;
     @FXML AnchorPane accountDetails;
     @FXML AnchorPane adminContentPane;
     @FXML private AnchorPane rootPane2;
@@ -34,7 +35,9 @@ public class AdminController {
     @FXML private Button logOutbtn;
 
     String []totalUsers;
-    int i=0;
+    int userID;
+    String userEmail;
+    String role;
 
     private static final Logger LOGGER = Logger.getLogger(AdminController.class.getName());
 
@@ -70,8 +73,9 @@ public class AdminController {
         adminStackPane.getChildren().forEach(node -> node.setDisable(true));
         userArea.setVisible(true);
         userArea.setDisable(false);
+        accountDetails.setVisible(false);
+        accountDetails.setDisable(true);
         try (final Connection conn = Database.getConnection()) {
-            i=0;
             String users = SQLProcedures.getUsers(conn);
             totalUsers = users.split("\n");
             userList.getChildren().clear();
@@ -85,6 +89,7 @@ public class AdminController {
                 // label containing the user email
                 Label emailField = new Label();
                 emailField.setPrefWidth(200);
+                emailField.setStyle("-fx-font-size: 16px;");
                 emailField.setText(email);
 
                 // edit button
@@ -95,11 +100,13 @@ public class AdminController {
                     selUserfName.setDisable(false);
                     selUserfName.setVisible(true);
                     try (Connection conn2 = Database.getConnection();) {
-                        selUserfName.setText(SQLProcedures.getFirstName(conn2, emailField.getText()));
-                        selUserlName.setText(SQLProcedures.getLastName(conn2, emailField.getText()));
-                        selUserEmail.setText(emailField.getText());
+                        userEmail = emailField.getText();
+                        selUserfName.setText(SQLProcedures.getFirstName(conn2, userEmail));
+                        selUserlName.setText(SQLProcedures.getLastName(conn2, userEmail));
+                        selUserEmail.setText(userEmail);
+                        selUserPhone.setText(SQLProcedures.getPhone(conn2, userEmail));
                     } catch(SQLException ex){
-                        LOGGER.log(Level.SEVERE, "Failed to load users first name", ex);
+                        LOGGER.log(Level.SEVERE, "Failed to load users info", ex);
                     }
                 });
 
@@ -108,7 +115,7 @@ public class AdminController {
                 deleteBtn.setStyle("-fx-background-color: #d9534f; -fx-text-fill: white;");
                 deleteBtn.setOnAction(e -> {
                     try (Connection conn2 = Database.getConnection()) {
-                        //SQLProcedures.deleteUser(conn2, s); // implementation to delete a user? i shall try it soon
+                        SQLProcedures.deleteUser(conn2, email); // implementation to delete a user? i shall try it soon
                         userList.getChildren().remove(row);
                         accountDetails.setVisible(false);
                         accountDetails.setDisable(true);
@@ -116,15 +123,10 @@ public class AdminController {
                         LOGGER.log(Level.SEVERE, "Failed to delete user", ex);
                     }
                 });
-
                 row.getChildren().addAll(emailField, editBtn, deleteBtn);
-
                 // add row to your UI container
                 userList.getChildren().add(row);
             }
-
-
-
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Failed to load users", e);
         }
@@ -140,4 +142,21 @@ public class AdminController {
             LOGGER.log(Level.SEVERE, "Incapability to leave Scene", e);
         }
     }
+    int status;
+    @FXML
+    public void updateUser(){
+        try(Connection conn = Database.getConnection()){
+            role = SQLProcedures.getRole(conn, userEmail);
+            status = SQLProcedures.updateInfo(conn, selUserfName.getText(), selUserlName.getText(), selUserPhone.getText(), role, userEmail, selUserEmail.getText());
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Failed to update user", e);
+        }
+        showUsers();
+    }
+
+
 }
+
+
+
+

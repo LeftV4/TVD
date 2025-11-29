@@ -46,6 +46,54 @@ as $$
     END;
 $$;
 
+create or replace function update_info(
+    r_fname VARCHAR,
+    r_lname VARCHAR,
+    r_phone VARCHAR,
+    r_role VARCHAR,
+    r_email VARCHAR,
+    r_email2 VARCHAR
+)returns int
+    language plpgsql
+as $$
+begin
+    if r_email != r_email2 then
+        update users set email = r_email2 where email = r_email;
+        IF r_role = 'admin' THEN
+            update admins set first_name = r_fname, last_name = r_lname, phone = r_phone where email = r_email2;
+            return 1;
+        ELSIF r_role = 'staff' then
+            update staff set first_name = r_fname, last_name = r_lname, phone = r_phone where email = r_email2;
+            return 1;
+        else
+            update guests set first_name = r_fname, last_name = r_lname, phone = r_phone where email = r_email2;
+            return 1;
+        end if;
+    else
+        IF r_role = 'admin' THEN
+            update admins set first_name = r_fname, last_name = r_lname, phone = r_phone where email = r_email;
+            return 1;
+        ELSIF r_role = 'staff' then
+            update staff set first_name = r_fname, last_name = r_lname, phone = r_phone where email = r_email;
+            return 1;
+        else
+            update guests set first_name = r_fname, last_name = r_lname, phone = r_phone where email = r_email;
+            return 1;
+        end if;
+    end if;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE NOTICE 'Error: %', SQLERRM;
+        RETURN -1;
+END;
+$$;
+
+
+
+
+
+
 create or replace function login (
     r_email VARCHAR,
     r_password VARCHAR
@@ -62,6 +110,20 @@ as $$
             WHEN OTHERS THEN
                 RETURN NULL;
    END
+$$;
+
+create or replace function deleteUser_by_email(r_email VARCHAR)
+returns int
+language plpgsql
+as $$
+    begin
+    delete from users where email = r_email;
+    return 0;
+    EXCEPTION
+        WHEN OTHERS THEN
+            RAISE NOTICE 'Error: %', SQLERRM;
+            RETURN 1;
+END;
 $$;
 
 
@@ -114,12 +176,37 @@ CREATE OR REPLACE FUNCTION get_role_by_email(r_email VARCHAR)
     LANGUAGE plpgsql
 AS $$
 DECLARE
-    role VARCHAR;
+    r_role VARCHAR;
 BEGIN
-    select role INTO role from users where email = r_email;
+    select role INTO r_role from users where email = r_email;
 
+    return r_role;
 end;
 $$;
+
+CREATE OR REPLACE FUNCTION get_phone_by_email(r_email VARCHAR)
+    RETURNS VARCHAR
+    LANGUAGE plpgsql
+AS $$
+DECLARE
+    phonenum VARCHAR;
+BEGIN
+    IF ( (SELECT role FROM users where r_email = email) = 'admin') THEN
+        select phone INTO phonenum from admins where email = r_email;
+    ELSIF ((SELECT role FROM users where r_email = email) = 'staff') THEN
+        select phone INTO phonenum from staff where email = r_email;
+    ELSE
+        select phone INTO phonenum from guests where email = r_email;
+    END IF;
+    RETURN phonenum;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN NULL;
+END;
+$$;
+
+
 
 --LOG FILE FUNCTIONS
 CREATE OR REPLACE FUNCTION log_changes_function()
