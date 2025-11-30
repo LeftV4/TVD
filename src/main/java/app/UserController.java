@@ -10,11 +10,17 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class UserController {
 
+    @FXML VBox receiptVbox;
+    @FXML Label receiptTotal;
+    @FXML AnchorPane checkoutPane;
     @FXML Spinner<Integer> singleSpinner;
     @FXML Spinner<Integer> doubleSpinner;
     @FXML Spinner<Integer> suiteSpinner;
@@ -85,6 +91,29 @@ public class UserController {
         doubleSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 18));
         suiteSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 3));
 
+        //Set Check In Limits
+        checkInDate.setDayCellFactory(_ -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+
+                setDisable(empty || date.isBefore(LocalDate.now()));
+            }
+        });
+
+        //Set Check-Out Limits
+        checkOutDate.setDayCellFactory(_ -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+
+                LocalDate checkIn = checkInDate.getValue();
+                setDisable(empty || (checkIn != null && !date.isAfter(checkIn)));
+            }
+
+
+        });
+
         try (Connection conn = Database.getConnection()) {
             cachedSinglePrice = SQLProcedures.getSinglePrice(conn);
             cachedDoublePrice = SQLProcedures.getDoublePrice(conn);
@@ -106,6 +135,25 @@ public class UserController {
                 suiteCart();
                 generatePrice();
             });
+
+            checkInDate.valueProperty().addListener((_, _, newV) -> {
+                checkOutDate.setValue(null);
+                checkOutDate.setDayCellFactory(_ -> new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate date, boolean empty) {
+                        super.updateItem(date, empty);
+
+                        if (!date.isAfter(newV)){
+                            setDisable(true);
+                        }
+                    }
+                });
+                generatePrice();
+            });
+
+            checkOutDate.valueProperty().addListener((_, _, _) -> generatePrice());
+
+
             listenersInitialized = true;
         }
     }
@@ -114,7 +162,7 @@ public class UserController {
         if (singleSpinner.getValue() == 0) {
             cartVbox.getChildren().remove(singlePrice);
         } else {
-                singlePrice.setText("Single Room x " + singleSpinner.getValue()+ " =" + (singleSpinner.getValue() * cachedSinglePrice)+ "€");
+                singlePrice.setText("Single Room x " + singleSpinner.getValue()+ " =" + (singleSpinner.getValue() * cachedSinglePrice)+ "€ per day");
             if (!cartVbox.getChildren().contains(singlePrice)) {cartVbox.getChildren().add(singlePrice);}
         }
     }
@@ -123,7 +171,7 @@ public class UserController {
         if (doubleSpinner.getValue() == 0) {
             cartVbox.getChildren().remove(doublePrice);
         } else {
-                doublePrice.setText("Double Room x " + doubleSpinner.getValue()+ " =" + (doubleSpinner.getValue() * cachedDoublePrice)+ "€");
+                doublePrice.setText("Double Room x " + doubleSpinner.getValue()+ " =" + (doubleSpinner.getValue() * cachedDoublePrice)+ "€ per day");
             if (!cartVbox.getChildren().contains(doublePrice)) {cartVbox.getChildren().add(doublePrice);}
         }
     }
@@ -132,24 +180,48 @@ public class UserController {
         if (suiteSpinner.getValue() == 0) {
             cartVbox.getChildren().remove(suitePrice);
         } else {
-                suitePrice.setText("Luxury Suite x " + suiteSpinner.getValue()+ " =" + (suiteSpinner.getValue() * cachedSuitePrice)+ "€");
+                suitePrice.setText("Luxury Suite x " + suiteSpinner.getValue()+ " =" + (suiteSpinner.getValue() * cachedSuitePrice)+ "€ per day");
             if (!cartVbox.getChildren().contains(suitePrice)) {cartVbox.getChildren().add(suitePrice);}
         }
     }
     public int total;
     private void generatePrice() {
-            total = (
-                    (suiteSpinner.getValue() * cachedSuitePrice)
-                            + (singleSpinner.getValue() * cachedSinglePrice)
-                            + (doubleSpinner.getValue() * cachedDoublePrice)
-            );
+            total = (int) (( (suiteSpinner.getValue() * cachedSuitePrice)
+                                        + (singleSpinner.getValue() * cachedSinglePrice)
+                                        + (doubleSpinner.getValue() * cachedDoublePrice) ) * ChronoUnit.DAYS.between(checkInDate.getValue(), checkOutDate.getValue() ));
             totalCost.setText("Total Cost: " + total + "€");
     }
 
     public void moveCheckout() {
+        if (checkInDate.getValue() == null || checkOutDate.getValue() == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Please select check-in and check-out dates!");
+            alert.showAndWait();
+            return;
+        }
+        else if (total == 0) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("No Rooms Selected!");
+            alert.showAndWait();
+            return;}
 
+        userStackPane.getChildren().forEach(node -> node.setVisible(false));
+        userStackPane.getChildren().forEach(node -> node.setDisable(true));
+        checkoutPane.setVisible(true);
+        checkoutPane.setDisable(false);
+
+        receiptVbox.getChildren().add(singlePrice);
+        receiptVbox.getChildren().add(doublePrice);
+        receiptVbox.getChildren().add(suitePrice);
+        receiptTotal.setText(totalCost.getText());
     }
 
+    public void cancelReservation() {
+        receiptVbox.getChildren().clear();
+        enterReserveRoom();
+    }
 
     public void enterMyReservations(){
         userStackPane.getChildren().forEach(node -> node.setVisible(false));
@@ -166,8 +238,25 @@ public class UserController {
     }
 
 
+    public void payByCash() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Payment Confirmation");
+        alert.setHeaderText("Make reservation and pay " + total + "€ with cash?");
+        Optional<ButtonType> result = alert.showAndWait();
 
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+        }
+    }
 
+    public void payByCard() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Payment Confirmation");
+        alert.setHeaderText("Make reservation and " + total + "€ with card?");
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+        }
+    }
 
 
 }

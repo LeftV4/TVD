@@ -95,7 +95,7 @@ CREATE TABLE payments (
     reservation_id INT NOT NULL REFERENCES reservations(reservation_id) ON DELETE CASCADE,
     amount NUMERIC(10,2) NOT NULL CHECK (amount >= 0),
     payment_date DATE NOT NULL DEFAULT CURRENT_DATE,
-    method VARCHAR(20) NOT NULL CHECK (method IN ('cash', 'card', 'online'))
+    method VARCHAR(20) NOT NULL CHECK (method IN ('cash', 'card'))
 );
 
 drop table if exists logfile cascade;
