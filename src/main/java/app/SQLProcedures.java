@@ -111,7 +111,8 @@ public class SQLProcedures {
         return fname;
     }
 
-    public static String getRole(Connection conn, String email) {
+    public static String getRole(Connection conn, String email)
+    {
         String role = null;
         String sql = "SELECT get_role_by_email(?)";
 
@@ -130,7 +131,7 @@ public class SQLProcedures {
     public static String getLogFileContent(Connection conn) {
         LOGGER.info("Fetching Log File content...");
         StringBuilder logContent = new StringBuilder();
-        String sql = "SELECT * FROM logfile ORDER BY timestamp DESC";
+        String sql = "SELECT * FROM get_logs()";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
@@ -151,6 +152,48 @@ public class SQLProcedures {
             return "Error fetching logs.";
         }
         return logContent.toString();
+    }
+
+    public static int getSinglePrice(Connection conn){
+        LOGGER.info("Fetching Single Room Price...");
+        String sql = "SELECT get_single_price()";
+        int price = -1;
+        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            try (ResultSet rs = stmt.executeQuery()){
+                if (rs.next()) {price = rs.getInt(1);}
+            }
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error fetching Single Room Price", e);
+        }
+        return price;
+    }
+
+    public static int getDoublePrice(Connection conn){
+        LOGGER.info("Fetching Double Room Price...");
+        String sql = "SELECT get_double_price()";
+        int price = -1;
+        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            try (ResultSet rs = stmt.executeQuery()){
+                if (rs.next()) {price = rs.getInt(1);}
+            }
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error fetching Double Room Price", e);
+        }
+        return price;
+    }
+
+    public static int getSuitePrice(Connection conn){
+        LOGGER.info("Fetching Suite Room Price...");
+        String sql = "SELECT get_suite_price()";
+        int price = -1;
+        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            try (ResultSet rs = stmt.executeQuery()){
+                if (rs.next()) {price = rs.getInt(1);}
+            }
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error fetching Suite Room Price", e);
+        }
+        return price;
     }
 }
 

@@ -117,11 +117,50 @@ DECLARE
     role VARCHAR;
 BEGIN
     select role INTO role from users where email = r_email;
-
 end;
 $$;
 
+
+CREATE OR REPLACE FUNCTION get_single_price()
+    RETURNS INT
+    LANGUAGE plpgsql
+AS $$
+    DECLARE
+        price INT;
+BEGIN
+    select price_per_night into price from room_types where type_id = 1;
+    RETURN price;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION get_suite_price()
+    RETURNS INT
+    LANGUAGE plpgsql
+AS $$
+DECLARE
+    price INT;
+BEGIN
+    select price_per_night into price from room_types where type_id = 3;
+    RETURN price;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION get_double_price()
+    RETURNS INT
+    LANGUAGE plpgsql
+AS $$
+DECLARE
+    price INT;
+BEGIN
+    select price_per_night into price from room_types where type_id = 2;
+    RETURN price;
+END;
+$$;
+
+
+
 --LOG FILE FUNCTIONS
+
 CREATE OR REPLACE FUNCTION log_changes_function()
     RETURNS TRIGGER
     LANGUAGE plpgsql
@@ -143,6 +182,25 @@ BEGIN
     RETURN NULL;
 END;
 $$;
+
+CREATE OR REPLACE FUNCTION get_logs()
+RETURNS TABLE(
+                log_id INT,
+                table_name TEXT,
+                operation TEXT,
+                old_data JSONB,
+                new_data JSONB,
+                modified_by TEXT,
+                timestamp_val TIMESTAMP
+             )
+    LANGUAGE plpgsql
+AS $$
+    BEGIN
+RETURN QUERY SELECT * FROM logfile ORDER BY timestamp;
+    END;
+$$;
+
+
 
 DROP TRIGGER IF EXISTS log_users_changes ON users;
 CREATE TRIGGER log_users_changes
