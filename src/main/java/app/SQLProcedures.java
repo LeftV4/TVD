@@ -1,6 +1,7 @@
 package app;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -128,6 +129,8 @@ public class SQLProcedures {
         }
         return role;
     }
+
+
     public static String getLogFileContent(Connection conn) {
         LOGGER.info("Fetching Log File content...");
         StringBuilder logContent = new StringBuilder();
@@ -195,7 +198,93 @@ public class SQLProcedures {
         }
         return price;
     }
+
+
+    public static int makeReservation(Connection conn, String email, Date checkIn, Date checkOut, int singles, int doubles, int suites) {
+        LOGGER.info("Making Reservation...");
+        String sql = "SELECT make_reservation(?, ?, ?, ?, ?, ?)";
+        int id = -1;
+        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setString(1, email);
+            stmt.setDate(2, checkIn);
+            stmt.setDate(3, checkOut);
+            stmt.setInt(4, singles);
+            stmt.setInt(5, doubles);
+            stmt.setInt(6, suites);
+
+            try(ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    id = rs.getInt(1);}
+            }
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error making reservation", e);
+        }
+        return id;
+    }
+
+    public static void registerPayment (Connection conn, int res_id, double amount, String method) {
+        LOGGER.info("Registering Payment...");
+        String sql = "SELECT register_payment(?, ?, ?)";
+
+            try (PreparedStatement stmt = conn.prepareStatement(sql)){
+                stmt.setInt(1, res_id);
+                stmt.setDouble(2, amount);
+                stmt.setString(3, method);
+                stmt.execute();
+            } catch (SQLException e) {LOGGER.log(Level.SEVERE, "Error registering payment", e);}
+    }
+
+
+    public static int getAvailableSingle(Connection conn, LocalDate checkIn, LocalDate checkOut){
+        LOGGER.info("Fetching Available Single Rooms...");
+        String sql = "SELECT count_available_single(?,?)";
+        int rooms = -1;
+        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setDate(1, Date.valueOf(checkIn));
+            stmt.setDate(2, Date.valueOf(checkOut));
+            try (ResultSet rs = stmt.executeQuery()){
+                if (rs.next()) {rooms = rs.getInt(1);}
+            }
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error fetching Available Single Rooms", e);
+        }
+        return rooms;
+    }
+
+    public static  int getAvailableDouble(Connection conn, LocalDate checkIn, LocalDate checkOut){
+        LOGGER.info("Fetching Available Double Rooms...");
+        String sql = "SELECT count_available_double(?,?)";
+        int rooms = -1;
+        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setDate(1, Date.valueOf(checkIn));
+            stmt.setDate(2, Date.valueOf(checkOut));
+            try (ResultSet rs = stmt.executeQuery()){
+                if (rs.next()) {rooms =rs.getInt(1);}
+            }
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error fetching Available Double Rooms", e);
+        }
+        return rooms;
+    }
+
+    public static int getAvailableSuite(Connection conn, LocalDate checkIn, LocalDate checkOut){
+        LOGGER.info("Fetching Available Suite Rooms...");
+        String sql = "SELECT count_available_suite(?,?)";
+        int rooms = -1;
+        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setDate(1, Date.valueOf(checkIn));
+            stmt.setDate(2, Date.valueOf(checkOut));
+            try (ResultSet rs = stmt.executeQuery()){
+                if (rs.next()) {rooms =rs.getInt(1);}
+            }
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error fetching Available Suite Rooms", e);
+        }
+        return rooms;
+    }
 }
+
+
 
 
 

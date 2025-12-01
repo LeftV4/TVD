@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -18,6 +19,11 @@ import java.util.logging.Logger;
 
 public class UserController {
 
+    @FXML Label suiteAv;
+    @FXML Label doubleAv;
+    @FXML Label singleAv;
+    @FXML Label resNumber;
+    @FXML AnchorPane thankPanel;
     @FXML VBox receiptVbox;
     @FXML Label receiptTotal;
     @FXML AnchorPane checkoutPane;
@@ -86,9 +92,10 @@ public class UserController {
         userStackPane.getChildren().forEach(node -> node.setDisable(true));
         reserveRoomPane.setVisible(true);
         reserveRoomPane.setDisable(false);
+        checkOutDate.setDisable(true);
 
         singleSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 12));
-        doubleSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 18));
+        doubleSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 15));
         suiteSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 3));
 
         //Set Check In Limits
@@ -118,6 +125,7 @@ public class UserController {
             cachedSinglePrice = SQLProcedures.getSinglePrice(conn);
             cachedDoublePrice = SQLProcedures.getDoublePrice(conn);
             cachedSuitePrice = SQLProcedures.getSuitePrice(conn);
+
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error fetching room prices", e);
         }
@@ -137,6 +145,7 @@ public class UserController {
             });
 
             checkInDate.valueProperty().addListener((_, _, newV) -> {
+                checkOutDate.setDisable(false);
                 checkOutDate.setValue(null);
                 checkOutDate.setDayCellFactory(_ -> new DateCell() {
                     @Override
@@ -151,7 +160,14 @@ public class UserController {
                 generatePrice();
             });
 
-            checkOutDate.valueProperty().addListener((_, _, _) -> generatePrice());
+            checkOutDate.valueProperty().addListener((_, _, _) -> {
+                generatePrice();
+                try (Connection conn = Database.getConnection()){
+                    singleAv.setText("Current Availability: " + SQLProcedures.getAvailableSingle(conn, checkInDate.getValue(), checkOutDate.getValue()));
+                    doubleAv.setText("Current Availability: " + SQLProcedures.getAvailableDouble(conn, checkInDate.getValue(), checkOutDate.getValue()));
+                    suiteAv.setText("Current Availability: " + SQLProcedures.getAvailableSuite(conn, checkInDate.getValue(), checkOutDate.getValue()));
+                }catch (SQLException e) {LOGGER.log(Level.SEVERE, "Error fetching room availability", e);}
+            });
 
 
             listenersInitialized = true;
@@ -184,6 +200,7 @@ public class UserController {
             if (!cartVbox.getChildren().contains(suitePrice)) {cartVbox.getChildren().add(suitePrice);}
         }
     }
+
     public int total;
     private void generatePrice() {
             total = (int) (( (suiteSpinner.getValue() * cachedSuitePrice)
@@ -245,6 +262,16 @@ public class UserController {
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
+
+            try (Connection conn = Database.getConnection() ){
+                int id = SQLProcedures.makeReservation(conn, Application.appEmail, Date.valueOf(checkInDate.getValue()), Date.valueOf(checkOutDate.getValue()), singleSpinner.getValue(), doubleSpinner.getValue(), suiteSpinner.getValue());
+                SQLProcedures.registerPayment(conn,id,total, "card");
+            }catch (SQLException e) {LOGGER.log(Level.SEVERE, "Error registering reservation", e);}
+
+            userStackPane.getChildren().forEach(node -> node.setVisible(false));
+            userStackPane.getChildren().forEach(node -> node.setDisable(true));
+            thankPanel.setVisible(true);
+            thankPanel.setDisable(false);
         }
     }
 
@@ -255,6 +282,15 @@ public class UserController {
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
+
+            try (Connection conn = Database.getConnection() ){
+                 int id = SQLProcedures.makeReservation(conn, Application.appEmail, Date.valueOf(checkInDate.getValue()), Date.valueOf(checkOutDate.getValue()), singleSpinner.getValue(), doubleSpinner.getValue(), suiteSpinner.getValue());
+                 SQLProcedures.registerPayment(conn,id,total, "card");
+            }catch (SQLException e) {LOGGER.log(Level.SEVERE, "Error registering reservation", e);}
+            userStackPane.getChildren().forEach(node -> node.setVisible(false));
+            userStackPane.getChildren().forEach(node -> node.setDisable(true));
+            thankPanel.setVisible(true);
+            thankPanel.setDisable(false);
         }
     }
 

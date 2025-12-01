@@ -20,7 +20,10 @@
          <Font size="24.0" />
       </font>
    </Label>
-   <Label fx:id="messLabel" alignment="CENTER" layoutX="403.0" layoutY="173.0" prefHeight="17.0" prefWidth="475.0" style="-fx-text-fill: red;" textAlignment="CENTER" />
+   <Label fx:id="messLabel" alignment="CENTER" layoutX="403.0" layoutY="173.0" prefHeight="17.0" prefWidth="475.0" style="-fx-text-fill: red;" textAlignment="CENTER">
+      <font>
+         <Font size="18.0" />
+      </font></Label>
     <StackPane fx:id="signInBox" layoutX="468.0" layoutY="223.0" prefHeight="355.0" prefWidth="344.0">
         <VBox fx:id="registerBox" alignment="CENTER" cacheShape="false" disable="true" prefHeight="200.0" prefWidth="249.0" spacing="5.0" visible="false">
             <TextField fx:id="regEmail" promptText="Enter Email">

@@ -158,6 +158,159 @@ END;
 $$;
 
 
+CREATE OR REPLACE FUNCTION count_available_single(
+    p_check_in DATE,
+    p_check_out DATE
+)
+    RETURNS INT AS $$
+DECLARE
+    available_count INT;
+BEGIN
+    SELECT COUNT(*)
+    INTO available_count
+    FROM rooms r
+    WHERE r.type_id = 1
+      AND NOT EXISTS (
+        SELECT 1
+        FROM reservation_rooms rr
+                 JOIN reservations res ON rr.reservation_id = res.reservation_id
+        WHERE rr.room_number = r.room_number
+          AND res.check_in < p_check_out
+          AND res.check_out > p_check_in
+    );
+
+    RETURN available_count;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION count_available_double(
+    p_check_in DATE,
+    p_check_out DATE
+)
+    RETURNS INT AS $$
+DECLARE
+    available_count INT;
+BEGIN
+    SELECT COUNT(*)
+    INTO available_count
+    FROM rooms r
+    WHERE r.type_id = 2
+      AND NOT EXISTS (
+        SELECT 1
+        FROM reservation_rooms rr
+                 JOIN reservations res ON rr.reservation_id = res.reservation_id
+        WHERE rr.room_number = r.room_number
+          AND res.check_in < p_check_out
+          AND res.check_out > p_check_in
+    );
+
+    RETURN available_count;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION count_available_suite(
+    p_check_in DATE,
+    p_check_out DATE
+)
+    RETURNS INT AS $$
+DECLARE
+    available_count INT;
+BEGIN
+    SELECT COUNT(*)
+    INTO available_count
+    FROM rooms r
+    WHERE r.type_id = 3
+      AND NOT EXISTS (
+        SELECT 1
+        FROM reservation_rooms rr
+                 JOIN reservations res ON rr.reservation_id = res.reservation_id
+        WHERE rr.room_number = r.room_number
+          AND res.check_in < p_check_out
+          AND res.check_out > p_check_in
+    );
+
+    RETURN available_count;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION make_reservation(
+    p_guest_email VARCHAR,
+    p_check_in DATE,
+    p_check_out DATE,
+    p_type1_count INT,
+    p_type2_count INT,
+    p_type3_count INT
+)
+    RETURNS INT AS $$
+DECLARE
+    res_id INT;
+    r_type INT;
+    r_count INT;
+    available_room RECORD;
+    reserved_count INT;
+    type_counts INT[] := ARRAY[p_type1_count, p_type2_count, p_type3_count];
+    type_ids INT[] := ARRAY[1,2,3];  -- adjust if your type IDs differ
+BEGIN
+    -- Insert reservation first
+    INSERT INTO reservations(guest_email, check_in, check_out)
+    VALUES (p_guest_email, p_check_in, p_check_out)
+    RETURNING reservation_id INTO res_id;
+
+    -- Loop over each room type
+    FOR r_type, r_count IN SELECT unnest(type_ids), unnest(type_counts)
+        LOOP
+            IF r_count = 0 THEN
+                CONTINUE;
+            END IF;
+
+            reserved_count := 0;
+
+            -- Find first available rooms for this type
+            FOR available_room IN
+                SELECT room_number
+                FROM rooms r
+                WHERE r.type_id = r_type
+                  AND NOT EXISTS (
+                    SELECT 1
+                    FROM reservation_rooms rr
+                             JOIN reservations res ON rr.reservation_id = res.reservation_id
+                    WHERE rr.room_number = r.room_number
+                      AND res.check_in < p_check_out
+                      AND res.check_out > p_check_in
+                )
+                ORDER BY r.room_number
+                LIMIT r_count
+                LOOP
+                    -- Insert into reservation_rooms
+                    INSERT INTO reservation_rooms(reservation_id, room_number)
+                    VALUES (res_id, available_room.room_number);
+
+                    reserved_count := reserved_count + 1;
+                END LOOP;
+
+            IF reserved_count < r_count THEN
+                RAISE EXCEPTION 'Not enough rooms available for type %', r_type;
+            END IF;
+        END LOOP;
+
+    RETURN res_id;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION register_payment(
+    p_reservation_id INT,
+    p_amount DOUBLE PRECISION,
+    p_method VARCHAR
+)
+    RETURNS VOID AS $$
+BEGIN
+    INSERT INTO payments(reservation_id, amount, method)
+    VALUES (p_reservation_id, p_amount, p_method);
+END;
+$$ LANGUAGE plpgsql;
+
 
 --LOG FILE FUNCTIONS
 
