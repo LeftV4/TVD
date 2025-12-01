@@ -104,13 +104,10 @@ public class signInController {
 
         try (Connection conn = Database.getConnection()) {
             String role = SQLProcedures.login(conn, email, password);
-            System.out.println(role);
 
             if (role !=null){
-                //noinspection StatementWithEmptyBody
                 if (role.equals("admin")) { timer.stop(); new app.SceneSwitch(rootPane, "/adminPanel.fxml");}
-                else //noinspection StatementWithEmptyBody
-                    if (role.equals("staff")) { timer.stop(); new app.SceneSwitch(rootPane, "/staffPanel.fxml");}
+                else if (role.equals("staff")) { timer.stop(); new app.SceneSwitch(rootPane, "/staffPanel.fxml");}
                 else {timer.stop(); new app.SceneSwitch(rootPane, "/userPanel.fxml");}
             }else {messLabel.setText("Invalid Email or Password!"); return;}
         }catch (SQLException | IOException e) {
@@ -187,15 +184,11 @@ public class signInController {
 
         try (Connection conn = Database.getConnection()) {
             int result = SQLProcedures.registerInfo(conn, fname, lname, phone, appRole, Application.appEmail);
-            System.out.println(appRole);
-            System.out.println(Application.appEmail);
             switch (result) {
                 case 0: {
                     if (appRole !=null){
-                        //noinspection StatementWithEmptyBody
                         if (appRole.equals("admin")) { timer.stop(); new app.SceneSwitch(rootPane, "/adminPanel.fxml"); }
-                        else //noinspection StatementWithEmptyBody
-                            if (appRole.equals("staff")) { timer.stop(); new app.SceneSwitch(rootPane, "/staffPanel.fxml"); }
+                        else if (appRole.equals("staff")) { timer.stop(); new app.SceneSwitch(rootPane, "/staffPanel.fxml"); }
                         else {timer.stop(); new app.SceneSwitch(rootPane, "/userPanel.fxml"); }
                     }else {messLabel.setText("Invalid Email or Password!"); return;}
                     break;

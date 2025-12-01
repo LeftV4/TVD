@@ -1,6 +1,7 @@
 package app;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -111,7 +112,8 @@ public class SQLProcedures {
         return fname;
     }
 
-    public static String getRole(Connection conn, String email) {
+    public static String getRole(Connection conn, String email)
+    {
         String role = null;
         String sql = "SELECT get_role_by_email(?)";
 
@@ -127,10 +129,12 @@ public class SQLProcedures {
         }
         return role;
     }
+
+
     public static String getLogFileContent(Connection conn) {
         LOGGER.info("Fetching Log File content...");
         StringBuilder logContent = new StringBuilder();
-        String sql = "SELECT * FROM logfile ORDER BY timestamp DESC";
+        String sql = "SELECT * FROM get_logs()";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
@@ -152,7 +156,135 @@ public class SQLProcedures {
         }
         return logContent.toString();
     }
+
+    public static int getSinglePrice(Connection conn){
+        LOGGER.info("Fetching Single Room Price...");
+        String sql = "SELECT get_single_price()";
+        int price = -1;
+        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            try (ResultSet rs = stmt.executeQuery()){
+                if (rs.next()) {price = rs.getInt(1);}
+            }
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error fetching Single Room Price", e);
+        }
+        return price;
+    }
+
+    public static int getDoublePrice(Connection conn){
+        LOGGER.info("Fetching Double Room Price...");
+        String sql = "SELECT get_double_price()";
+        int price = -1;
+        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            try (ResultSet rs = stmt.executeQuery()){
+                if (rs.next()) {price = rs.getInt(1);}
+            }
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error fetching Double Room Price", e);
+        }
+        return price;
+    }
+
+    public static int getSuitePrice(Connection conn){
+        LOGGER.info("Fetching Suite Room Price...");
+        String sql = "SELECT get_suite_price()";
+        int price = -1;
+        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            try (ResultSet rs = stmt.executeQuery()){
+                if (rs.next()) {price = rs.getInt(1);}
+            }
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error fetching Suite Room Price", e);
+        }
+        return price;
+    }
+
+
+    public static int makeReservation(Connection conn, String email, Date checkIn, Date checkOut, int singles, int doubles, int suites) {
+        LOGGER.info("Making Reservation...");
+        String sql = "SELECT make_reservation(?, ?, ?, ?, ?, ?)";
+        int id = -1;
+        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setString(1, email);
+            stmt.setDate(2, checkIn);
+            stmt.setDate(3, checkOut);
+            stmt.setInt(4, singles);
+            stmt.setInt(5, doubles);
+            stmt.setInt(6, suites);
+
+            try(ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    id = rs.getInt(1);}
+            }
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error making reservation", e);
+        }
+        return id;
+    }
+
+    public static void registerPayment (Connection conn, int res_id, double amount, String method) {
+        LOGGER.info("Registering Payment...");
+        String sql = "SELECT register_payment(?, ?, ?)";
+
+            try (PreparedStatement stmt = conn.prepareStatement(sql)){
+                stmt.setInt(1, res_id);
+                stmt.setDouble(2, amount);
+                stmt.setString(3, method);
+                stmt.execute();
+            } catch (SQLException e) {LOGGER.log(Level.SEVERE, "Error registering payment", e);}
+    }
+
+
+    public static int getAvailableSingle(Connection conn, LocalDate checkIn, LocalDate checkOut){
+        LOGGER.info("Fetching Available Single Rooms...");
+        String sql = "SELECT count_available_single(?,?)";
+        int rooms = -1;
+        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setDate(1, Date.valueOf(checkIn));
+            stmt.setDate(2, Date.valueOf(checkOut));
+            try (ResultSet rs = stmt.executeQuery()){
+                if (rs.next()) {rooms = rs.getInt(1);}
+            }
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error fetching Available Single Rooms", e);
+        }
+        return rooms;
+    }
+
+    public static  int getAvailableDouble(Connection conn, LocalDate checkIn, LocalDate checkOut){
+        LOGGER.info("Fetching Available Double Rooms...");
+        String sql = "SELECT count_available_double(?,?)";
+        int rooms = -1;
+        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setDate(1, Date.valueOf(checkIn));
+            stmt.setDate(2, Date.valueOf(checkOut));
+            try (ResultSet rs = stmt.executeQuery()){
+                if (rs.next()) {rooms =rs.getInt(1);}
+            }
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error fetching Available Double Rooms", e);
+        }
+        return rooms;
+    }
+
+    public static int getAvailableSuite(Connection conn, LocalDate checkIn, LocalDate checkOut){
+        LOGGER.info("Fetching Available Suite Rooms...");
+        String sql = "SELECT count_available_suite(?,?)";
+        int rooms = -1;
+        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setDate(1, Date.valueOf(checkIn));
+            stmt.setDate(2, Date.valueOf(checkOut));
+            try (ResultSet rs = stmt.executeQuery()){
+                if (rs.next()) {rooms =rs.getInt(1);}
+            }
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error fetching Available Suite Rooms", e);
+        }
+        return rooms;
+    }
 }
+
+
 
 
 
