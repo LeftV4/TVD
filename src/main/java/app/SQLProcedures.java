@@ -1,5 +1,8 @@
 package app;
 
+import javafx.scene.control.Alert;
+
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.logging.Level;
@@ -468,6 +471,37 @@ public class SQLProcedures {
             LOGGER.log(Level.SEVERE, "Error fetching Available Suite Rooms", e);
         }
         return rooms;
+    }
+
+    public static void update_room_prices(Connection conn, Double single_price, Double double_price, Double suite_price) {
+        LOGGER.info("Updating Room Prices...");
+        String sql = "SELECT update_room_prices(?, ?, ?)";
+
+        if (single_price == null || double_price == null || suite_price == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Invalid Prices");
+            alert.setContentText("Cannot have empty room values!");
+            alert.showAndWait();
+            return;
+        }
+
+        if (single_price <= 0 || double_price <= 0 || suite_price <= 0) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Invalid Prices");
+            alert.setContentText("All prices must be greater than 0!");
+            alert.showAndWait();
+            return;
+        }
+        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setBigDecimal(1, BigDecimal.valueOf(single_price));
+            stmt.setBigDecimal(2, BigDecimal.valueOf(double_price));
+            stmt.setBigDecimal(3, BigDecimal.valueOf(suite_price));
+            stmt.execute();
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error updating room prices", e);
+        }
     }
 }
 

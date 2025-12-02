@@ -494,6 +494,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION update_room_prices(
+    p_price1 NUMERIC(10,2),
+    p_price2 NUMERIC(10,2),
+    p_price3 NUMERIC(10,2)
+)
+    RETURNS VOID AS $$
+BEGIN
+
+
+    UPDATE room_types SET price_per_night = p_price1 WHERE type_id = 1;
+    UPDATE room_types SET price_per_night = p_price2 WHERE type_id = 2;
+    UPDATE room_types SET price_per_night = p_price3 WHERE type_id = 3;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+
 
 --LOG FILE FUNCTIONS
 

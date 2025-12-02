@@ -3,17 +3,24 @@ package app;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.sql.Date;
 
 
 public class AdminController {
+    @FXML ScrollPane resScrollPane;
+    @FXML Button updateBtn;
+    @FXML ScrollPane userScrollPane;
+    @FXML TextArea manageDoublePrice;
+    @FXML TextArea manageSinglePrice;
+    @FXML TextArea manageSuitePrice;
+    @FXML VBox roomManager;
     @FXML Label helloLabel;
     @FXML AnchorPane adminButtonPane;
     @FXML StackPane adminStackPane;
@@ -36,13 +43,6 @@ public class AdminController {
     @FXML AnchorPane adminContentPane;
     @FXML private AnchorPane rootPane2;
     @FXML private VBox WelcomeBox;
-    @FXML private SplitPane rootSplitPane;
-    @FXML private Button billing;
-    @FXML private Button logfile;
-    @FXML private Button accountman;
-    @FXML private Button reservationman;
-    @FXML private Button roomman;
-    @FXML private Button logOutbtn;
 
     String []totalUsers;
     String userEmail;
@@ -50,8 +50,6 @@ public class AdminController {
     String resID;
     String []totalRes;
     String []totalResRooms;
-    Date checkIn;
-    Date checkOut;
 
     private static final Logger LOGGER = Logger.getLogger(AdminController.class.getName());
 
@@ -136,7 +134,7 @@ public class AdminController {
                 deleteBtn.setStyle("-fx-background-color: #d9534f; -fx-text-fill: white;");
                 deleteBtn.setOnAction(e -> {
                     try (Connection conn2 = Database.getConnection()) {
-                        SQLProcedures.deleteUser(conn2, email); // implementation to delete a user? i shall try it soon
+                        SQLProcedures.deleteUser(conn2, email); // implementation to delete a user? I shall try it soon
                         userList.getChildren().remove(row);
                         accountDetails.setVisible(false);
                         accountDetails.setDisable(true);
@@ -241,7 +239,7 @@ public class AdminController {
                 deleteBtn.setStyle("-fx-background-color: #d9534f; -fx-text-fill: white;");
                 deleteBtn.setOnAction(e -> {
                     try (Connection conn2 = Database.getConnection()) {
-                        SQLProcedures.deleteRes(conn2, Integer.valueOf(res));
+                        SQLProcedures.deleteRes(conn2, Integer.parseInt(res));
                         resList.getChildren().remove(row);
                         resDetails.setVisible(false);
                         resDetails.setDisable(true);
@@ -260,4 +258,30 @@ public class AdminController {
     }
 
 
+    public void updatePrices() {
+        try (Connection conn = Database.getConnection()){
+            SQLProcedures.update_room_prices(conn, Double.parseDouble(manageSinglePrice.getText()), Double.parseDouble(manageDoublePrice.getText()), Double.parseDouble(manageSuitePrice.getText()));
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Failed to update room prices", e);
+        }
+    }
+
+    public void manageRooms() {
+        adminStackPane.getChildren().forEach(node -> {
+            node.setVisible(false);
+            node.setDisable(true);
+        });
+
+
+        roomManager.setVisible(true);
+        roomManager.setDisable(false);
+
+        try (Connection conn = Database.getConnection()){
+            manageSinglePrice.setText(String.valueOf(SQLProcedures.getSinglePrice(conn)));
+            manageDoublePrice.setText(String.valueOf(SQLProcedures.getDoublePrice(conn)));
+            manageSuitePrice.setText(String.valueOf(SQLProcedures.getSuitePrice(conn)));
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Failed to load room prices", e);
+        }
+    }
 }
