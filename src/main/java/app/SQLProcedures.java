@@ -163,25 +163,63 @@ public class SQLProcedures {
         }catch(SQLException e){
             LOGGER.log(Level.SEVERE, "Error viewing users file", e);
         }
-        return users.toString();
+        return users;
+    }
+
+    public static String getBills(Connection conn) {
+        LOGGER.info("Fetching bill/payments...");
+        String bills = null;
+        String sql = "SELECT get_bills()";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            try (ResultSet rs = stmt.executeQuery()){
+                if (rs.next()){
+                    bills = rs.getString(1);
+                }
+            }
+        }catch(SQLException e){
+            LOGGER.log(Level.SEVERE, "Error viewing users file", e);
+        }
+        return bills;
     }
 
     public static String getRes(Connection conn) {
         LOGGER.info("Fetching Reservations...");
-        StringBuilder ress = new StringBuilder();
+        String ress = null;
         String sql = "SELECT get_reservations()";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)){
             try (ResultSet rs = stmt.executeQuery()){
                 if(rs.next()){
-                    ress.append(rs.getString(1));
+                    ress = rs.getString(1);
                 }
             }
         }catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error viewing reservations file", e);
         }
-        return ress.toString();
+        return ress;
     }
+
+    public static String getResByEmail(Connection conn, String email){
+        LOGGER.info("Fetching Reservations by Email...");
+        String ress = null;
+        String sql = "SELECT get_reservations_by_email(?)";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setString(1,email);
+
+            try (ResultSet rs = stmt.executeQuery()){
+                if(rs.next()){
+                    ress = rs.getString(1);
+                }
+            }
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error viewing reservations file", e);
+        }
+        return ress;
+
+    }
+
 
     public static String getResRooms(Connection conn, String resid){
         LOGGER.info("Fetching Reservation Rooms...");
@@ -189,7 +227,7 @@ public class SQLProcedures {
         String sql = "SELECT get_reservation_rooms(?)";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)){
-            stmt.setInt(1,Integer.valueOf(resid));
+            stmt.setInt(1,Integer.parseInt(resid));
 
             try (ResultSet rs = stmt.executeQuery()){
 
@@ -212,7 +250,7 @@ public class SQLProcedures {
         String sql = "SELECT get_guest_email_by_resid(?)";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)){
-            stmt.setInt(1,Integer.valueOf(resid));
+            stmt.setInt(1,Integer.parseInt(resid));
 
             try (ResultSet rs = stmt.executeQuery()){
                 if (rs.next()) {guest_email = rs.getString(1);}
@@ -229,7 +267,7 @@ public class SQLProcedures {
         String sql = "SELECT get_checkIn_by_resid(?)";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)){
-            stmt.setInt(1,Integer.valueOf(resid));
+            stmt.setInt(1,Integer.parseInt(resid));
 
             try (ResultSet rs = stmt.executeQuery()){
                 if (rs.next()) {checkIn = rs.getDate(1);}
@@ -241,12 +279,63 @@ public class SQLProcedures {
         return checkIn;
     }
 
+    public static String getRIDbyBILLID(Connection conn, String pid){
+        String rid = null;
+        String sql = "SELECT get_resid_by_paymentid(?)";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setInt(1,Integer.parseInt(pid));
+
+            try (ResultSet rs = stmt.executeQuery()){
+                if (rs.next()) {rid = rs.getString(1);}
+                return rid;
+            }
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error fetching CheckIn_by_resid", e);
+        }
+        return rid;
+    }
+
+    public static Timestamp getPayDate(Connection conn, String pid){
+        Timestamp payDate = null;
+        String sql = "SELECT get_paydate_by_paymentid(?)";
+
+        try (PreparedStatement stmt  = conn.prepareStatement(sql)){
+            stmt.setInt(1,Integer.parseInt(pid));
+
+            try (ResultSet rs = stmt.executeQuery()){
+                if (rs.next()) {payDate = rs.getTimestamp(1);}
+                return payDate;
+            }
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error fetching paydate_by_paymentid", e);
+        }
+        return payDate;
+    }
+
+    public static String getMethod(Connection conn, String pid){
+        String method = null;
+        String sql = "SELECT get_method_by_paymentid(?)";
+
+        try (PreparedStatement stmt  = conn.prepareStatement(sql)){
+            stmt.setInt(1,Integer.parseInt(pid));
+
+            try (ResultSet rs = stmt.executeQuery()){
+                if (rs.next()) {method = rs.getString(1);}
+                return method;
+            }
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error fetching paydate_by_paymentid", e);
+        }
+        return method;
+    }
+
     public static Date getCheckOut(Connection conn, String resid){
         Date checkOut = null;
         String sql = "SELECT get_checkOut_by_resid(?)";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)){
-            stmt.setInt(1,Integer.valueOf(resid));
+            stmt.setInt(1,Integer.parseInt(resid));
 
             try (ResultSet rs = stmt.executeQuery()){
                 if (rs.next()) {checkOut = rs.getDate(1);}
@@ -257,6 +346,26 @@ public class SQLProcedures {
         }
         return checkOut;
     }
+
+    public static double getAmount(Connection conn, String resid){
+        double amount = -1;
+        String sql = "SELECT get_amount_by_resid(?)";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setInt(1, Integer.parseInt(resid));
+
+            try (ResultSet rs = stmt.executeQuery()){
+                if (rs.next()){amount = rs.getDouble(1);}
+                return amount;
+            }
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error fetching amount_by_resid", e);
+        }
+        return amount;
+    }
+
+
+
 
     public static int deleteUser(Connection conn, String email) {
         LOGGER.info("Deleting User " + SQLProcedures.getFirstName(conn, email) + "..." );

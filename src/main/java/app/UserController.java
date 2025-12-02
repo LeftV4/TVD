@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -35,6 +36,7 @@ public class UserController {
     @FXML Label suitePrice;
     @FXML Label totalCost;
     @FXML AnchorPane userRootPane;
+    @FXML AnchorPane resDetails;
     @FXML Label singleAvailability;
     @FXML Label doubleAvailability;
     @FXML Label suiteAvailability;
@@ -57,11 +59,29 @@ public class UserController {
     @FXML SplitPane rootSplitPane;
     @FXML Label helloLabel;
     @FXML VBox WelcomeBox;
+    @FXML VBox resList;
+    @FXML VBox resRoomList;
+    @FXML TextField selResEmail;
+    @FXML DatePicker selResCheckIn;
+    @FXML DatePicker selResCheckOut;
+    @FXML TextField selResAmount;
 
     private static final Logger LOGGER = Logger.getLogger(UserController.class.getName());
 
+    String []totalRes;
+    String []totalResRooms;
+    String resID;
+
 
     public void initialize(){
+        selResCheckIn.setDisable(true);
+        selResCheckIn.setStyle("-fx-opacity: 1");
+        selResCheckIn.getEditor().setStyle("-fx-opacity: 1");
+
+        selResCheckOut.setDisable(true);
+        selResCheckOut.setStyle("-fx-opacity: 1");
+        selResCheckOut.getEditor().setStyle("-fx-opacity: 1");
+
         if (singlePrice == null) singlePrice = new Label();
         if (doublePrice == null) doublePrice = new Label();
         if (suitePrice == null) suitePrice = new Label();
@@ -240,12 +260,6 @@ public class UserController {
         enterReserveRoom();
     }
 
-    public void enterMyReservations(){
-        userStackPane.getChildren().forEach(node -> node.setVisible(false));
-        userStackPane.getChildren().forEach(node -> node.setDisable(true));
-        reservationsPane.setVisible(true);
-        reservationsPane.setDisable(false);
-    }
 
     public void enterMyAccount(){
         userStackPane.getChildren().forEach(node -> node.setVisible(false));
@@ -295,6 +309,96 @@ public class UserController {
     }
 
     public void showReservations(){
+        userStackPane.getChildren().forEach(node -> node.setVisible(false));
+        userStackPane.getChildren().forEach(node -> node.setDisable(true));
+        reservationsPane.setVisible(true);
+        reservationsPane.setDisable(false);
+        resDetails.setVisible(false);
+        resDetails.setDisable(true);
+        try(final Connection conn = Database.getConnection()){
+            String ress = SQLProcedures.getResByEmail(conn, Application.appEmail);
+            resList.getChildren().clear();
+            if(ress != null){
+                totalRes = ress.split("\n");
+                for(String res: totalRes){
+                    HBox row = new HBox();
+                    row.setSpacing(10);
+                    row.setStyle("-fx-padding: 5; -fx-alignment: CENTER_LEFT;");
 
+                    Label resField = new Label();
+                    resField.setPrefWidth(20);
+                    resField.setStyle("-fx-font-size: 16px;");
+                    resField.setText(res);
+
+                    //details button
+                    Button detailsBtn = new Button("Details");
+                    detailsBtn.setOnAction(e -> {
+                        resDetails.setVisible(true);
+                        resDetails.setDisable(false);
+                        try (Connection conn2 = Database.getConnection()){
+                            resID = resField.getText();
+                            selResEmail.setText(SQLProcedures.getGuestEmail(conn2, resID));
+                            selResCheckIn.setValue(SQLProcedures.getCheckIn(conn2, resID).toLocalDate());
+                            selResCheckOut.setValue(SQLProcedures.getCheckOut(conn2, resID).toLocalDate());
+                            selResCheckOut.setEditable(false);
+                            selResCheckIn.setEditable(false);
+                            selResAmount.setText(String.valueOf(SQLProcedures.getAmount(conn2, resID))+"€");
+                            resRoomList.getChildren().clear();
+                            String ressRooms = SQLProcedures.getResRooms(conn2, resID);
+                            totalResRooms = ressRooms.split("\n");
+                            for(String rooms: totalResRooms){
+
+                                HBox row1 = new HBox();
+                                row1.setSpacing(10);
+                                row1.setStyle("-fx-padding: 5; -fx-alignment: CENTER_LEFT;");
+
+                                //label for containing roomfield
+                                Label roomField = new Label();
+                                roomField.setPrefWidth(200);
+                                roomField.setStyle("-fx-font-size: 18px;");
+                                roomField.setText(rooms);
+                                row1.getChildren().addAll(roomField);
+                                resRoomList.getChildren().add(row1);
+                            }
+                        }catch (SQLException ex){
+                            LOGGER.log(Level.SEVERE, "Failed to load res info", ex);
+                        }
+                    });
+
+                    //delete /cancel button
+                    Button deleteBtn = new Button("Cancel");
+                    deleteBtn.setOnAction(e -> {
+                        try(Connection conn2 = Database.getConnection()){
+                            SQLProcedures.deleteRes(conn2, Integer.parseInt(res));
+                            resList.getChildren().remove(row);
+                            resDetails.setVisible(false);
+                            resDetails.setDisable(true);
+                        }catch (SQLException ex){
+                            LOGGER.log(Level.SEVERE, "Failed to delete reservation", ex);
+                        }
+                    });
+                    row.getChildren().addAll(resField, detailsBtn, deleteBtn);
+                    resList.getChildren().add(row);
+                }
+            }else{
+                HBox row = new HBox();
+                row.setSpacing(10);
+                row.setStyle("-fx-padding: 5; -fx-alignment: CENTER_LEFT;");
+
+                Label noRes = new Label("No reservations yet!");
+                noRes.setStyle("-fx-font-size: 12px;");
+                noRes.setPrefWidth(200);
+
+                row.getChildren().addAll(noRes);
+                resList.getChildren().add(row);
+            }
+        }catch (SQLException e){
+                LOGGER.log(Level.SEVERE, "Failed to load reservations", e);
+        }
     }
+
+
+
+
+
 }

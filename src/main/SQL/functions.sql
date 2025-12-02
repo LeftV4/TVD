@@ -150,6 +150,20 @@ EXCEPTION
 END;
 $$;
 
+CREATE OR REPLACE FUNCTION get_bills()
+    RETURNS VARCHAR
+    LANGUAGE plpgsql
+AS $$
+BEGIN
+    RETURN (SELECT STRING_AGG(CAST(payment_id AS VARCHAR), E'\n') FROM payments);
+
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN NULL;
+END;
+$$;
+
 CREATE OR REPLACE FUNCTION get_fname_by_email(r_email VARCHAR)
     RETURNS VARCHAR
     LANGUAGE plpgsql
@@ -241,6 +255,18 @@ EXCEPTION
 END;
 $$;
 
+CREATE OR REPLACE FUNCTION get_reservations_by_email(r_email VARCHAR)
+    RETURNS VARCHAR
+    LANGUAGE plpgsql
+AS $$
+BEGIN
+    RETURN (SELECT STRING_AGG(CAST(reservation_id AS VARCHAR), E'\n') FROM reservations where guest_email = r_email);
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN NULL;
+END;
+$$;
+
 CREATE OR REPLACE FUNCTION get_reservation_rooms(r_resid int)
     RETURNS VARCHAR
     LANGUAGE plpgsql
@@ -252,6 +278,15 @@ EXCEPTION
     WHEN NO_DATA_FOUND THEN
         RETURN NULL;
 END;
+$$;
+
+create or replace function get_amount_by_resid(r_resid int)
+    returns double precision
+    language plpgsql
+as $$
+begin
+    return (select amount from payments where reservation_id = r_resid);
+end;
 $$;
 
 CREATE OR REPLACE FUNCTION get_guest_email_by_resid(r_resid int)
@@ -301,6 +336,58 @@ EXCEPTION
         RETURN NULL;
 END;
 $$;
+
+create or replace function get_resid_by_paymentid(r_paymentid int)
+    returns int
+    language plpgsql
+as $$
+    DECLARE
+        resid INT;
+begin
+    select reservation_id into resid from payments where payment_id = r_paymentid;
+    return resid;
+
+    EXCEPTION
+        WHEN OTHERS THEN
+            RAISE NOTICE 'Error: %', SQLERRM;
+            RETURN 1;
+end;
+$$;
+
+create or replace function get_paydate_by_paymentid(r_paymentid int)
+    returns timestamp
+    language plpgsql
+as $$
+    DECLARE
+        paydate timestamp;
+begin
+    select payment_date into paydate from payments where payment_id = r_paymentid;
+    return paydate;
+
+    exception
+    when others then
+            raise notice 'Error: %', SQLERRM;
+            return null;
+end;
+$$;
+
+create or replace function get_method_by_paymentid(r_paymentid int)
+    returns varchar
+    language plpgsql
+as $$
+DECLARE
+    r_method varchar;
+begin
+    select method into r_method from payments where payment_id = r_paymentid;
+    return r_method;
+
+exception
+    when others then
+        raise notice 'Error: %', SQLERRM;
+        return null;
+end;
+$$;
+
 
 
 

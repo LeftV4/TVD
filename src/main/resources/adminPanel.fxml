@@ -1,20 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="rootPane2" prefHeight="800.0" prefWidth="1280.0" styleClass="style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.AdminController">
+<AnchorPane fx:id="rootPane2" prefHeight="800.0" prefWidth="1280.0" styleClass="style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.AdminController">
     <SplitPane fx:id="rootSplitPane" dividerPositions="0.3" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" scaleShape="false" stylesheets="@style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <AnchorPane fx:id="adminButtonPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="420.0" prefHeight="802.0" prefWidth="420.0" stylesheets="@style.css">
             <StackPane prefHeight="65.0" prefWidth="387.0" stylesheets="@style.css">
@@ -27,7 +18,7 @@
                 </VBox>
             </StackPane>
             <VBox alignment="CENTER" fillWidth="false" focusTraversable="true" layoutY="90.0" prefHeight="711.0" prefWidth="420.0" spacing="30.0" stylesheets="@style.css">
-                <Button alignment="CENTER" cacheShape="false" centerShape="false" contentDisplay="TOP" mnemonicParsing="false" prefHeight="84.0" prefWidth="344.0" text="Billing &amp; Payments">
+                <Button alignment="CENTER" cacheShape="false" centerShape="false" contentDisplay="TOP" mnemonicParsing="false" onMouseClicked="#showBilling" prefHeight="84.0" prefWidth="344.0" text="Billing &amp; Payments">
                     <VBox.margin>
                         <Insets />
                     </VBox.margin>
@@ -222,6 +213,109 @@
                         </ScrollPane>
                     </AnchorPane>
                 </AnchorPane>
+            <AnchorPane fx:id="billingArea" disable="true" layoutX="10.0" layoutY="10.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="200.0" stylesheets="@style.css" visible="false">
+               <children>
+                  <ScrollPane fx:id="billScrollPane" hbarPolicy="NEVER" layoutX="2.0" layoutY="47.0" prefHeight="751.0" prefWidth="445.0" vbarPolicy="ALWAYS" AnchorPane.topAnchor="47.0">
+                     <content>
+                        <VBox fx:id="billList" prefHeight="753.0" prefWidth="420.0" />
+                     </content>
+                  </ScrollPane>
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="2.0" prefHeight="47.0" prefWidth="445.0" text="Bills">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <AnchorPane fx:id="billDetails" layoutX="447.0" prefHeight="800.0" prefWidth="410.0">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="47.0" prefWidth="410.0" text="Bill Details">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="selBillID" editable="false" layoutX="130.0" layoutY="71.0" prefHeight="47.0" prefWidth="270.0">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </TextField>
+                        <TextField fx:id="selBillRID" editable="false" layoutX="129.0" layoutY="137.0" prefHeight="47.0" prefWidth="270.0">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </TextField>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="73.0" prefHeight="47.0" prefWidth="127.0" text="Bill ID:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="139.0" prefHeight="47.0" prefWidth="127.0" text="Reservation ID:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="207.0" prefHeight="47.0" prefWidth="127.0" text="Email:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="472.0" prefHeight="47.0" prefWidth="127.0" text="Payment Date:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="545.0" prefHeight="47.0" prefWidth="127.0" text="Method:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="selBillAmount" editable="false" layoutX="129.0" layoutY="400.0" prefHeight="47.0" prefWidth="270.0">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </TextField>
+                        <TextField fx:id="selBillPayDate" editable="false" layoutX="129.0" layoutY="470.0" prefHeight="47.0" prefWidth="270.0">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </TextField>
+                        <TextField fx:id="selBillMethod" editable="false" layoutX="129.0" layoutY="543.0" prefHeight="47.0" prefWidth="270.0">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </TextField>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="402.0" prefHeight="47.0" prefWidth="127.0" text="Amount:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="selBillEmail" editable="false" layoutX="129.0" layoutY="205.0" prefHeight="47.0" prefWidth="270.0">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </TextField>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="270.0" prefHeight="47.0" prefWidth="127.0" text="First Name:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="332.0" prefHeight="47.0" prefWidth="127.0" text="Last Name:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="selBillFname" editable="false" layoutX="129.0" layoutY="268.0" prefHeight="47.0" prefWidth="270.0">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </TextField>
+                        <TextField fx:id="selBillLname" editable="false" layoutX="129.0" layoutY="330.0" prefHeight="47.0" prefWidth="270.0">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </TextField>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
             </StackPane>
         </AnchorPane>
     </SplitPane>
