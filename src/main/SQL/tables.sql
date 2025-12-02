@@ -10,7 +10,7 @@ CREATE TABLE guests (
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     phone VARCHAR(20),
-    email VARCHAR(50) PRIMARY KEY NOT NULL REFERENCES users(email)
+    email VARCHAR(50) PRIMARY KEY NOT NULL REFERENCES users(email) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 drop table if exists admins cascade;
@@ -18,7 +18,7 @@ CREATE TABLE admins (
     first_name varchar(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     phone varchar(20),
-    email VARCHAR(50) PRIMARY KEY NOT NULL REFERENCES users(email)
+    email VARCHAR(50) PRIMARY KEY NOT NULL REFERENCES users(email) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 drop table if exists staff cascade;
@@ -26,7 +26,7 @@ CREATE TABLE staff (
     first_name varchar(50) NOT NULL,
     last_name VARCHAR(50) not null,
     phone varchar(20),
-    email VARCHAR(50) PRIMARY KEY NOT NULL REFERENCES users(email)
+    email VARCHAR(50) PRIMARY KEY NOT NULL REFERENCES users(email) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 drop table if exists room_types cascade;
@@ -88,9 +88,10 @@ CREATE TABLE reservations (
 );
 
 
+
 drop table if exists reservation_rooms cascade;
 CREATE TABLE reservation_rooms (
-    reservation_id INT NOT NULL REFERENCES reservations(reservation_id) ON DELETE CASCADE,
+    reservation_id INT NOT NULL REFERENCES reservations(reservation_id) ON DELETE CASCADE ON UPDATE CASCADE,
     room_number VARCHAR(10) NOT NULL REFERENCES rooms(room_number) ON DELETE CASCADE,
     PRIMARY KEY(reservation_id, room_number)
 );

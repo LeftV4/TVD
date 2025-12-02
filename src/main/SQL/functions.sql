@@ -46,6 +46,79 @@ as $$
     END;
 $$;
 
+create or replace function update_info(
+    r_fname VARCHAR,
+    r_lname VARCHAR,
+    r_phone VARCHAR,
+    r_role VARCHAR,
+    r_email VARCHAR,
+    r_email2 VARCHAR
+)returns int
+    language plpgsql
+as $$
+begin
+    if r_email != r_email2 then
+        update users set email = r_email2 where email = r_email;
+        IF r_role = 'admin' THEN
+            update admins set first_name = r_fname, last_name = r_lname, phone = r_phone where email = r_email2;
+            return 1;
+        ELSIF r_role = 'staff' then
+            update staff set first_name = r_fname, last_name = r_lname, phone = r_phone where email = r_email2;
+            return 1;
+        else
+            update guests set first_name = r_fname, last_name = r_lname, phone = r_phone where email = r_email2;
+            return 1;
+        end if;
+    else
+        IF r_role = 'admin' THEN
+            update admins set first_name = r_fname, last_name = r_lname, phone = r_phone where email = r_email;
+            return 1;
+        ELSIF r_role = 'staff' then
+            update staff set first_name = r_fname, last_name = r_lname, phone = r_phone where email = r_email;
+            return 1;
+        else
+            update guests set first_name = r_fname, last_name = r_lname, phone = r_phone where email = r_email;
+            return 1;
+        end if;
+    end if;
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE NOTICE 'Error: %', SQLERRM;
+        RETURN -1;
+END;
+$$;
+
+create or replace function deleteUser_by_email(r_email VARCHAR)
+    returns int
+    language plpgsql
+as $$
+begin
+    delete from users where email = r_email;
+    return 0;
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE NOTICE 'Error: %', SQLERRM;
+        RETURN 1;
+END;
+$$;
+
+create or replace function deleteRes_by_resid(r_resid INT)
+    returns int
+    language plpgsql
+as $$
+begin
+    delete from reservations where reservation_id = r_resid;
+    return 0;
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE NOTICE 'Error: %', SQLERRM;
+        RETURN 1;
+END;
+$$;
+
+
+
+
 create or replace function login (
     r_email VARCHAR,
     r_password VARCHAR
@@ -64,6 +137,18 @@ as $$
    END
 $$;
 
+CREATE OR REPLACE FUNCTION get_users()
+    RETURNS VARCHAR
+    LANGUAGE plpgsql
+AS $$
+BEGIN
+    RETURN (SELECT STRING_AGG(CAST(email AS VARCHAR), E'\n') FROM users);
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN NULL;
+END;
+$$;
 
 CREATE OR REPLACE FUNCTION get_fname_by_email(r_email VARCHAR)
     RETURNS VARCHAR
@@ -119,6 +204,104 @@ BEGIN
     select role INTO role from users where email = r_email;
 end;
 $$;
+
+CREATE OR REPLACE FUNCTION get_phone_by_email(r_email VARCHAR)
+    RETURNS VARCHAR
+    LANGUAGE plpgsql
+AS $$
+DECLARE
+    phonenum VARCHAR;
+BEGIN
+    IF ( (SELECT role FROM users where r_email = email) = 'admin') THEN
+        select phone INTO phonenum from admins where email = r_email;
+    ELSIF ((SELECT role FROM users where r_email = email) = 'staff') THEN
+        select phone INTO phonenum from staff where email = r_email;
+    ELSE
+        select phone INTO phonenum from guests where email = r_email;
+    END IF;
+    RETURN phonenum;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN NULL;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION get_reservations()
+    RETURNS VARCHAR
+    LANGUAGE plpgsql
+AS $$
+BEGIN
+    RETURN (SELECT STRING_AGG(CAST(reservation_id AS VARCHAR), E'\n') FROM reservations);
+
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN NULL;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION get_reservation_rooms(r_resid int)
+    RETURNS VARCHAR
+    LANGUAGE plpgsql
+AS $$
+BEGIN
+    return(select STRING_AGG(CAST(room_number AS VARCHAR), E'\n') from reservation_rooms where reservation_id = r_resid);
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN NULL;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION get_guest_email_by_resid(r_resid int)
+    RETURNS VARCHAR
+    LANGUAGE plpgsql
+AS $$
+DECLARE
+     r_email VARCHAR;
+BEGIN
+    select guest_email into r_email from reservations where reservation_id = r_resid;
+    return r_email;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN NULL;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION get_checkIn_by_resid(r_resid int)
+    RETURNS VARCHAR
+    LANGUAGE plpgsql
+AS $$
+DECLARE
+    r_checkIn DATE;
+BEGIN
+    select check_in into r_checkIn from reservations where reservation_id = r_resid;
+    return r_checkIn;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN NULL;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION get_checkOut_by_resid(r_resid int)
+    RETURNS VARCHAR
+    LANGUAGE plpgsql
+AS $$
+DECLARE
+    r_checkOut DATE;
+BEGIN
+    select check_out into r_checkOut from reservations where reservation_id = r_resid;
+    return r_checkOut;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN NULL;
+END;
+$$;
+
 
 
 CREATE OR REPLACE FUNCTION get_single_price()

@@ -294,5 +294,7 @@ public class UserController {
         }
     }
 
+    public void showReservations(){
 
+    }
 }
