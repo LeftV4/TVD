@@ -148,6 +148,40 @@ public class SQLProcedures {
         return phone;
     }
 
+    public static String getPass(Connection conn, String email){
+        String pass = null;
+        String sql = "SELECT get_pass_by_email(?)";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setString(1,email);
+
+            try (ResultSet rs = stmt.executeQuery()){
+                if (rs.next()) { pass = rs.getString(1); }
+            }
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error getting password", e);
+        }
+        return pass;
+    }
+
+    public static int updatePass(Connection conn, String email, String pass) {
+        int status = -1;
+        LOGGER.info("Updating Password...");
+        String sql = "SELECT update_pass(?, ?)";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setString(1,email);
+            stmt.setString(2,pass);
+
+            try (ResultSet rs = stmt.executeQuery()){
+                if (rs.next()) { status = rs.getInt(1); }
+            }
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error updating password", e);
+        }
+        return status;
+    }
+
     public static String getUsers(Connection conn) {
         LOGGER.info("Fetching Users...");
         String users = null;

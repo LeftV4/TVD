@@ -40,6 +40,7 @@ public class UserController {
     @FXML Label singleAvailability;
     @FXML Label doubleAvailability;
     @FXML Label suiteAvailability;
+    @FXML Label messLabel;
     @FXML VBox cartVbox;
     @FXML DatePicker checkInDate;
     @FXML DatePicker checkOutDate;
@@ -266,6 +267,61 @@ public class UserController {
         userStackPane.getChildren().forEach(node -> node.setDisable(true));
         myAccountPane.setVisible(true);
         myAccountPane.setDisable(false);
+        editEmail.setText(Application.appEmail);
+        try (Connection conn = Database.getConnection()){
+            editFname.setText(SQLProcedures.getFirstName(conn, Application.appEmail));
+            editLname.setText(SQLProcedures.getLastName(conn, Application.appEmail));
+            editPhone.setText(SQLProcedures.getPhone(conn, Application.appEmail));
+        }catch (SQLException e) {LOGGER.log(Level.SEVERE, "Error retrieving user info", e);}
+
+    }
+
+    public void deleteUser(){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Account");
+        alert.setHeaderText("Are you sure you want to delete your account?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try (Connection conn = Database.getConnection()){
+                SQLProcedures.deleteUser(conn, Application.appEmail);
+                logOut();
+            }catch (SQLException e) {LOGGER.log(Level.SEVERE, "Error deleting user", e);}
+        }
+    }
+
+    String role;
+    int status;
+    public void updateMyUser(){
+        try(Connection conn = Database.getConnection()){
+            role = SQLProcedures.getRole(conn, Application.appEmail);
+            status = SQLProcedures.updateInfo(conn, editFname.getText(), editLname.getText(), editPhone.getText(), role, Application.appEmail, editEmail.getText());
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Failed to update user", e);
+        }
+        enterMyAccount();
+    }
+
+    String pass;
+    public void changePassword(){
+
+        messLabel.setText("");
+        if(editOldPass.getText().isEmpty() || editNewPass.getText().isEmpty() || editConfirmPass.getText().isEmpty()){
+            messLabel.setText("Please fill in all fields!");
+        }
+        try (Connection conn = Database.getConnection()){
+            pass = SQLProcedures.getPass(conn, Application.appEmail);
+
+            if (editOldPass.getText().equals(pass)){
+                if(editNewPass.getText().equals(editConfirmPass.getText())){
+                        SQLProcedures.updatePass(conn, Application.appEmail, editNewPass.getText());
+                }else{
+                    messLabel.setText("Confirmation of new password failed!");
+                }
+            }else{
+                messLabel.setText("Incorrect old password!");
+            }
+
+        }catch (SQLException e) {LOGGER.log(Level.SEVERE, "Error proceeding with update of password", e);}
     }
 
 

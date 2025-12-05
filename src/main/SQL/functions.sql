@@ -220,6 +220,34 @@ BEGIN
 end;
 $$;
 
+CREATE OR REPLACE FUNCTION get_pass_by_email(r_email VARCHAR)
+    RETURNS VARCHAR
+    LANGUAGE plpgsql
+AS $$
+DECLARE
+    r_password VARCHAR;
+BEGIN
+    select password INTO r_password from users where email = r_email;
+    return r_password;
+end;
+$$;
+
+create or replace function update_pass(
+    r_email VARCHAR,
+    r_pass VARCHAR
+) returns int
+    language plpgsql
+as $$
+begin
+    update users set password = r_pass where email = r_email;
+    return 0;
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE NOTICE 'Error: %', SQLERRM;
+        RETURN 1;
+END;
+$$;
+
 CREATE OR REPLACE FUNCTION get_phone_by_email(r_email VARCHAR)
     RETURNS VARCHAR
     LANGUAGE plpgsql
