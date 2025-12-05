@@ -41,6 +41,7 @@ public class AdminController {
     @FXML DatePicker selResCheckIn;
     @FXML DatePicker selResCheckOut;
     @FXML TextField selUserPhone;
+    @FXML TextField selUserRole;
     @FXML AnchorPane accountDetails;
     @FXML AnchorPane resDetails;
     @FXML AnchorPane billDetails;
@@ -70,8 +71,6 @@ public class AdminController {
     String resID;
     String []totalRes;
     String []totalResRooms;
-    Date checkIn;
-    Date checkOut;
 
     private static final Logger LOGGER = Logger.getLogger(AdminController.class.getName());
 
@@ -147,6 +146,8 @@ public class AdminController {
                             selUserlName.setText(SQLProcedures.getLastName(conn2, userEmail));
                             selUserEmail.setText(userEmail);
                             selUserPhone.setText(SQLProcedures.getPhone(conn2, userEmail));
+                            role = SQLProcedures.getRole(conn2, userEmail);
+                            selUserRole.setText(role);
                         } catch(SQLException ex){
                             LOGGER.log(Level.SEVERE, "Failed to load users info", ex);
                         }
@@ -379,7 +380,7 @@ public class AdminController {
                             selBillEmail.setText(email);
                             selBillFname.setText(SQLProcedures.getFirstName(conn2, email));
                             selBillLname.setText(SQLProcedures.getLastName(conn2, email));
-                            selBillAmount.setText(String.valueOf(SQLProcedures.getAmount(conn2, resID)));
+                            selBillAmount.setText(String.valueOf(SQLProcedures.getAmount(conn2, resID))+"€");
                             paydate = SQLProcedures.getPayDate(conn2, billID);
                             if (paydate != null) {
                                 java.time.format.DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");

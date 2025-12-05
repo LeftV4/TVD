@@ -6,7 +6,7 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane fx:id="rootPane2" prefHeight="800.0" prefWidth="1280.0" styleClass="style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.AdminController">
-    <SplitPane fx:id="rootSplitPane" dividerPositions="0.3" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" scaleShape="false" stylesheets="@style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <SplitPane fx:id="rootSplitPane" dividerPositions="0.3265940902021773" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" scaleShape="false" stylesheets="@style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <AnchorPane fx:id="adminButtonPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="420.0" prefHeight="802.0" prefWidth="420.0" stylesheets="@style.css">
             <StackPane prefHeight="65.0" prefWidth="387.0" stylesheets="@style.css">
                 <VBox fx:id="WelcomeBox" alignment="CENTER" minHeight="-Infinity" minWidth="420.0" prefHeight="90.0" prefWidth="420.0">
@@ -148,7 +148,7 @@
                                 <Font size="24.0" />
                             </font>
                         </TextField>
-                        <Button fx:id="updateBtn" layoutX="129.0" layoutY="343.0" mnemonicParsing="false" onMouseClicked="#updateUser" prefHeight="51.0" prefWidth="270.0" text="Update" />
+                        <Button fx:id="updateBtn" layoutX="129.0" layoutY="418.0" mnemonicParsing="false" onMouseClicked="#updateUser" prefHeight="51.0" prefWidth="270.0" text="Update" />
                         <TextField fx:id="selUserPhone" layoutX="129.0" layoutY="268.0" prefHeight="47.0" prefWidth="270.0">
                             <font>
                                 <Font size="24.0" />
@@ -159,6 +159,16 @@
                                 <Font size="24.0" />
                             </font>
                         </Label>
+                  <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="341.0" prefHeight="47.0" prefWidth="103.0" text="Role:">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="selUserRole" editable="false" layoutX="129.0" layoutY="339.0" prefHeight="47.0" prefWidth="270.0">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </TextField>
                     </AnchorPane>
                 </AnchorPane>
                 <AnchorPane fx:id="resArea" disable="true" layoutX="10.0" layoutY="10.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="200.0" stylesheets="@style.css" visible="false">

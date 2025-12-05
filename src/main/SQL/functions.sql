@@ -213,9 +213,10 @@ CREATE OR REPLACE FUNCTION get_role_by_email(r_email VARCHAR)
     LANGUAGE plpgsql
 AS $$
 DECLARE
-    role VARCHAR;
+    r_role VARCHAR;
 BEGIN
-    select role INTO role from users where email = r_email;
+    select role INTO r_role from users where email = r_email;
+    return r_role;
 end;
 $$;
 

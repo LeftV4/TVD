@@ -117,20 +117,19 @@ public class SQLProcedures {
 
     public static String getRole(Connection conn, String email)
     {
-        String role = null;
+        String r_role = null;
         String sql = "SELECT get_role_by_email(?)";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)){
             stmt.setString(1,email);
 
             try (ResultSet rs = stmt.executeQuery()){
-                if (rs.next()) {role = rs.getString(1);}
-                return role;
+                if (rs.next()) {r_role = rs.getString(1);}
             }
         }catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error fetching role", e);
         }
-        return role;
+        return r_role;
     }
 
     public static String getPhone(Connection conn, String email) {

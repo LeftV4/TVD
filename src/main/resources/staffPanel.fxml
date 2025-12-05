@@ -51,12 +51,59 @@
                 <AnchorPane fx:id="adminContentPane" minHeight="720.0" minWidth="860.0" prefHeight="160.0" prefWidth="100.0">
                     <children>
                         <StackPane fx:id="adminStackPane" prefHeight="800.0" prefWidth="860.0">
-                            <TextArea fx:id="logFileArea" disable="true" prefHeight="200.0" prefWidth="200.0" visible="false">
-                                <font>
-                                    <Font size="18.0" />
-                                </font>
-                            </TextArea>
-                        </StackPane>
+                     <children>
+                        <AnchorPane fx:id="resArea" disable="true" prefHeight="200.0" prefWidth="200.0" visible="false">
+                           <children>
+                              <ScrollPane layoutY="56.0" prefHeight="742.0" prefWidth="520.0">
+                                 <content>
+                                    <VBox fx:id="resList" prefHeight="739.0" prefWidth="500.0" />
+                                 </content></ScrollPane>
+                              <Label alignment="CENTER" layoutX="2.0" layoutY="1.0" prefHeight="55.0" prefWidth="520.0" text="Reservations">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <AnchorPane fx:id="resDetails" layoutX="524.0" prefHeight="798.0" prefWidth="336.0">
+                                 <children>
+                                    <Label alignment="CENTER" prefHeight="55.0" prefWidth="336.0" text="Reservation Details">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </Label>
+                                    <Label alignment="CENTER" layoutX="6.0" layoutY="65.0" prefHeight="25.0" prefWidth="96.0" text="Guest Email:">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <Label alignment="CENTER" layoutY="114.0" prefHeight="25.0" prefWidth="108.0" text="Reservation ID:">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <Label alignment="CENTER" layoutX="20.0" layoutY="163.0" prefHeight="25.0" prefWidth="68.0" text="Check In:">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <Label alignment="CENTER" layoutX="14.0" layoutY="214.0" prefHeight="25.0" prefWidth="81.0" text="Check Out:">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <ScrollPane layoutX="2.0" layoutY="266.0" prefHeight="530.0" prefWidth="330.0">
+                                       <content>
+                                          <VBox fx:id="resRoomList" prefHeight="527.0" prefWidth="324.0" />
+                                       </content>
+                                    </ScrollPane>
+                                    <TextField fx:id="selResGEmail" layoutX="108.0" layoutY="65.0" prefHeight="25.0" prefWidth="221.0" />
+                                    <TextField fx:id="selResID" layoutX="108.0" layoutY="114.0" prefHeight="25.0" prefWidth="221.0" />
+                                    <DatePicker fx:id="selResCheckIn" layoutX="101.0" layoutY="163.0" prefHeight="25.0" prefWidth="221.0" />
+                                    <DatePicker fx:id="selResCheckOut" layoutX="101.0" layoutY="214.0" prefHeight="25.0" prefWidth="221.0" />
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </AnchorPane>
+                     </children></StackPane>
                     </children></AnchorPane>
             </items>
         </SplitPane>
