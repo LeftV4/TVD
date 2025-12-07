@@ -56,6 +56,14 @@ public class StaffController {
 
 
     public void initialize(){
+        selResCheckIn.setDisable(true);
+        selResCheckIn.setStyle("-fx-opacity: 1");
+        selResCheckIn.getEditor().setStyle("-fx-opacity: 1");
+
+        selResCheckOut.setDisable(true);
+        selResCheckOut.setStyle("-fx-opacity: 1");
+        selResCheckOut.getEditor().setStyle("-fx-opacity: 1");
+
         Platform.runLater(()->{
             try (Connection conn = Database.getConnection()){
                 helloLabel.setText("Welcome "+ SQLProcedures.getFirstName(conn, Application.appEmail) + "!");
