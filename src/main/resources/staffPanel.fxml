@@ -26,18 +26,18 @@
                         </StackPane>
                         <VBox alignment="CENTER" fillWidth="false" focusTraversable="true" layoutY="90.0" prefHeight="711.0" prefWidth="420.0" spacing="30.0">
                             <children>
-                                <Button alignment="CENTER" cacheShape="false" centerShape="false" contentDisplay="TOP" mnemonicParsing="false" prefHeight="84.0" prefWidth="344.0" text="Hotel Reservations">
+                                <Button alignment="CENTER" cacheShape="false" centerShape="false" contentDisplay="TOP" mnemonicParsing="false" onMouseClicked="#showRes" prefHeight="84.0" prefWidth="344.0" text="Hotel Reservations">
                                     <VBox.margin>
                                         <Insets />
                                     </VBox.margin>
                                     <font>
                                         <Font size="24.0" />
                                     </font></Button>
-                                <Button cacheShape="false" centerShape="false" layoutX="48.0" layoutY="324.0" mnemonicParsing="false" prefHeight="84.0" prefWidth="344.0" text="Room Availability">
+                                <Button cacheShape="false" centerShape="false" layoutX="48.0" layoutY="324.0" mnemonicParsing="false" onMouseClicked="#showAvailable" prefHeight="84.0" prefWidth="344.0" text="Room Availability">
                                     <font>
                                         <Font size="24.0" />
                                     </font></Button>
-                                <Button cacheShape="false" centerShape="false" layoutX="48.0" layoutY="366.0" mnemonicParsing="false" prefHeight="84.0" prefWidth="344.0" text="Guest Information">
+                                <Button cacheShape="false" centerShape="false" layoutX="48.0" layoutY="366.0" mnemonicParsing="false" onMouseClicked="#showGuests" prefHeight="84.0" prefWidth="344.0" text="Guest Information">
                                     <font>
                                         <Font size="24.0" />
                                     </font></Button>
@@ -54,11 +54,11 @@
                      <children>
                         <AnchorPane fx:id="resArea" disable="true" prefHeight="200.0" prefWidth="200.0" visible="false">
                            <children>
-                              <ScrollPane layoutY="56.0" prefHeight="742.0" prefWidth="520.0">
+                              <ScrollPane layoutY="49.0" prefHeight="749.0" prefWidth="520.0">
                                  <content>
-                                    <VBox fx:id="resList" prefHeight="739.0" prefWidth="500.0" />
+                                    <VBox fx:id="resList" prefHeight="741.0" prefWidth="500.0" />
                                  </content></ScrollPane>
-                              <Label alignment="CENTER" layoutX="2.0" layoutY="1.0" prefHeight="55.0" prefWidth="520.0" text="Reservations">
+                              <Label alignment="CENTER" layoutX="2.0" layoutY="1.0" prefHeight="47.0" prefWidth="520.0" text="Reservations">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
@@ -99,6 +99,88 @@
                                     <TextField fx:id="selResID" layoutX="108.0" layoutY="114.0" prefHeight="25.0" prefWidth="221.0" />
                                     <DatePicker fx:id="selResCheckIn" layoutX="101.0" layoutY="163.0" prefHeight="25.0" prefWidth="221.0" />
                                     <DatePicker fx:id="selResCheckOut" layoutX="101.0" layoutY="214.0" prefHeight="25.0" prefWidth="221.0" />
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="roomAvailArea" disable="true" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" visible="false">
+                           <children>
+                              <VBox alignment="CENTER" layoutX="270.0" layoutY="115.0" prefHeight="571.0" prefWidth="320.0" spacing="30.0">
+                                 <children>
+                                    <Label fx:id="availSingle" alignment="CENTER">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="availDouble" alignment="CENTER" layoutX="10.0" layoutY="10.0">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="availSuite" alignment="CENTER" layoutX="10.0" layoutY="75.0" textAlignment="CENTER">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                              <DatePicker fx:id="roomAvailCheckIn" layoutX="56.0" layoutY="72.0" prefHeight="35.0" prefWidth="215.0" />
+                              <DatePicker fx:id="roomAvailCheckOut" layoutX="590.0" layoutY="72.0" prefHeight="35.0" prefWidth="215.0" />
+                              <Label layoutX="131.0" layoutY="28.0" text="Check In:">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="659.0" layoutY="28.0" text="Check Out:">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="guestArea" disable="true" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" visible="false">
+                           <children>
+                              <ScrollPane layoutY="49.0" prefHeight="749.0" prefWidth="520.0">
+                                 <content>
+                                    <VBox fx:id="guestList" prefHeight="741.0" prefWidth="500.0" />
+                                 </content>
+                              </ScrollPane>
+                              <Label alignment="CENTER" layoutX="2.0" layoutY="1.0" prefHeight="47.0" prefWidth="520.0" text="Guests">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <AnchorPane fx:id="guestDetails" layoutX="516.0" prefHeight="798.0" prefWidth="344.0">
+                                 <children>
+                                    <Label alignment="CENTER" prefHeight="55.0" prefWidth="336.0" text="Guest Details">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </Label>
+                                    <Label alignment="CENTER" layoutX="6.0" layoutY="65.0" prefHeight="25.0" prefWidth="96.0" text="Email:">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <Label alignment="CENTER" layoutY="114.0" prefHeight="25.0" prefWidth="108.0" text="First Name:">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="selGEmail" layoutX="108.0" layoutY="65.0" prefHeight="25.0" prefWidth="221.0" />
+                                    <TextField fx:id="selGFName" layoutX="108.0" layoutY="114.0" prefHeight="25.0" prefWidth="221.0" />
+                                    <Label alignment="CENTER" layoutY="169.0" prefHeight="25.0" prefWidth="108.0" text="Last Name:">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="selGLName" layoutX="108.0" layoutY="169.0" prefHeight="25.0" prefWidth="221.0" />
+                                    <Label alignment="CENTER" layoutX="6.0" layoutY="218.0" prefHeight="25.0" prefWidth="108.0" text="Phone:">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="selGPhone" layoutX="108.0" layoutY="218.0" prefHeight="25.0" prefWidth="221.0" />
                                  </children>
                               </AnchorPane>
                            </children>

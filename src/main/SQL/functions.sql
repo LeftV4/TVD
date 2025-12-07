@@ -150,6 +150,19 @@ EXCEPTION
 END;
 $$;
 
+CREATE OR REPLACE FUNCTION get_guests()
+    RETURNS VARCHAR
+    LANGUAGE plpgsql
+AS $$
+BEGIN
+    RETURN (SELECT STRING_AGG(CAST(email AS VARCHAR), E'\n') FROM users where role = 'guest');
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN NULL;
+END;
+$$;
+
 CREATE OR REPLACE FUNCTION get_bills()
     RETURNS VARCHAR
     LANGUAGE plpgsql

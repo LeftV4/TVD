@@ -199,6 +199,23 @@ public class SQLProcedures {
         return users;
     }
 
+    public static String getGuests(Connection conn) {
+        LOGGER.info("Fetching Guests...");
+        String guests = null;
+        String sql = "SELECT get_guests()";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            try (ResultSet rs = stmt.executeQuery()){
+                if(rs.next()){
+                    guests = rs.getString(1);
+                }
+            }
+        }catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error viewing guests file", e);
+        }
+        return guests;
+    }
+
     public static String getBills(Connection conn) {
         LOGGER.info("Fetching bill/payments...");
         String bills = null;
