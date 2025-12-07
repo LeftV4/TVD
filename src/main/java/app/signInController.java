@@ -37,7 +37,11 @@ public class signInController {
     @FXML TextField loginEmail;
     @FXML TextField loginPassword;
 
-    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final ExecutorService executor = Executors.newSingleThreadExecutor(r -> {
+        Thread t = new Thread(r);
+        t.setDaemon(true);
+        return t;
+    });
     private static final Logger LOGGER = Logger.getLogger(signInController.class.getName());
 
     String appRole;
