@@ -1,8 +1,114 @@
 .label{
-    -fx-font-family: 'Century Gothic';
+    -fx-text-fill: #e6e2d3;
 }
 
 .button {
-    -fx-font-size: 24px;
+    -fx-font-size: 30px;
+    -fx-background-color: linear-gradient(#2b2b2b, #1f1f1f);
+    -fx-text-fill: #e6e2d3;
+    -fx-padding : 10 20;
+    -fx_background-radius: 10;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.75), 10, 0.0, 0, 1);
+    -fx-transition: all 0.15s ease-in-out
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(#3a3a3a, #282828);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+    -fx-translate-y: -2;
+}
+
+.button:pressed {
+    -fx-translate-y: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 4, 0, 0, 1);
+    -fx-background-color: linear-gradient(#1c1c1c, #101010);
+}
+
+.text-field {
+    -fx-background-color: #252525;
+    -fx-text-fill: #e6e2d3;
+    -fx-padding: 8;
+    -fx-background-radius: 8;
+    -fx-border-color: #3b3b3b;
+}
+
+.text-field:focused {
+    -fx-background-color: #2a2a2a;
+    -fx-effect: dropshadow(gaussian, #bfa772, 15, 0, 0, 0);
+}
+.divider {
+    -fx-background-color: linear-gradient(to right,
+    transparent,
+    #d9c598,
+    transparent
+    );
+    -fx-pref-height: 2;
+}
+
+.root {
+    -fx-background-image: url("images/background.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
     -fx-font-family: 'Century Gothic';
+}
+
+.card {
+    -fx-background-color: #232323;
+    -fx-background-radius: 12;
+    -fx-padding: 15;
+    -fx-spacing: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 10, 0, 0, 3);
+
+    -fx-border-color: #bfa772;
+    border-width: 1.2;
+    -fx-border-radius: 12;
+}
+
+.anchor-pane, .vbox, .stack-pane, .split-pane {
+    -fx-background-color: #1b1b1b;
+}
+
+#signInBox{
+    -fx-background-color: #121212; /* dark, slightly lighter than pure black */
+    -fx-background-radius: 12;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 20, 0, 0, 5);
+    -fx-border-color: #bfa772;  /* your thin golden lines */
+    -fx-border-width: 1.2;
+    -fx-border-radius: 12;
+}
+
+.radio-button .text {
+    -fx-fill: #e6e2d3;
+    -fx-text-fill: #e6e2d3; /* warm cream */
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+}
+
+.radio-button:selected .radio {
+    -fx-background-color: #d4af53; /* warm glowing gold */
+    -fx-effect: dropshadow(gaussian, rgba(212,175,83,0.6), 6, 0, 0, 0);
+}
+
+.radio-button .radio {
+    -fx-background-color: #232323; /* matches card background */
+    -fx-border-color: #bfa772; /* soft gold border */
+    -fx-border-width: 2;
+    -fx-background-radius: 50%;
+    -fx-border-radius: 50%;
+    -fx-pref-width: 20;
+    -fx-pref-height: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 4, 0, 0, 1);
+}
+
+.radio-button:armed .radio {
+    -fx-background-color: #bfa772; /* slightly darker glow for tactile feel */
+}
+
+.radio-button:hover .radio {
+    -fx-border-color: #d4af53; /* subtle gold glow */
+    -fx-effect: dropshadow(gaussian, rgba(212,175,83,0.3), 6, 0, 0, 0);
 }

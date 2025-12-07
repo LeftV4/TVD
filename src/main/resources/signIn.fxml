@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane" onMouseMoved="#check" prefHeight="800.0" prefWidth="1280.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.signInController">
+<AnchorPane fx:id="rootPane" onMouseMoved="#check" prefHeight="800.0" prefWidth="1280.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.signInController">
       <Label layoutX="403.0" layoutY="82.0" style="-fx-font-size: 36;" text="Hotel Management System">
          <font>
             <Font name="Century Gothic" size="36.0" />
          </font>
       </Label>
+   <Separator layoutX="540.0" layoutY="139.0" prefWidth="200.0" />
    <Label fx:id="connLabel" layoutX="14.0" layoutY="751.0" prefHeight="35.0" prefWidth="200.0" style="-fx-text-fill: red;" text="Not Connected" textAlignment="CENTER">
       <font>
          <Font size="24.0" />
