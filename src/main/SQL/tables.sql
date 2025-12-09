@@ -83,7 +83,7 @@ insert into rooms (room_number, type_id) values ('309', 1);
 drop table if exists reservations cascade;
 CREATE TABLE reservations (
     reservation_id SERIAL PRIMARY KEY,
-    guest_email VARCHAR(50) NOT NULL REFERENCES guests(email) ON DELETE CASCADE,
+    guest_email VARCHAR(50) NOT NULL REFERENCES guests(email) ON DELETE CASCADE ON UPDATE CASCADE,
     check_in DATE NOT NULL,
     check_out DATE NOT NULL CHECK (check_out > check_in)
 );

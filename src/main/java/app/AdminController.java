@@ -253,7 +253,7 @@ public class AdminController {
                     resField.setStyle("-fx-font-size: 16px;");
                     resField.setText(res);
 
-                    // edit button
+                    // details button
                     Button editBtn = new Button("Details");
                     editBtn.setOnAction(e -> {
                         resDetails.setVisible(true);
