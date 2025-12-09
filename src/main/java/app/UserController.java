@@ -348,7 +348,7 @@ public class UserController {
     public void payByCard() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Payment Confirmation");
-        alert.setHeaderText("Make reservation and " + total + "€ with card?");
+        alert.setHeaderText("Make reservation and pay " + total + "€ with card?");
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -424,14 +424,21 @@ public class UserController {
                     //delete /cancel button
                     Button deleteBtn = new Button("Cancel");
                     deleteBtn.setOnAction(_ -> {
-                        try(Connection conn2 = Database.getConnection()){
-                            SQLProcedures.deleteRes(conn2, Integer.parseInt(res));
-                            resList.getChildren().remove(row);
-                            resDetails.setVisible(false);
-                            resDetails.setDisable(true);
-                        }catch (SQLException ex){
-                            LOGGER.log(Level.SEVERE, "Failed to delete reservation", ex);
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Cancel Reservation?");
+                        alert.setHeaderText("Are you sure you want to cancel your reservation?");
+                        Optional<ButtonType> result = alert.showAndWait();
+                        if (result.isPresent() && result.get() == ButtonType.OK) {
+                            try(Connection conn2 = Database.getConnection()){
+                                SQLProcedures.deleteRes(conn2, Integer.parseInt(res));
+                                resList.getChildren().remove(row);
+                                resDetails.setVisible(false);
+                                resDetails.setDisable(true);
+                            }catch (SQLException ex){
+                                LOGGER.log(Level.SEVERE, "Failed to delete reservation", ex);
+                            }
                         }
+
                     });
                     row.getChildren().addAll(resField, detailsBtn, deleteBtn);
                     resList.getChildren().add(row);

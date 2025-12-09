@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.sql.Date;
@@ -158,13 +159,19 @@ public class AdminController {
                     Button deleteBtn = new Button("Delete");
                     deleteBtn.setStyle("-fx-background-color: #d9534f; -fx-text-fill: white;");
                     deleteBtn.setOnAction(e -> {
-                        try (Connection conn2 = Database.getConnection()) {
-                            SQLProcedures.deleteUser(conn2, email); // implementation to delete a user? i shall try it soon
-                            userList.getChildren().remove(row);
-                            accountDetails.setVisible(false);
-                            accountDetails.setDisable(true);
-                        } catch (SQLException ex) {
-                            LOGGER.log(Level.SEVERE, "Failed to delete user", ex);
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Delete User?");
+                        alert.setHeaderText("Are you sure you want to delete this user?");
+                        Optional<ButtonType> result = alert.showAndWait();
+                        if(result.isPresent() && result.get() == ButtonType.OK){
+                            try (Connection conn2 = Database.getConnection()) {
+                                SQLProcedures.deleteUser(conn2, email); // implementation to delete a user? i shall try it soon
+                                userList.getChildren().remove(row);
+                                accountDetails.setVisible(false);
+                                accountDetails.setDisable(true);
+                            } catch (SQLException ex) {
+                                LOGGER.log(Level.SEVERE, "Failed to delete user", ex);
+                            }
                         }
                     });
                     row.getChildren().addAll(emailField, editBtn, deleteBtn);
@@ -277,13 +284,19 @@ public class AdminController {
                     Button deleteBtn = new Button("Delete");
                     deleteBtn.setStyle("-fx-background-color: #d9534f; -fx-text-fill: white;");
                     deleteBtn.setOnAction(e -> {
-                        try (Connection conn2 = Database.getConnection()) {
-                            SQLProcedures.deleteRes(conn2, Integer.parseInt(res));
-                            resList.getChildren().remove(row);
-                            resDetails.setVisible(false);
-                            resDetails.setDisable(true);
-                        } catch (SQLException ex) {
-                            LOGGER.log(Level.SEVERE, "Failed to delete reservation", ex);
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Delete Reservation?");
+                        alert.setHeaderText("Are you sure you want to delete this reservation?");
+                        Optional<ButtonType> result = alert.showAndWait();
+                        if(result.isPresent() && result.get() == ButtonType.OK){
+                            try (Connection conn2 = Database.getConnection()) {
+                                SQLProcedures.deleteRes(conn2, Integer.parseInt(res));
+                                resList.getChildren().remove(row);
+                                resDetails.setVisible(false);
+                                resDetails.setDisable(true);
+                            } catch (SQLException ex) {
+                                LOGGER.log(Level.SEVERE, "Failed to delete reservation", ex);
+                            }
                         }
                     });
                     row.getChildren().addAll(resField, editBtn, deleteBtn);
