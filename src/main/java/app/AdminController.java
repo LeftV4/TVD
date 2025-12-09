@@ -207,11 +207,20 @@ public class AdminController {
         }
     }
     int status;
+    String userfname;
+    String userlname;
+    String useremail;
+    String userphone;
+    String userrole;
     @FXML
     public void updateUser(){
         try(Connection conn = Database.getConnection()){
-            role = SQLProcedures.getRole(conn, userEmail);
-            status = SQLProcedures.updateInfo(conn, selUserfName.getText(), selUserlName.getText(), selUserPhone.getText(), role, userEmail, selUserEmail.getText());
+            userfname = selUserfName.getText();
+            userlname = selUserlName.getText();
+            useremail = selUserEmail.getText();
+            userphone = selUserPhone.getText();
+            userrole = SQLProcedures.getRole(conn, userEmail);
+            status = SQLProcedures.updateInfo(conn, userfname, userlname, userphone, userrole, userEmail, useremail);
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Failed to update user", e);
         }
