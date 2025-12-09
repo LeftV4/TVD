@@ -16,6 +16,7 @@ import java.sql.Date;
 
 
 public class AdminController {
+    @FXML ScrollPane billScrollPane;
     @FXML ScrollPane resScrollPane;
     @FXML Button updateBtn;
     @FXML ScrollPane userScrollPane;

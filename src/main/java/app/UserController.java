@@ -388,7 +388,7 @@ public class UserController {
 
                     //details button
                     Button detailsBtn = new Button("Details");
-                    detailsBtn.setOnAction(e -> {
+                    detailsBtn.setOnAction(_ -> {
                         resDetails.setVisible(true);
                         resDetails.setDisable(false);
                         try (Connection conn2 = Database.getConnection()){
@@ -423,7 +423,7 @@ public class UserController {
 
                     //delete /cancel button
                     Button deleteBtn = new Button("Cancel");
-                    deleteBtn.setOnAction(e -> {
+                    deleteBtn.setOnAction(_ -> {
                         try(Connection conn2 = Database.getConnection()){
                             SQLProcedures.deleteRes(conn2, Integer.parseInt(res));
                             resList.getChildren().remove(row);

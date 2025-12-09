@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -13,12 +12,11 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="rootPane" onMouseMoved="#check" prefHeight="800.0" prefWidth="1280.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.signInController">
-      <Label layoutX="403.0" layoutY="82.0" style="-fx-font-size: 36;" text="Hotel Management System">
+      <Label layoutX="403.0" layoutY="82.0" style="-fx-font-size: 36;" styleClass="signInLabel" text="Hotel Management System">
          <font>
             <Font name="Century Gothic" size="36.0" />
          </font>
       </Label>
-   <Separator layoutX="540.0" layoutY="139.0" prefWidth="200.0" />
    <Label fx:id="connLabel" layoutX="14.0" layoutY="751.0" prefHeight="35.0" prefWidth="200.0" style="-fx-text-fill: red;" text="Not Connected" textAlignment="CENTER">
       <font>
          <Font size="24.0" />
@@ -29,12 +27,8 @@
          <Font size="24.0" />
       </font>
    </Label>
-   <Label fx:id="messLabel" alignment="CENTER" layoutX="403.0" layoutY="173.0" prefHeight="17.0" prefWidth="475.0" style="-fx-text-fill: red;" textAlignment="CENTER">
-      <font>
-         <Font size="18.0" />
-      </font></Label>
     <StackPane fx:id="signInBox" layoutX="468.0" layoutY="223.0" prefHeight="355.0" prefWidth="344.0">
-        <VBox fx:id="registerBox" alignment="CENTER" cacheShape="false" disable="true" prefHeight="200.0" prefWidth="249.0" spacing="5.0" visible="false">
+        <VBox fx:id="registerBox" alignment="CENTER" cacheShape="false" disable="true" prefHeight="459.0" prefWidth="302.0" spacing="10.0" visible="false">
             <TextField fx:id="regEmail" promptText="Enter Email">
                 <font>
                     <Font size="18.0" />
@@ -89,7 +83,7 @@
                 </font>
             </Button>
         </VBox>
-        <VBox fx:id="loginBox" alignment="CENTER" disable="true" prefHeight="200.0" prefWidth="249.0" spacing="5.0" visible="false">
+        <VBox fx:id="loginBox" alignment="CENTER" disable="true" prefHeight="200.0" prefWidth="249.0" spacing="10.0" visible="false">
             <TextField fx:id="loginEmail" prefHeight="34.0" prefWidth="194.0" promptText="Enter email">
                 <font>
                     <Font size="18.0" />
@@ -111,7 +105,7 @@
                 </font>
             </Button>
         </VBox>
-        <VBox fx:id="infoBox" alignment="CENTER" disable="true" prefHeight="355.0" prefWidth="242.0" spacing="5.0" visible="false">
+        <VBox fx:id="infoBox" alignment="CENTER" disable="true" prefHeight="355.0" prefWidth="242.0" spacing="10.0" visible="false">
             <Label text="Please Register your info:">
                 <font>
                     <Font size="18.0" />
@@ -143,7 +137,7 @@
                 </font>
             </Button>
         </VBox>
-        <VBox fx:id="startBox" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="355.0" prefWidth="241.0" spacing="20.0">
+        <VBox fx:id="startBox" alignment="CENTER" prefHeight="441.0" prefWidth="302.0" spacing="30.0">
             <Button mnemonicParsing="false" onMouseClicked="#startRegister" text="Register">
                 <font>
                     <Font size="24.0" />
@@ -156,4 +150,5 @@
             </Button>
         </VBox>
     </StackPane>
+   <Button layoutX="1007.0" layoutY="722.0" mnemonicParsing="false" text="About the App" />
 </AnchorPane>

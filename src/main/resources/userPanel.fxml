@@ -19,7 +19,7 @@
 
 <AnchorPane fx:id="userRootPane" prefHeight="800.0" prefWidth="1280.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.UserController">
     <SplitPane fx:id="rootSplitPane" dividerPositions="0.3" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" scaleShape="false" stylesheets="@style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <AnchorPane fx:id="userButtonPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="420.0" prefHeight="802.0" prefWidth="420.0">
+        <AnchorPane fx:id="userButtonPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="420.0" prefHeight="802.0" prefWidth="420.0" styleClass="buttonPane">
             <StackPane prefHeight="65.0" prefWidth="387.0">
                 <VBox fx:id="WelcomeBox" alignment="CENTER" minHeight="-Infinity" minWidth="420.0" prefHeight="90.0" prefWidth="420.0">
                     <Label fx:id="helloLabel" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="47.0" prefWidth="286.0">
@@ -55,9 +55,9 @@
                 </Button>
             </VBox>
         </AnchorPane>
-        <AnchorPane fx:id="userContentPane" minHeight="720.0" minWidth="860.0" prefHeight="160.0" prefWidth="100.0">
+        <AnchorPane fx:id="userContentPane" minHeight="720.0" minWidth="860.0" prefHeight="160.0" prefWidth="100.0" styleClass="contentPane">
             <StackPane fx:id="userStackPane" prefHeight="800.0" prefWidth="860.0">
-                <AnchorPane fx:id="reserveRoomPane" prefHeight="200.0" prefWidth="200.0">
+                <AnchorPane fx:id="reserveRoomPane" disable="true" prefHeight="200.0" prefWidth="200.0" visible="false">
                     <HBox alignment="BOTTOM_CENTER" layoutX="23.0" layoutY="104.0" prefHeight="501.0" prefWidth="860.0" spacing="4.0" AnchorPane.bottomAnchor="195.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="104.0">
                         <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="280.0" styleClass="card">
                             <opaqueInsets>
@@ -71,14 +71,14 @@
                             <ImageView fitHeight="186.0" fitWidth="280.0" layoutX="1.0" layoutY="122.0" preserveRatio="true">
                                 <Image url="@images/single_room.jpg" />
                             </ImageView>
-                            <Label layoutX="71.0" layoutY="319.0" text="Ideal for 1 Adult">
+                            <Label layoutX="62.0" layoutY="319.0" text="Ideal for 1 Adult">
                                 <font>
-                                    <Font size="18.0" />
+                                    <Font size="20.0" />
                                 </font>
                             </Label>
                             <Label fx:id="singleAv" layoutX="13.0" layoutY="361.0" text="Current Availability: ">
                                 <font>
-                                    <Font size="18.0" />
+                                    <Font size="22.0" />
                                 </font>
                             </Label>
                             <Label fx:id="singleAvailability" layoutX="13.0" layoutY="382.0">
@@ -86,7 +86,7 @@
                                     <Font size="18.0" />
                                 </font>
                             </Label>
-                     <Spinner fx:id="singleSpinner" layoutX="178.0" layoutY="433.0" prefHeight="25.0" prefWidth="65.0" />
+                     <Spinner fx:id="singleSpinner" layoutX="178.0" layoutY="433.0" prefHeight="30.0" prefWidth="70.0" />
                      <Label layoutX="34.0" layoutY="433.0" text="Select Amount:">
                         <font>
                            <Font size="18.0" />
@@ -99,9 +99,9 @@
                                     <Font size="28.0" />
                                 </font>
                             </Label>
-                            <Label layoutX="68.0" layoutY="320.0" text="Ideal for 2 Adults">
+                            <Label layoutX="57.0" layoutY="318.0" text="Ideal for 2 Adults">
                                 <font>
-                                    <Font size="18.0" />
+                                    <Font size="20.0" />
                                 </font>
                             </Label>
                             <Label fx:id="doubleAvailability" layoutX="12.0" layoutY="382.0">
@@ -111,13 +111,13 @@
                             </Label>
                             <Label fx:id="doubleAv" layoutX="12.0" layoutY="361.0" text="Current Availability: ">
                                 <font>
-                                    <Font size="18.0" />
+                                    <Font size="22.0" />
                                 </font>
                             </Label>
                             <ImageView fitHeight="186.0" fitWidth="279.0" layoutX="1.0" layoutY="122.0" preserveRatio="true">
                                 <Image url="@images/double_room.jpg" />
                             </ImageView>
-                     <Spinner fx:id="doubleSpinner" layoutX="173.0" layoutY="433.0" prefHeight="25.0" prefWidth="65.0" />
+                     <Spinner fx:id="doubleSpinner" layoutX="173.0" layoutY="433.0" prefHeight="30.0" prefWidth="70.0" />
                      <Label layoutX="33.0" layoutY="433.0" text="Select Amount:">
                         <font>
                            <Font size="18.0" />
@@ -130,14 +130,14 @@
                                     <Font size="28.0" />
                                 </font>
                             </Label>
-                            <Label layoutX="54.0" layoutY="319.0" text="Ideal for 2-4 Adults">
+                            <Label layoutX="53.0" layoutY="319.0" text="Ideal for 2-4 Adults">
                                 <font>
-                                    <Font size="18.0" />
+                                    <Font size="20.0" />
                                 </font>
                             </Label>
                             <Label fx:id="suiteAv" layoutX="14.0" layoutY="361.0" text="Current Availability: ">
                                 <font>
-                                    <Font size="18.0" />
+                                    <Font size="22.0" />
                                 </font>
                             </Label>
                             <Label fx:id="suiteAvailability" layoutX="14.0" layoutY="382.0">
@@ -148,7 +148,7 @@
                             <ImageView fitHeight="186.0" fitWidth="280.0" layoutY="122.0" preserveRatio="true">
                                 <Image url="@images/luxury_suite.jpg" />
                             </ImageView>
-                     <Spinner fx:id="suiteSpinner" layoutX="175.0" layoutY="433.0" prefHeight="25.0" prefWidth="65.0" />
+                     <Spinner fx:id="suiteSpinner" layoutX="175.0" layoutY="433.0" prefHeight="30.0" prefWidth="70.0" />
                      <Label layoutX="35.0" layoutY="433.0" text="Select Amount:">
                         <font>
                            <Font size="18.0" />
@@ -161,11 +161,11 @@
                             <Font size="24.0" />
                         </font>
                     </Label>
-                    <Button layoutX="497.0" layoutY="714.0" mnemonicParsing="false" onMouseClicked="#moveCheckout" text="Proceed to Checkout" />
+                    <Button layoutX="489.0" layoutY="714.0" mnemonicParsing="false" onMouseClicked="#moveCheckout" text="Proceed to Checkout" />
                     <VBox fx:id="cartVbox" layoutX="14.0" layoutY="610.0" prefHeight="169.0" prefWidth="259.0">
                         <Label text="My Cart:">
                             <font>
-                                <Font size="18.0" />
+                                <Font size="24.0" />
                             </font>
                         </Label>
                     </VBox>
@@ -183,18 +183,18 @@
                     </Label>
                 </AnchorPane>
                 <AnchorPane fx:id="checkoutPane" disable="true" prefHeight="200.0" prefWidth="200.0" visible="false">
-                    <Label layoutX="269.0" layoutY="93.0" style="-fx-font-size: 24;" text="You are about to purchase:">
+                    <Label layoutX="187.0" layoutY="47.0" style="-fx-font-size: 36;" text="You are about to purchase:">
                         <font>
-                            <Font size="24.0" />
+                            <Font size="36.0" />
                         </font>
                     </Label>
-                    <Label fx:id="receiptTotal" layoutX="296.0" layoutY="334.0" style="-fx-font-size: 24;" text="For the total cost of: X€">
+                    <Label fx:id="receiptTotal" layoutX="276.0" layoutY="324.0" text="For the total cost of: X€">
                         <font>
-                            <Font size="24.0" />
+                            <Font size="30.0" />
                         </font>
                     </Label>
-                    <Button layoutX="151.0" layoutY="388.0" mnemonicParsing="false" onMouseClicked="#payByCash" text="Cash at the Hotel" />
-                    <Button layoutX="504.0" layoutY="388.0" mnemonicParsing="false" onMouseClicked="#payByCard" text="Card Online" />
+                    <Button layoutX="122.0" layoutY="388.0" mnemonicParsing="false" onMouseClicked="#payByCash" text="Cash at the Hotel" />
+                    <Button layoutX="483.0" layoutY="388.0" mnemonicParsing="false" onMouseClicked="#payByCard" text="Card Online" />
                     <VBox fx:id="receiptVbox" alignment="TOP_CENTER" layoutX="335.0" layoutY="124.0" prefHeight="200.0" prefWidth="187.0">
                         <Label text="Some Rooms">
                             <font>
@@ -202,84 +202,89 @@
                             </font>
                         </Label>
                     </VBox>
-                    <Button layoutX="301.0" layoutY="483.0" mnemonicParsing="false" onMouseClicked="#cancelReservation" text="Cancel Reservation" />
+                    <Button layoutX="267.0" layoutY="481.0" mnemonicParsing="false" onMouseClicked="#cancelReservation" text="Cancel Reservation" />
                 </AnchorPane>
                 <AnchorPane fx:id="thankPanel" disable="true" prefHeight="200.0" prefWidth="200.0" visible="false">
-                    <Label layoutX="352.0" layoutY="362.0" text="Thank you!">
+                    <Label layoutX="232.0" layoutY="332.0" text="Thank you for the reservation!">
                         <font>
                             <Font size="30.0" />
                         </font>
                     </Label>
-                    <Label fx:id="resNumber" layoutX="229.0" layoutY="400.0" text="Your Reservation Number is:">
+                    <Label fx:id="resNumber" layoutX="249.0" layoutY="433.0" text="You may exit the app safely">
                         <font>
                             <Font size="30.0" />
                         </font>
                     </Label>
                 </AnchorPane>
-                <AnchorPane fx:id="reservationsPane" disable="true" prefHeight="200.0" prefWidth="200.0" visible="false">
-               <children>
-                  <Label alignment="CENTER" prefHeight="60.0" prefWidth="471.0" text="My Reservations">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-                  <ScrollPane layoutY="60.0" prefHeight="738.0" prefWidth="471.0">
-                     <content>
-                        <VBox fx:id="resList" prefHeight="824.0" prefWidth="445.0" />
-                     </content>
-                  </ScrollPane>
-                  <AnchorPane fx:id="resDetails" layoutX="470.0" prefHeight="798.0" prefWidth="390.0">
-                     <children>
+                <AnchorPane fx:id="reservationsPane" disable="true" prefHeight="200.0" prefWidth="200.0">
+                    <Label alignment="CENTER" prefHeight="60.0" prefWidth="471.0" text="My Reservations">
+                        <font>
+                            <Font size="24.0" />
+                        </font>
+                    </Label>
+                    <ScrollPane layoutY="60.0" prefHeight="738.0" prefWidth="471.0">
+                        <VBox fx:id="resList" prefHeight="824.0" prefWidth="445.0" style="-fx-background-color: #101b3b;" />
+                    </ScrollPane>
+                    <AnchorPane fx:id="resDetails" layoutX="470.0" prefHeight="798.0" prefWidth="390.0">
                         <Label alignment="CENTER" prefHeight="60.0" prefWidth="389.0" text="Reservation Details">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
+                            <font>
+                                <Font size="24.0" />
+                            </font>
                         </Label>
                         <Label alignment="CENTER" layoutX="19.0" layoutY="71.0" prefHeight="45.0" prefWidth="75.0" text="Email:">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
+                            <font>
+                                <Font size="16.0" />
+                            </font>
                         </Label>
                         <TextField fx:id="selResEmail" editable="false" layoutX="94.0" layoutY="76.0" prefHeight="35.0" prefWidth="282.0" />
                         <Label alignment="CENTER" layoutX="19.0" layoutY="129.0" prefHeight="45.0" prefWidth="75.0" text="Check In:">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
+                            <font>
+                                <Font size="16.0" />
+                            </font>
                         </Label>
                         <DatePicker fx:id="selResCheckIn" layoutX="94.0" layoutY="134.0" prefHeight="35.0" prefWidth="280.0" />
                         <DatePicker fx:id="selResCheckOut" layoutX="96.0" layoutY="200.0" prefHeight="35.0" prefWidth="279.0" />
                         <Label alignment="CENTER" layoutX="9.0" layoutY="195.0" prefHeight="45.0" prefWidth="85.0" text="Check Out:">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
+                            <font>
+                                <Font size="16.0" />
+                            </font>
                         </Label>
                         <ScrollPane layoutX="-4.0" layoutY="298.0" prefHeight="501.0" prefWidth="390.0">
-                           <content>
-                              <VBox fx:id="resRoomList" prefHeight="597.0" prefWidth="371.0" />
-                           </content>
+                            <VBox fx:id="resRoomList" prefHeight="597.0" prefWidth="371.0" style="-fx-background-color: #101b3b;" />
                         </ScrollPane>
                         <Label alignment="CENTER" layoutX="9.0" layoutY="253.0" prefHeight="45.0" prefWidth="85.0" text="Amount: ">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
+                            <font>
+                                <Font size="16.0" />
+                            </font>
                         </Label>
                         <TextField fx:id="selResAmount" editable="false" layoutX="92.0" layoutY="258.0" prefHeight="35.0" prefWidth="282.0" />
-                     </children>
-                  </AnchorPane>
-               </children></AnchorPane>
+                    </AnchorPane>
+                </AnchorPane>
                 <AnchorPane fx:id="myAccountPane" disable="true" prefHeight="200.0" prefWidth="200.0" visible="false">
                     <SplitPane dividerPositions="0.5" layoutX="118.0" layoutY="68.0" prefHeight="800.0" prefWidth="860.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="426.0">
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="426.0" styleClass="buttonPane">
                             <VBox alignment="CENTER" prefHeight="400.0" prefWidth="426.0" spacing="10.0">
                                 <Label text="Edit Account Information" textAlignment="CENTER">
                                     <font>
                                         <Font size="24.0" />
                                     </font>
                                 </Label>
-                                <TextField fx:id="editEmail" />
-                                <TextField fx:id="editFname" />
-                                <TextField fx:id="editLname" prefWidth="286.0" />
-                                <TextField fx:id="editPhone" />
+                                <TextField fx:id="editEmail" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font></TextField>
+                                <TextField fx:id="editFname" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font></TextField>
+                                <TextField fx:id="editLname" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font></TextField>
+                                <TextField fx:id="editPhone" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font></TextField>
                                 <Button mnemonicParsing="false" onMouseClicked="#updateMyUser" text="Save Changes" />
                             </VBox>
                             <VBox alignment="CENTER" layoutY="398.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="426.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="398.0">
@@ -288,9 +293,18 @@
                                         <Font size="28.0" />
                                     </font>
                                 </Label>
-                                <PasswordField fx:id="editOldPass" promptText="Enter old Password" />
-                                <PasswordField fx:id="editNewPass" promptText="Enter New Password" />
-                                <PasswordField fx:id="editConfirmPass" promptText="Confirm New Password" />
+                                <PasswordField fx:id="editOldPass" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" promptText="Enter old Password">
+                           <font>
+                              <Font size="14.0" />
+                           </font></PasswordField>
+                                <PasswordField fx:id="editNewPass" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" promptText="Enter New Password">
+                           <font>
+                              <Font size="14.0" />
+                           </font></PasswordField>
+                                <PasswordField fx:id="editConfirmPass" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" promptText="Confirm New Password">
+                           <font>
+                              <Font size="14.0" />
+                           </font></PasswordField>
                                 <Button mnemonicParsing="false" onMouseClicked="#changePassword" text="Save Password" />
                         <Label fx:id="messLabel" layoutX="82.0" layoutY="107.0" textFill="RED">
                            <font>
@@ -300,7 +314,7 @@
                             </VBox>
                         </AnchorPane>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                            <VBox alignment="CENTER" prefHeight="798.0" prefWidth="426.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <VBox alignment="CENTER" prefHeight="798.0" prefWidth="426.0" styleClass="buttonPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                 <Button mnemonicParsing="false" onMouseClicked="#deleteUser" text="Delete my account" />
                             </VBox>
                         </AnchorPane>

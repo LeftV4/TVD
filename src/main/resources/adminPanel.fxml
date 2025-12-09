@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane2" prefHeight="800.0" prefWidth="1280.0" styleClass="style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.AdminController">
+<AnchorPane fx:id="rootPane2" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.AdminController">
     <SplitPane fx:id="rootSplitPane" dividerPositions="0.3265940902021773" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" scaleShape="false" stylesheets="@style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <AnchorPane fx:id="adminButtonPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="420.0" prefHeight="802.0" prefWidth="420.0" stylesheets="@style.css">
+        <AnchorPane fx:id="adminButtonPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="420.0" prefHeight="802.0" prefWidth="420.0" styleClass="buttonPane" stylesheets="@style.css">
             <StackPane prefHeight="65.0" prefWidth="387.0" stylesheets="@style.css">
                 <VBox fx:id="WelcomeBox" alignment="CENTER" minHeight="-Infinity" minWidth="420.0" prefHeight="90.0" prefWidth="420.0">
                     <Label fx:id="helloLabel" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="47.0" prefWidth="286.0">
@@ -18,7 +27,7 @@
                 </VBox>
             </StackPane>
             <VBox alignment="CENTER" fillWidth="false" focusTraversable="true" layoutY="90.0" prefHeight="711.0" prefWidth="420.0" spacing="30.0" stylesheets="@style.css">
-                <Button alignment="CENTER" cacheShape="false" centerShape="false" contentDisplay="TOP" mnemonicParsing="false" onMouseClicked="#showBilling" prefHeight="84.0" prefWidth="344.0" text="Billing &amp; Payments">
+                <Button alignment="CENTER" cacheShape="false" centerShape="false" contentDisplay="TOP" mnemonicParsing="false" onMouseClicked="#showBilling" prefHeight="84.0" prefWidth="380.0" text="Billing &amp; Payments">
                     <VBox.margin>
                         <Insets />
                     </VBox.margin>
@@ -26,35 +35,35 @@
                         <Font size="24.0" />
                     </font>
                 </Button>
-                <Button cacheShape="false" centerShape="false" layoutX="48.0" layoutY="324.0" mnemonicParsing="false" onMouseClicked="#showLogFile" prefHeight="84.0" prefWidth="344.0" text="Generate Log File">
+                <Button cacheShape="false" centerShape="false" layoutX="48.0" layoutY="324.0" mnemonicParsing="false" onMouseClicked="#showLogFile" prefHeight="84.0" prefWidth="380.0" text="Generate Log File">
                     <font>
                         <Font size="24.0" />
                     </font>
                 </Button>
-                <Button cacheShape="false" centerShape="false" layoutX="48.0" layoutY="366.0" mnemonicParsing="false" onMouseClicked="#showUsers" prefHeight="84.0" prefWidth="344.0" text="Account Management">
+                <Button cacheShape="false" centerShape="false" layoutX="48.0" layoutY="366.0" mnemonicParsing="false" onMouseClicked="#showUsers" prefHeight="84.0" prefWidth="380.0" text="Account Management">
                     <font>
                         <Font name="Century Gothic" size="24.0" />
                     </font>
                 </Button>
-                <Button cacheShape="false" centerShape="false" layoutX="48.0" layoutY="408.0" mnemonicParsing="false" onMouseClicked="#showRes" prefHeight="84.0" prefWidth="344.0" text="Reservation Management">
+                <Button cacheShape="false" centerShape="false" layoutX="48.0" layoutY="408.0" mnemonicParsing="false" onMouseClicked="#showRes" prefHeight="84.0" prefWidth="380.0" text="Reservation Management">
                     <font>
                         <Font name="Century Gothic" size="24.0" />
                     </font>
                 </Button>
-                <Button cacheShape="false" centerShape="false" layoutX="48.0" layoutY="450.0" mnemonicParsing="false" onMouseClicked="#manageRooms" prefHeight="84.0" prefWidth="344.0" text="Room Management" textAlignment="CENTER">
+                <Button cacheShape="false" centerShape="false" layoutX="48.0" layoutY="450.0" mnemonicParsing="false" onMouseClicked="#manageRooms" prefHeight="84.0" prefWidth="380.0" text="Room Management" textAlignment="CENTER">
                     <font>
                         <Font size="24.0" />
                     </font>
                 </Button>
-                <Button cacheShape="false" centerShape="false" layoutX="48.0" layoutY="492.0" mnemonicParsing="false" onMouseClicked="#logOut" prefHeight="84.0" prefWidth="344.0" text="Log Out" textAlignment="CENTER">
+                <Button cacheShape="false" centerShape="false" layoutX="48.0" layoutY="492.0" mnemonicParsing="false" onMouseClicked="#logOut" prefHeight="84.0" prefWidth="380.0" text="Log Out" textAlignment="CENTER">
                     <font>
                         <Font size="24.0" />
                     </font>
                 </Button>
             </VBox>
         </AnchorPane>
-        <AnchorPane fx:id="adminContentPane" minHeight="720.0" minWidth="860.0" prefHeight="160.0" prefWidth="100.0" stylesheets="@style.css">
-            <StackPane fx:id="adminStackPane" layoutY="-1.0" prefHeight="800.0" prefWidth="860.0" stylesheets="@style.css">
+        <AnchorPane fx:id="adminContentPane" minHeight="720.0" minWidth="860.0" prefHeight="160.0" prefWidth="100.0" styleClass="contentPane" stylesheets="@style.css">
+            <StackPane fx:id="adminStackPane" layoutY="-1.0" prefHeight="800.0" prefWidth="860.0" styleClass="contentPane" stylesheets="@style.css">
                 <VBox fx:id="roomManager" alignment="CENTER" disable="true" prefHeight="200.0" prefWidth="100.0" spacing="25.0" visible="false">
                     <Label text="Manage Room Prices:">
                         <font>
@@ -102,20 +111,20 @@
                     </HBox>
                     <Button mnemonicParsing="false" onMouseClicked="#updatePrices" text="Update Prices" />
                 </VBox>
-                <TextArea fx:id="logFileArea" prefHeight="200.0" prefWidth="200.0" visible="false" />
+                <TextArea fx:id="logFileArea" disable="true" prefHeight="200.0" prefWidth="200.0" visible="false" />
                 <AnchorPane fx:id="userArea" disable="true" nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="200.0" stylesheets="@style.css" visible="false">
                     <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="47.0" prefWidth="449.0" text="Accounts">
                         <font>
-                            <Font size="24.0" />
+                            <Font size="30.0" />
                         </font>
                     </Label>
                     <ScrollPane fx:id="userScrollPane" hbarPolicy="NEVER" layoutX="2.0" layoutY="47.0" prefHeight="751.0" prefWidth="445.0" vbarPolicy="ALWAYS" AnchorPane.topAnchor="47.0">
-                        <VBox fx:id="userList" prefHeight="753.0" prefWidth="420.0" />
+                        <VBox fx:id="userList" prefHeight="753.0" prefWidth="420.0" style="-fx-background-color: #101b3b;" />
                     </ScrollPane>
                     <AnchorPane fx:id="accountDetails" layoutX="447.0" prefHeight="800.0" prefWidth="410.0">
                         <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="47.0" prefWidth="410.0" text="Account Details">
                             <font>
-                                <Font size="24.0" />
+                                <Font size="30.0" />
                             </font>
                         </Label>
                         <Label layoutX="2.0" layoutY="73.0" prefHeight="47.0" prefWidth="127.0" text="First Name:">
@@ -173,7 +182,7 @@
                 </AnchorPane>
                 <AnchorPane fx:id="resArea" disable="true" layoutX="10.0" layoutY="10.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="200.0" stylesheets="@style.css" visible="false">
                     <ScrollPane fx:id="resScrollPane" hbarPolicy="NEVER" layoutX="2.0" layoutY="47.0" prefHeight="751.0" prefWidth="445.0" vbarPolicy="ALWAYS" AnchorPane.topAnchor="47.0">
-                        <VBox fx:id="resList" prefHeight="753.0" prefWidth="420.0" />
+                        <VBox fx:id="resList" prefHeight="753.0" prefWidth="420.0" style="-fx-background-color: #101b3b;" />
                     </ScrollPane>
                     <Label alignment="CENTER" contentDisplay="CENTER" layoutX="2.0" prefHeight="47.0" prefWidth="445.0" text="Reservations">
                         <font>
@@ -219,113 +228,130 @@
                         <DatePicker fx:id="selResCheckIn" editable="false" layoutX="129.0" layoutY="218.0" prefHeight="25.0" prefWidth="270.0" />
                         <DatePicker fx:id="selResCheckOut" editable="false" layoutX="129.0" layoutY="281.0" prefHeight="25.0" prefWidth="270.0" />
                         <ScrollPane layoutY="334.0" prefHeight="467.0" prefWidth="410.0">
-                            <VBox fx:id="resRoomList" prefHeight="472.0" prefWidth="389.0" />
+                            <VBox fx:id="resRoomList" prefHeight="472.0" prefWidth="389.0" style="-fx-background-color: #101b3b;" />
                         </ScrollPane>
                     </AnchorPane>
                 </AnchorPane>
-            <AnchorPane fx:id="billingArea" disable="true" layoutX="10.0" layoutY="10.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="200.0" stylesheets="@style.css" visible="false">
-               <children>
-                  <ScrollPane fx:id="billScrollPane" hbarPolicy="NEVER" layoutX="2.0" layoutY="47.0" prefHeight="751.0" prefWidth="445.0" vbarPolicy="ALWAYS" AnchorPane.topAnchor="47.0">
-                     <content>
-                        <VBox fx:id="billList" prefHeight="753.0" prefWidth="420.0" />
-                     </content>
-                  </ScrollPane>
-                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="2.0" prefHeight="47.0" prefWidth="445.0" text="Bills">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-                  <AnchorPane fx:id="billDetails" layoutX="447.0" prefHeight="800.0" prefWidth="410.0">
-                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="47.0" prefWidth="410.0" text="Bill Details">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
+                <AnchorPane fx:id="billingArea" disable="true" layoutX="10.0" layoutY="10.0"
+                            nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="200.0"
+                            stylesheets="@style.css" visible="false">
+                    <ScrollPane fx:id="billScrollPane" hbarPolicy="NEVER" layoutX="2.0" layoutY="47.0"
+                                prefHeight="751.0"
+                                prefWidth="445.0" vbarPolicy="ALWAYS" AnchorPane.topAnchor="47.0">
+                        <VBox fx:id="billList" prefHeight="753.0" prefWidth="420.0"
+                              style="-fx-background-color: #101b3b;"/>
+                    </ScrollPane>
+                    <Label alignment="CENTER" contentDisplay="CENTER" layoutX="2.0" prefHeight="47.0" prefWidth="445.0"
+                           text="Bills">
+                        <font>
+                            <Font size="24.0"/>
+                        </font>
+                    </Label>
+                    <AnchorPane fx:id="billDetails" layoutX="447.0" prefHeight="800.0" prefWidth="410.0">
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="47.0" prefWidth="410.0"
+                               text="Bill Details">
+                            <font>
+                                <Font size="24.0"/>
+                            </font>
                         </Label>
-                        <TextField fx:id="selBillID" editable="false" layoutX="130.0" layoutY="71.0" prefHeight="47.0" prefWidth="270.0">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
+                        <TextField fx:id="selBillID" editable="false" layoutX="130.0" layoutY="71.0" prefHeight="47.0"
+                                   prefWidth="270.0">
+                            <font>
+                                <Font size="24.0"/>
+                            </font>
                         </TextField>
-                        <TextField fx:id="selBillRID" editable="false" layoutX="129.0" layoutY="137.0" prefHeight="47.0" prefWidth="270.0">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
+                        <TextField fx:id="selBillRID" editable="false" layoutX="129.0" layoutY="137.0" prefHeight="47.0"
+                                   prefWidth="270.0">
+                            <font>
+                                <Font size="24.0"/>
+                            </font>
                         </TextField>
-                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="73.0" prefHeight="47.0" prefWidth="127.0" text="Bill ID:">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="73.0" prefHeight="47.0"
+                               prefWidth="127.0" text="Bill ID:">
+                            <font>
+                                <Font size="16.0"/>
+                            </font>
                         </Label>
-                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="139.0" prefHeight="47.0" prefWidth="127.0" text="Reservation ID:">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="139.0" prefHeight="47.0"
+                               prefWidth="127.0" text="Reservation ID:">
+                            <font>
+                                <Font size="16.0"/>
+                            </font>
                         </Label>
-                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="207.0" prefHeight="47.0" prefWidth="127.0" text="Email:">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="207.0" prefHeight="47.0"
+                               prefWidth="127.0" text="Email:">
+                            <font>
+                                <Font size="16.0"/>
+                            </font>
                         </Label>
-                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="472.0" prefHeight="47.0" prefWidth="127.0" text="Payment Date:">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="472.0" prefHeight="47.0"
+                               prefWidth="127.0" text="Payment Date:">
+                            <font>
+                                <Font size="16.0"/>
+                            </font>
                         </Label>
-                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="545.0" prefHeight="47.0" prefWidth="127.0" text="Method:">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="545.0" prefHeight="47.0"
+                               prefWidth="127.0" text="Method:">
+                            <font>
+                                <Font size="16.0"/>
+                            </font>
                         </Label>
-                        <TextField fx:id="selBillAmount" editable="false" layoutX="129.0" layoutY="400.0" prefHeight="47.0" prefWidth="270.0">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
+                        <TextField fx:id="selBillAmount" editable="false" layoutX="129.0" layoutY="400.0"
+                                   prefHeight="47.0" prefWidth="270.0">
+                            <font>
+                                <Font size="24.0"/>
+                            </font>
                         </TextField>
-                        <TextField fx:id="selBillPayDate" editable="false" layoutX="129.0" layoutY="470.0" prefHeight="47.0" prefWidth="270.0">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
+                        <TextField fx:id="selBillPayDate" editable="false" layoutX="129.0" layoutY="470.0"
+                                   prefHeight="47.0" prefWidth="270.0">
+                            <font>
+                                <Font size="24.0"/>
+                            </font>
                         </TextField>
-                        <TextField fx:id="selBillMethod" editable="false" layoutX="129.0" layoutY="543.0" prefHeight="47.0" prefWidth="270.0">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
+                        <TextField fx:id="selBillMethod" editable="false" layoutX="129.0" layoutY="543.0"
+                                   prefHeight="47.0" prefWidth="270.0">
+                            <font>
+                                <Font size="24.0"/>
+                            </font>
                         </TextField>
-                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="402.0" prefHeight="47.0" prefWidth="127.0" text="Amount:">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="402.0" prefHeight="47.0"
+                               prefWidth="127.0" text="Amount:">
+                            <font>
+                                <Font size="16.0"/>
+                            </font>
                         </Label>
-                        <TextField fx:id="selBillEmail" editable="false" layoutX="129.0" layoutY="205.0" prefHeight="47.0" prefWidth="270.0">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
+                        <TextField fx:id="selBillEmail" editable="false" layoutX="129.0" layoutY="205.0"
+                                   prefHeight="47.0" prefWidth="270.0">
+                            <font>
+                                <Font size="24.0"/>
+                            </font>
                         </TextField>
-                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="270.0" prefHeight="47.0" prefWidth="127.0" text="First Name:">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="270.0" prefHeight="47.0"
+                               prefWidth="127.0" text="First Name:">
+                            <font>
+                                <Font size="16.0"/>
+                            </font>
                         </Label>
-                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="332.0" prefHeight="47.0" prefWidth="127.0" text="Last Name:">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="332.0" prefHeight="47.0"
+                               prefWidth="127.0" text="Last Name:">
+                            <font>
+                                <Font size="16.0"/>
+                            </font>
                         </Label>
-                        <TextField fx:id="selBillFname" editable="false" layoutX="129.0" layoutY="268.0" prefHeight="47.0" prefWidth="270.0">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
+                        <TextField fx:id="selBillFname" editable="false" layoutX="129.0" layoutY="268.0"
+                                   prefHeight="47.0" prefWidth="270.0">
+                            <font>
+                                <Font size="24.0"/>
+                            </font>
                         </TextField>
-                        <TextField fx:id="selBillLname" editable="false" layoutX="129.0" layoutY="330.0" prefHeight="47.0" prefWidth="270.0">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
+                        <TextField fx:id="selBillLname" editable="false" layoutX="129.0" layoutY="330.0"
+                                   prefHeight="47.0" prefWidth="270.0">
+                            <font>
+                                <Font size="24.0"/>
+                            </font>
                         </TextField>
-                     </children>
-                  </AnchorPane>
-               </children>
-            </AnchorPane>
+                    </AnchorPane>
+                </AnchorPane>
             </StackPane>
         </AnchorPane>
     </SplitPane>

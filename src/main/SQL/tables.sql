@@ -1,6 +1,7 @@
 drop table if exists users cascade;
+
 CREATE TABLE users (
-    email VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(50) PRIMARY KEY NOT NULL,
     password VARCHAR(255) NOT NULL,
     role VARCHAR(20) NOT NULL CHECK (role IN ('admin', 'staff', 'guest'))
 );
@@ -41,7 +42,7 @@ insert into room_types (name, price_per_night) values ('Suite', 300);
 
 drop table if exists rooms cascade;
 CREATE TABLE rooms (
-    room_number VARCHAR(10) PRIMARY KEY UNIQUE NOT NULL,
+    room_number VARCHAR(10) PRIMARY KEY NOT NULL,
     type_id INT NOT NULL REFERENCES room_types(type_id) ON DELETE RESTRICT
 );
 

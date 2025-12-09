@@ -7,13 +7,13 @@ language plpgsql
 as $$
 BEGIN
     if exists (select 1 from users where email = r_email) THEN
-        RETURN 1; -- 1 means exists
+        RETURN 1;
     END IF;
 
     INSERT INTO users(email, password, role)
     VALUES (r_email, r_pass, r_role);
 
-    RETURN 0; --0 means success
+    RETURN 0;
 
     EXCEPTION
         WHEN OTHERS THEN
@@ -45,6 +45,8 @@ as $$
             RETURN 1;
     END;
 $$;
+
+
 
 create or replace function update_info(
     r_fname VARCHAR,
@@ -713,6 +715,10 @@ CREATE TRIGGER log_room_types_changes
 DROP TRIGGER IF EXISTS log_rooms_changes ON rooms;
 CREATE TRIGGER log_rooms_changes
     AFTER INSERT OR UPDATE OR DELETE ON rooms
+    FOR EACH ROW EXECUTE FUNCTION log_changes_function();
+
+CREATE TRIGGER log_rooms_changes
+    AFTER INSERT OR UPDATE OR DELETE ON reservation_rooms
     FOR EACH ROW EXECUTE FUNCTION log_changes_function();
 
 DROP TRIGGER IF EXISTS log_reservations_changes ON reservations;

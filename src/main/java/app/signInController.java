@@ -24,7 +24,6 @@ public class signInController {
     @FXML PasswordField regConfirm;
     @FXML PasswordField regPassword;
     @FXML TextField regEmail;
-    @FXML Label messLabel;
     @FXML StackPane signInBox;
     @FXML ToggleGroup roleGroup;
     @FXML Label connLabel;
@@ -67,7 +66,12 @@ public class signInController {
     }
 
     public boolean testConnection(){
-        if (connLabel.getText().equals("Not Connected")) {messLabel.setText("Database not connected");return false;}
+        if (connLabel.getText().equals("Not Connected")) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Error");
+            alert.setContentText("Database not Connected!");
+            alert.show();
+            return false;}
         return connLabel.getText().equals("Connected");
     }
 
@@ -94,13 +98,15 @@ public class signInController {
         startBox.setDisable(false);
         infoBox.setVisible(false);
         infoBox.setDisable(true);
-        messLabel.setText("");
     }
     public void logIn(){
         boolean connTest = testConnection();
         if (!connTest) {return;}
         if(loginEmail.getText().isEmpty() || loginPassword.getText().isEmpty()){
-            messLabel.setText("Please fill all Fields!");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Error");
+            alert.setContentText("Please fill all Fields!");
+            alert.show();
             return;
         }
         String email = loginEmail.getText();
@@ -113,7 +119,13 @@ public class signInController {
                 if (role.equals("admin")) { timer.stop(); new app.SceneSwitch(rootPane, "/adminPanel.fxml");}
                 else if (role.equals("staff")) { timer.stop(); new app.SceneSwitch(rootPane, "/staffPanel.fxml");}
                 else {timer.stop(); new app.SceneSwitch(rootPane, "/userPanel.fxml");}
-            }else {messLabel.setText("Invalid Email or Password!"); return;}
+            }else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText("Error");
+                alert.setContentText("Invalid email or password!");
+                alert.show();
+                return;
+            }
         }catch (SQLException | IOException e) {
             LOGGER.log(Level.SEVERE, "Login failed", e);
         }
@@ -129,14 +141,25 @@ public class signInController {
         String role = "";
         String passcode = "";
         if(regEmail.getText().isEmpty() || regPassword.getText().isEmpty()){
-            messLabel.setText("Please fill all Fields!");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Error!");
+            alert.setContentText("Please fill all Fields!");
+            alert.show();
             return;
         }
         if (!regPassword.getText().equals(regConfirm.getText())){
-            messLabel.setText("Passwords do not match!");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Error!");
+            alert.setContentText("Passwords do not match!");
+            alert.show();
             return;
         }
-        if (roleGroup.getSelectedToggle() == null) { messLabel.setText("Please select a role!"); return;}
+        if (roleGroup.getSelectedToggle() == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Error");
+            alert.setContentText("Please select a role!");
+            alert.show();
+            return;}
 
         String email = regEmail.getText();
         String password = regPassword.getText();
@@ -146,30 +169,44 @@ public class signInController {
         else if (staffRadio.isSelected()) {role = "staff"; rolePass.setVisible(true); rolePass.setDisable(false); passcode = "staff";}
         else if (adminRadio.isSelected()) {role = "admin"; rolePass.setVisible(true); rolePass.setDisable(false); passcode = "admin";}
         appRole = role;
-        if (rolePass.isVisible() && !rolePass.getText().equals(passcode)){messLabel.setText("Please enter passcode"); return;}
+        if (rolePass.isVisible() && !rolePass.getText().equals(passcode)){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText(null);
+            alert.setContentText("Please enter passcode");
+            alert.show();
+            return;
+        }
 
 
         try (Connection conn = Database.getConnection()) {
             int result = SQLProcedures.registerUser(conn, email, role, password);
             switch (result) {
                 case 0: {
-                    messLabel.setText("User successfully registered");
-                    // Only advance UI if registration was successful
                     infoBox.setVisible(true);
                     infoBox.setDisable(false);
                     registerBox.setVisible(false);
                     registerBox.setDisable(true);
                     break;
                 }
-                case 1: {messLabel.setText("Email already registered!"); return;}
-                default: {messLabel.setText("Registration failed."); return;}
+                case 1: {Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setHeaderText("Notice");
+                    alert.setContentText("Email already registered");
+                    alert.show();
+                    return;}
+                default: {Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setHeaderText("Error");
+                    alert.setContentText("Registration failed.");
+                    alert.show();
+                    return;}
             }
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Database Error", e);
-            messLabel.setText("Database connection error");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Error!");
+            alert.setContentText("Database connection error!");
+            alert.show();
+            return;
         }
-
-
 		infoBox.setVisible(true);
 		infoBox.setDisable(false);
 		registerBox.setVisible(false);
@@ -179,7 +216,10 @@ public class signInController {
         boolean connTest = testConnection();
         if (!connTest) {return;}
         if(regPhone.getText().isEmpty() || regFname.getText().isEmpty() || regLname.getText().isEmpty()){
-            messLabel.setText("Please fill all Fields!");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Error!");
+            alert.setContentText("Please fill all Fields!");
+            alert.show();
             return;
 		}
         String fname = regFname.getText();
@@ -194,10 +234,18 @@ public class signInController {
                         if (appRole.equals("admin")) { timer.stop(); new app.SceneSwitch(rootPane, "/adminPanel.fxml"); }
                         else if (appRole.equals("staff")) { timer.stop(); new app.SceneSwitch(rootPane, "/staffPanel.fxml"); }
                         else {timer.stop(); new app.SceneSwitch(rootPane, "/userPanel.fxml"); }
-                    }else {messLabel.setText("Invalid Email or Password!"); return;}
+                    }else {Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setHeaderText("Error");
+                        alert.setContentText("Invalid email or password!");
+                        alert.show();
+                        return;}
                     break;
                 }
-                case 1: {messLabel.setText("Error registering info!"); return;}
+                case 1: {Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setHeaderText("Error");
+                    alert.setContentText("Error registering info!");
+                    alert.show();
+                    return;}
             }
         }catch (SQLException | IOException e) {
             LOGGER.log(Level.SEVERE, "Error registering info", e);
@@ -207,7 +255,6 @@ public class signInController {
         signInBox.getChildren().remove(registerBox);
         signInBox.getChildren().remove(startBox);
         signInBox.getChildren().remove(infoBox);
-        rootPane.getChildren().remove(messLabel);
         try (Connection conn = Database.getConnection()){
             Label welcLabel = new Label("Welcome! " + SQLProcedures.getFirstName(conn, Application.appEmail));
             signInBox.getChildren().add(welcLabel);
