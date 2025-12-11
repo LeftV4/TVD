@@ -3,21 +3,21 @@ CREATE or REPLACE FUNCTION register_user(
     r_role VARCHAR,
     r_pass VARCHAR
 ) RETURNS INT
-language plpgsql
+    language plpgsql
 as $$
 BEGIN
     if exists (select 1 from users where email = r_email) THEN
         RETURN 1;
     END IF;
 
-    INSERT INTO users(email, password, role)
-    VALUES (r_email, r_pass, r_role);
+    EXECUTE 'INSERT INTO users(email, password, role) VALUES ($1, $2, $3)'
+        USING r_email, r_pass, r_role;
 
     RETURN 0;
 
-    EXCEPTION
-        WHEN OTHERS THEN
-            RETURN 2;
+EXCEPTION
+    WHEN OTHERS THEN
+        RETURN 2;
 END;
 $$;
 
@@ -28,22 +28,29 @@ create or replace function register_info(
     r_role VARCHAR,
     r_email VARCHAR
 )returns int
-language plpgsql
+    language plpgsql
 as $$
-    begin
+DECLARE
+    table_name VARCHAR;
+    query_string TEXT;
+begin
     IF r_role = 'admin' THEN
-        insert into admins(first_name, last_name, phone, email) values (r_fname, r_lname, r_phone, r_email);
+        table_name := 'admins';
     ELSIF r_role = 'staff' then
-        insert into staff(first_name, last_name, phone, email) values (r_fname, r_lname, r_phone,r_email);
+        table_name := 'staff';
     else
-        insert into guests(first_name, last_name, phone, email) values (r_fname, r_lname, r_phone, r_email);
+        table_name := 'guests';
     end if;
+
+    query_string := 'insert into ' || quote_ident(table_name) || '(first_name, last_name, phone, email) values ($1, $2, $3, $4)';
+
+    EXECUTE query_string USING r_fname, r_lname, r_phone, r_email;
+
     return 0;
-    EXCEPTION
-        WHEN OTHERS THEN
-            RAISE NOTICE 'Error: %', SQLERRM;
-            RETURN 1;
-    END;
+EXCEPTION
+    WHEN OTHERS THEN
+        RETURN 1;
+END;
 $$;
 
 
@@ -53,175 +60,162 @@ create or replace function update_info(
     r_lname VARCHAR,
     r_phone VARCHAR,
     r_role VARCHAR,
-    r_email VARCHAR,
-    r_email2 VARCHAR
+    r_email_old VARCHAR,
+    r_email_new VARCHAR
 )returns int
     language plpgsql
 as $$
+DECLARE
+    table_name VARCHAR;
+    query_string TEXT;
+    current_email VARCHAR;
 begin
-    if r_email != r_email2 then
-        update users set email = r_email2 where email = r_email;
-        IF r_role = 'admin' THEN
-            update admins set first_name = r_fname, last_name = r_lname, phone = r_phone where email = r_email2;
-            return 1;
-        ELSIF r_role = 'staff' then
-            update staff set first_name = r_fname, last_name = r_lname, phone = r_phone where email = r_email2;
-            return 1;
-        else
-            update guests set first_name = r_fname, last_name = r_lname, phone = r_phone where email = r_email2;
-            return 1;
-        end if;
-    else
-        IF r_role = 'admin' THEN
-            update admins set first_name = r_fname, last_name = r_lname, phone = r_phone where email = r_email;
-            return 1;
-        ELSIF r_role = 'staff' then
-            update staff set first_name = r_fname, last_name = r_lname, phone = r_phone where email = r_email;
-            return 1;
-        else
-            update guests set first_name = r_fname, last_name = r_lname, phone = r_phone where email = r_email;
-            return 1;
-        end if;
+    current_email := r_email_old;
+
+    if r_email_old != r_email_new then
+        EXECUTE 'UPDATE users SET email = $1 WHERE email = $2' USING r_email_new, r_email_old;
+        current_email := r_email_new;
     end if;
+
+    IF r_role = 'admin' THEN
+        table_name := 'admins';
+    ELSIF r_role = 'staff' then
+        table_name := 'staff';
+    else
+        table_name := 'guests';
+    end if;
+
+    query_string := 'UPDATE ' || quote_ident(table_name) || ' SET first_name = $1, last_name = $2, phone = $3 WHERE email = $4';
+
+    EXECUTE query_string USING r_fname, r_lname, r_phone, current_email;
+
+    return 1;
 EXCEPTION
     WHEN OTHERS THEN
-        RAISE NOTICE 'Error: %', SQLERRM;
         RETURN -1;
 END;
 $$;
 
-create or replace function deleteUser_by_email(r_email VARCHAR)
+create or replace function delete_entity(
+    entity_id INT,
+    identifier VARCHAR
+)
     returns int
     language plpgsql
 as $$
+DECLARE
+    query_string TEXT;
+    table_name VARCHAR;
+    where_column VARCHAR;
+    delete_id INT;
 begin
-    delete from users where email = r_email;
-    return 0;
+    CASE entity_id
+        WHEN 1 THEN
+            table_name := 'users';
+            where_column := 'email';
+        WHEN 2 THEN
+            table_name := 'reservations';
+            where_column := 'reservation_id';
+        ELSE
+            RETURN -1;
+        END CASE;
+
+    IF entity_id = 1 THEN
+        query_string := 'DELETE FROM ' || quote_ident(table_name) || ' WHERE ' || quote_ident(where_column) || ' = $1';
+        EXECUTE query_string USING identifier;
+
+    ELSIF entity_id = 2 THEN
+        BEGIN
+            delete_id := identifier::INT;
+        EXCEPTION WHEN invalid_text_representation THEN
+            RETURN -2;
+        END;
+
+        query_string := 'DELETE FROM ' || quote_ident(table_name) || ' WHERE ' || quote_ident(where_column) || ' = $1';
+        EXECUTE query_string USING delete_id;
+    END IF;
+
+    IF FOUND THEN
+        RETURN 0;
+    ELSE
+        RETURN 1;
+    END IF;
+
 EXCEPTION
     WHEN OTHERS THEN
-        RAISE NOTICE 'Error: %', SQLERRM;
         RETURN 1;
-END;
-$$;
-
-create or replace function deleteRes_by_resid(r_resid INT)
-    returns int
-    language plpgsql
-as $$
-begin
-    delete from reservations where reservation_id = r_resid;
-    return 0;
-EXCEPTION
-    WHEN OTHERS THEN
-        RAISE NOTICE 'Error: %', SQLERRM;
-        RETURN 1;
-END;
+end;
 $$;
 
 
 
-
-create or replace function login (
+create or replace function login(
     r_email VARCHAR,
     r_password VARCHAR
 ) returns VARCHAR
-language plpgsql
+    language plpgsql
 as $$
-    DECLARE
-        user_role VARCHAR;
-    BEGIN
-
-        select role INTO user_role from users where email = r_email and password = r_password;
-        return user_role;
-        EXCEPTION
-            WHEN OTHERS THEN
-                RETURN NULL;
-   END
-$$;
-
-CREATE OR REPLACE FUNCTION get_users()
-    RETURNS VARCHAR
-    LANGUAGE plpgsql
-AS $$
+DECLARE
+    user_role VARCHAR;
 BEGIN
-    RETURN (SELECT STRING_AGG(CAST(email AS VARCHAR), E'\n') FROM users);
 
+    EXECUTE 'SELECT role FROM users WHERE email = $1 AND password = $2'
+        INTO user_role
+        USING r_email, r_password;
+
+    return user_role;
 EXCEPTION
-    WHEN NO_DATA_FOUND THEN
+    WHEN OTHERS THEN
         RETURN NULL;
-END;
+END
 $$;
 
-CREATE OR REPLACE FUNCTION get_guests()
-    RETURNS VARCHAR
-    LANGUAGE plpgsql
-AS $$
-BEGIN
-    RETURN (SELECT STRING_AGG(CAST(email AS VARCHAR), E'\n') FROM users where role = 'guest');
-
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        RETURN NULL;
-END;
-$$;
-
-CREATE OR REPLACE FUNCTION get_bills()
-    RETURNS VARCHAR
-    LANGUAGE plpgsql
-AS $$
-BEGIN
-    RETURN (SELECT STRING_AGG(CAST(payment_id AS VARCHAR), E'\n') FROM payments);
-
-
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        RETURN NULL;
-END;
-$$;
-
-CREATE OR REPLACE FUNCTION get_fname_by_email(r_email VARCHAR)
+CREATE OR REPLACE FUNCTION get_entity_list(
+    entity_id INT -- 1: all users, 2: guests, 3: bills, 4: reservations
+)
     RETURNS VARCHAR
     LANGUAGE plpgsql
 AS $$
 DECLARE
-    fname VARCHAR;
+    result_str VARCHAR;
+    query_string TEXT;
+    table_name VARCHAR;
+    select_column VARCHAR;
+    where_clause TEXT := '';
 BEGIN
-    IF ( (SELECT role FROM users where r_email = email) = 'admin') THEN
-        select first_name INTO fname from admins where email = r_email;
-    ELSIF ((SELECT role FROM users where r_email = email) = 'staff') THEN
-        select first_name INTO fname from staff where email = r_email;
-    ELSE
-        select first_name INTO fname from guests where email = r_email;
-    END IF;
-    RETURN fname;
+    CASE entity_id
+        WHEN 1 THEN
+            table_name := 'users';
+            select_column := 'email';
+        WHEN 2 THEN
+            table_name := 'users';
+            select_column := 'email';
+            where_clause := ' WHERE role = ''guest''';
+        WHEN 3 THEN
+            table_name := 'payments';
+            select_column := 'payment_id';
+        WHEN 4 THEN
+            table_name := 'reservations';
+            select_column := 'reservation_id';
+        ELSE
+            RETURN NULL; -- Άγνωστος ID
+        END CASE;
+
+    -- Σύνθεση του δυναμικού ερωτήματος
+    query_string := 'SELECT STRING_AGG(CAST(' || quote_ident(select_column) || ' AS VARCHAR), E''\n'') FROM ' || quote_ident(table_name) || where_clause;
+
+    EXECUTE query_string INTO result_str;
+
+    RETURN result_str;
 
 EXCEPTION
     WHEN NO_DATA_FOUND THEN
         RETURN NULL;
-END;
-$$;
-
-CREATE OR REPLACE FUNCTION get_lname_by_email(r_email VARCHAR)
-    RETURNS VARCHAR
-    LANGUAGE plpgsql
-AS $$
-DECLARE
-    fname VARCHAR;
-BEGIN
-    IF ( (SELECT role FROM users where r_email = email) = 'admin') THEN
-        select last_name INTO fname from admins where email = r_email;
-    ELSIF ((SELECT role FROM users where r_email = email) = 'staff') THEN
-        select last_name INTO fname from staff where email = r_email;
-    ELSE
-        select last_name INTO fname from guests where email = r_email;
-    END IF;
-    RETURN fname;
-
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
+    WHEN OTHERS THEN
         RETURN NULL;
 END;
 $$;
+
 
 CREATE OR REPLACE FUNCTION get_role_by_email(r_email VARCHAR)
     RETURNS VARCHAR
@@ -249,41 +243,75 @@ $$;
 
 create or replace function update_pass(
     r_email VARCHAR,
-    r_pass VARCHAR
+    new_password VARCHAR
 ) returns int
     language plpgsql
 as $$
-begin
-    update users set password = r_pass where email = r_email;
-    return 0;
+DECLARE
+    query_string TEXT;
+BEGIN
+    query_string := 'UPDATE users SET password = $1 WHERE email = $2';
+
+    EXECUTE query_string USING new_password, r_email;
+
+    IF FOUND THEN
+        RETURN 0;
+    ELSE
+        RETURN 1;
+    END IF;
+
 EXCEPTION
     WHEN OTHERS THEN
-        RAISE NOTICE 'Error: %', SQLERRM;
-        RETURN 1;
+        RETURN -1;
 END;
 $$;
 
-CREATE OR REPLACE FUNCTION get_phone_by_email(r_email VARCHAR)
+
+CREATE OR REPLACE FUNCTION get_user_info_by_email(
+    r_email VARCHAR,
+    field_id INT
+)
     RETURNS VARCHAR
     LANGUAGE plpgsql
 AS $$
 DECLARE
-    phonenum VARCHAR;
+    info_val VARCHAR;
+    r_role VARCHAR;
+    table_name VARCHAR;
+    field_name VARCHAR;
 BEGIN
-    IF ( (SELECT role FROM users where r_email = email) = 'admin') THEN
-        select phone INTO phonenum from admins where email = r_email;
-    ELSIF ((SELECT role FROM users where r_email = email) = 'staff') THEN
-        select phone INTO phonenum from staff where email = r_email;
+    CASE field_id
+        WHEN 1 THEN field_name := 'first_name';
+        WHEN 2 THEN field_name := 'last_name';
+        WHEN 3 THEN field_name := 'phone';
+        ELSE RAISE EXCEPTION 'Invalid field ID: %', field_id;
+        END CASE;
+
+    SELECT role INTO r_role FROM users WHERE email = r_email;
+
+    IF r_role = 'admin' THEN
+        table_name := 'admins';
+    ELSIF r_role = 'staff' THEN
+        table_name := 'staff';
     ELSE
-        select phone INTO phonenum from guests where email = r_email;
+        table_name := 'guests';
     END IF;
-    RETURN phonenum;
+
+    EXECUTE 'SELECT ' || quote_ident(field_name) || ' FROM ' || quote_ident(table_name) || ' WHERE email = $1'
+        INTO info_val
+        USING r_email;
+
+    RETURN info_val;
 
 EXCEPTION
     WHEN NO_DATA_FOUND THEN
         RETURN NULL;
+    WHEN OTHERS THEN
+        RAISE NOTICE 'Error in get_user_info_by_email_id_dynamic: %', SQLERRM;
+        RETURN NULL;
 END;
 $$;
+
 
 CREATE OR REPLACE FUNCTION get_reservations()
     RETURNS VARCHAR
@@ -323,6 +351,66 @@ EXCEPTION
         RETURN NULL;
 END;
 $$;
+
+CREATE OR REPLACE FUNCTION get_field_by_id(
+    id_value VARCHAR,
+    id_type INT,
+    target_field INT
+)
+    RETURNS VARCHAR
+    LANGUAGE plpgsql
+AS $$
+DECLARE
+    result_val VARCHAR;
+    query_string TEXT;
+    table_name VARCHAR;
+    filter_column VARCHAR;
+    select_column VARCHAR;
+    id_int INT;
+BEGIN
+    CASE id_type
+        WHEN 1 THEN
+        filter_column := 'reservation_id';
+        id_int := id_value::INT;
+        CASE target_field
+            WHEN 1 THEN table_name := 'reservations'; select_column := 'guest_email';
+            WHEN 2 THEN table_name := 'reservations'; select_column := 'check_in';
+            WHEN 3 THEN table_name := 'reservations'; select_column := 'check_out';
+            WHEN 4 THEN table_name := 'payments'; select_column := 'amount';
+            ELSE RETURN NULL;
+            END CASE;
+
+        WHEN 2 THEN
+        filter_column := 'payment_id';
+        id_int := id_value::INT;
+        CASE target_field
+            WHEN 5 THEN table_name := 'payments'; select_column := 'reservation_id';
+            WHEN 6 THEN table_name := 'payments'; select_column := 'payment_date';
+            WHEN 7 THEN table_name := 'payments'; select_column := 'method';
+            ELSE RETURN NULL;
+            END CASE;
+
+        ELSE
+            RETURN NULL;
+        END CASE;
+
+    -- 2. Δυναμική Εκτέλεση
+    query_string := 'SELECT CAST(' || quote_ident(select_column) || ' AS VARCHAR) FROM ' || quote_ident(table_name) || ' WHERE ' || quote_ident(filter_column) || ' = $1';
+
+    EXECUTE query_string INTO result_val USING id_int;
+
+    RETURN result_val;
+
+EXCEPTION
+    WHEN invalid_text_representation THEN
+        RETURN '-2';
+    WHEN NO_DATA_FOUND THEN
+        RETURN NULL;
+    WHEN OTHERS THEN
+        RETURN '-1';
+END;
+$$;
+
 
 create or replace function get_amount_by_resid(r_resid int)
     returns double precision
@@ -433,120 +521,21 @@ end;
 $$;
 
 
-
-
-CREATE OR REPLACE FUNCTION get_single_price()
-    RETURNS INT
-    LANGUAGE plpgsql
-AS $$
-    DECLARE
-        price INT;
-BEGIN
-    select price_per_night into price from room_types where type_id = 1;
-    RETURN price;
-END;
-$$;
-
-CREATE OR REPLACE FUNCTION get_suite_price()
+CREATE OR REPLACE FUNCTION get_price_by_type(
+    p_type_id INT
+)
     RETURNS INT
     LANGUAGE plpgsql
 AS $$
 DECLARE
     price INT;
 BEGIN
-    select price_per_night into price from room_types where type_id = 3;
+    EXECUTE 'SELECT price_per_night FROM room_types WHERE type_id = $1'
+        INTO price
+        USING p_type_id;
     RETURN price;
 END;
 $$;
-
-CREATE OR REPLACE FUNCTION get_double_price()
-    RETURNS INT
-    LANGUAGE plpgsql
-AS $$
-DECLARE
-    price INT;
-BEGIN
-    select price_per_night into price from room_types where type_id = 2;
-    RETURN price;
-END;
-$$;
-
-
-CREATE OR REPLACE FUNCTION count_available_single(
-    p_check_in DATE,
-    p_check_out DATE
-)
-    RETURNS INT AS $$
-DECLARE
-    available_count INT;
-BEGIN
-    SELECT COUNT(*)
-    INTO available_count
-    FROM rooms r
-    WHERE r.type_id = 1
-      AND NOT EXISTS (
-        SELECT 1
-        FROM reservation_rooms rr
-                 JOIN reservations res ON rr.reservation_id = res.reservation_id
-        WHERE rr.room_number = r.room_number
-          AND res.check_in < p_check_out
-          AND res.check_out > p_check_in
-    );
-
-    RETURN available_count;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION count_available_double(
-    p_check_in DATE,
-    p_check_out DATE
-)
-    RETURNS INT AS $$
-DECLARE
-    available_count INT;
-BEGIN
-    SELECT COUNT(*)
-    INTO available_count
-    FROM rooms r
-    WHERE r.type_id = 2
-      AND NOT EXISTS (
-        SELECT 1
-        FROM reservation_rooms rr
-                 JOIN reservations res ON rr.reservation_id = res.reservation_id
-        WHERE rr.room_number = r.room_number
-          AND res.check_in < p_check_out
-          AND res.check_out > p_check_in
-    );
-
-    RETURN available_count;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION count_available_suite(
-    p_check_in DATE,
-    p_check_out DATE
-)
-    RETURNS INT AS $$
-DECLARE
-    available_count INT;
-BEGIN
-    SELECT COUNT(*)
-    INTO available_count
-    FROM rooms r
-    WHERE r.type_id = 3
-      AND NOT EXISTS (
-        SELECT 1
-        FROM reservation_rooms rr
-                 JOIN reservations res ON rr.reservation_id = res.reservation_id
-        WHERE rr.room_number = r.room_number
-          AND res.check_in < p_check_out
-          AND res.check_out > p_check_in
-    );
-
-    RETURN available_count;
-END;
-$$ LANGUAGE plpgsql;
-
 
 CREATE OR REPLACE FUNCTION make_reservation(
     p_guest_email VARCHAR,
@@ -564,14 +553,14 @@ DECLARE
     available_room RECORD;
     reserved_count INT;
     type_counts INT[] := ARRAY[p_type1_count, p_type2_count, p_type3_count];
-    type_ids INT[] := ARRAY[1,2,3];  -- adjust if your type IDs differ
+    type_ids INT[] := ARRAY[1,2,3];
+    find_room_query TEXT;
+    insert_room_query TEXT := 'INSERT INTO reservation_rooms(reservation_id, room_number) VALUES ($1, $2)';
 BEGIN
-    -- Insert reservation first
-    INSERT INTO reservations(guest_email, check_in, check_out)
-    VALUES (p_guest_email, p_check_in, p_check_out)
-    RETURNING reservation_id INTO res_id;
+    EXECUTE 'INSERT INTO reservations(guest_email, check_in, check_out) VALUES ($1, $2, $3) RETURNING reservation_id'
+        INTO res_id
+        USING p_guest_email, p_check_in, p_check_out;
 
-    -- Loop over each room type
     FOR r_type, r_count IN SELECT unnest(type_ids), unnest(type_counts)
         LOOP
             IF r_count = 0 THEN
@@ -580,26 +569,24 @@ BEGIN
 
             reserved_count := 0;
 
-            -- Find first available rooms for this type
-            FOR available_room IN
+            find_room_query := '
                 SELECT room_number
                 FROM rooms r
-                WHERE r.type_id = r_type
+                WHERE r.type_id = $1
                   AND NOT EXISTS (
                     SELECT 1
                     FROM reservation_rooms rr
                              JOIN reservations res ON rr.reservation_id = res.reservation_id
                     WHERE rr.room_number = r.room_number
-                      AND res.check_in < p_check_out
-                      AND res.check_out > p_check_in
+                      AND res.check_in < $3
+                      AND res.check_out > $2
                 )
                 ORDER BY r.room_number
-                LIMIT r_count
-                LOOP
-                    -- Insert into reservation_rooms
-                    INSERT INTO reservation_rooms(reservation_id, room_number)
-                    VALUES (res_id, available_room.room_number);
+                LIMIT ' || r_count;
 
+            FOR available_room IN EXECUTE find_room_query USING r_type, p_check_in, p_check_out
+                LOOP
+                    EXECUTE insert_room_query USING res_id, available_room.room_number;
                     reserved_count := reserved_count + 1;
                 END LOOP;
 
@@ -609,8 +596,58 @@ BEGIN
         END LOOP;
 
     RETURN res_id;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        RETURN -1;
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION register_payment(
+    p_reservation_id INT,
+    p_amount DOUBLE PRECISION,
+    p_method VARCHAR
+)
+    RETURNS VOID AS $$
+BEGIN
+    EXECUTE 'INSERT INTO payments(reservation_id, amount, method, payment_date) VALUES ($1, $2, $3, NOW())'
+        USING p_reservation_id, p_amount, p_method;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION count_available(
+    p_check_in DATE,
+    p_check_out DATE,
+    p_type_id INT
+)
+    RETURNS INT AS $$
+DECLARE
+    available_count INT;
+    query_string TEXT;
+BEGIN
+    query_string := '
+        SELECT COUNT(*)
+        FROM rooms r
+        WHERE r.type_id = $1
+          AND NOT EXISTS (
+            SELECT 1
+            FROM reservation_rooms rr
+                     JOIN reservations res ON rr.reservation_id = res.reservation_id
+            WHERE rr.room_number = r.room_number
+              AND res.check_in < $3
+              AND res.check_out > $2
+        )';
+
+    EXECUTE query_string
+        INTO available_count
+        USING p_type_id, p_check_in, p_check_out;
+
+    RETURN available_count;
+END;
+$$ LANGUAGE plpgsql;
+
+
 
 
 CREATE OR REPLACE FUNCTION register_payment(
@@ -632,11 +669,9 @@ CREATE OR REPLACE FUNCTION update_room_prices(
 )
     RETURNS VOID AS $$
 BEGIN
-
-
-    UPDATE room_types SET price_per_night = p_price1 WHERE type_id = 1;
-    UPDATE room_types SET price_per_night = p_price2 WHERE type_id = 2;
-    UPDATE room_types SET price_per_night = p_price3 WHERE type_id = 3;
+    EXECUTE 'UPDATE room_types SET price_per_night = $1 WHERE type_id = 1' USING p_price1;
+    EXECUTE 'UPDATE room_types SET price_per_night = $1 WHERE type_id = 2' USING p_price2;
+    EXECUTE 'UPDATE room_types SET price_per_night = $1 WHERE type_id = 3' USING p_price3;
 END;
 $$ LANGUAGE plpgsql;
 

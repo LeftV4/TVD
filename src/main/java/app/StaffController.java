@@ -66,7 +66,7 @@ public class StaffController {
 
         Platform.runLater(()->{
             try (Connection conn = Database.getConnection()){
-                helloLabel.setText("Welcome "+ SQLProcedures.getFirstName(conn, Application.appEmail) + "!");
+                helloLabel.setText("Welcome "+ SQLProcedures.getUserInfo(conn, Application.appEmail, 1) + "!");
                 Label welcLabel = new Label("Staff Privileges");
                 WelcomeBox.getChildren().add(welcLabel);
             }catch (SQLException e) {
@@ -92,7 +92,7 @@ public class StaffController {
         resDetails.setVisible(false);
         resDetails.setDisable(true);
         try (final Connection conn = Database.getConnection()) {
-            String ress = SQLProcedures.getRes(conn);
+            String ress = SQLProcedures.getEntityList(conn,4 );
             resList.getChildren().clear();
             if(ress != null){
                 totalRes = ress.split("\n");
@@ -116,10 +116,10 @@ public class StaffController {
                         resDetails.setDisable(false);
                         try (Connection conn2 = Database.getConnection();) {
                             resID = resField.getText();
-                            selResGEmail.setText(SQLProcedures.getGuestEmail(conn2, resID));
+                            selResGEmail.setText(SQLProcedures.getFieldById(conn2, resID, 1 , 2));
                             selResID.setText(resID);
-                            selResCheckIn.setValue(SQLProcedures.getCheckIn(conn2, resID).toLocalDate());
-                            selResCheckOut.setValue(SQLProcedures.getCheckOut(conn2, resID).toLocalDate());
+                            selResCheckIn.setValue(SQLProcedures.getCheckIn(conn2, resID));
+                            selResCheckOut.setValue(SQLProcedures.getCheckOut(conn2, resID));
                             selResCheckOut.setEditable(false);
                             selResCheckIn.setEditable(false);
                             resRoomList.getChildren().clear();
@@ -216,9 +216,9 @@ public class StaffController {
 
             roomAvailCheckOut.valueProperty().addListener((_, _, _) -> {
                 try (Connection conn = Database.getConnection()){
-                    availSingle.setText("Single Room Availability: " + SQLProcedures.getAvailableSingle(conn, roomAvailCheckIn.getValue(), roomAvailCheckOut.getValue()));
-                    availDouble.setText("Double Room Availability: " + SQLProcedures.getAvailableDouble(conn, roomAvailCheckIn.getValue(), roomAvailCheckOut.getValue()));
-                    availSuite.setText("Luxury Suite Availability: " + SQLProcedures.getAvailableSuite(conn, roomAvailCheckIn.getValue(), roomAvailCheckOut.getValue()));
+                    availSingle.setText("Single Room Availability: " + SQLProcedures.getAvailableRooms(conn, roomAvailCheckIn.getValue(), roomAvailCheckOut.getValue(), 1));
+                    availDouble.setText("Double Room Availability: " + SQLProcedures.getAvailableRooms(conn, roomAvailCheckIn.getValue(), roomAvailCheckOut.getValue(), 2));
+                    availSuite.setText("Luxury Suite Availability: " + SQLProcedures.getAvailableRooms(conn, roomAvailCheckIn.getValue(), roomAvailCheckOut.getValue(), 3));
                 }catch (SQLException e) {LOGGER.log(Level.SEVERE, "Error fetching room availability", e);}
             });
 
@@ -240,7 +240,7 @@ public class StaffController {
         guestDetails.setVisible(false);
         guestDetails.setDisable(true);
         try (final Connection conn = Database.getConnection()) {
-            String guests = SQLProcedures.getGuests(conn);
+            String guests = SQLProcedures.getEntityList(conn,2 );
             guestList.getChildren().clear();
             if(guests != null){
                 totalGuests = guests.split("\n");
@@ -264,10 +264,10 @@ public class StaffController {
                         guestDetails.setDisable(false);
                         try (Connection conn2 = Database.getConnection();) {
                             userEmail = emailField.getText();
-                            selGFName.setText(SQLProcedures.getFirstName(conn2, userEmail));
-                            selGLName.setText(SQLProcedures.getLastName(conn2, userEmail));
+                            selGFName.setText(SQLProcedures.getUserInfo(conn2, userEmail, 1));
+                            selGLName.setText(SQLProcedures.getUserInfo(conn2, userEmail, 2));
                             selGEmail.setText(userEmail);
-                            selGPhone.setText(SQLProcedures.getPhone(conn2, userEmail));
+                            selGPhone.setText(SQLProcedures.getUserInfo(conn2, userEmail, 3));
                         } catch(SQLException ex){
                             LOGGER.log(Level.SEVERE, "Failed to load guests info", ex);
                         }

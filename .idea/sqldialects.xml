@@ -2,6 +2,8 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/0348ca1e-3ce8-4b15-8920-ef75f7945b71/console_6.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/.idea/queries/Query.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/.idea/queries/Query_1.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/SQL/functions.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/SQL/tables.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/app/SQLProcedures.java" dialect="GenericSQL" />

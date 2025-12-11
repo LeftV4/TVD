@@ -256,7 +256,7 @@ public class signInController {
         signInBox.getChildren().remove(startBox);
         signInBox.getChildren().remove(infoBox);
         try (Connection conn = Database.getConnection()){
-            Label welcLabel = new Label("Welcome! " + SQLProcedures.getFirstName(conn, Application.appEmail));
+            Label welcLabel = new Label("Welcome! " + SQLProcedures.getUserInfo(conn, Application.appEmail, 1));
             signInBox.getChildren().add(welcLabel);
         }catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error retrieving First Name", e);

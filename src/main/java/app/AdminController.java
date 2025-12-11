@@ -86,7 +86,7 @@ public class AdminController {
         selResCheckOut.getEditor().setStyle("-fx-opacity: 1");
         Platform.runLater(()->{
             try (Connection conn = Database.getConnection()){
-                helloLabel.setText("Welcome "+ SQLProcedures.getFirstName(conn, Application.appEmail) + "!");
+                helloLabel.setText("Welcome "+ SQLProcedures.getUserInfo(conn, Application.appEmail, 1) + "!");
                 Label welcLabel = new Label("Admin Privileges");
                 WelcomeBox.getChildren().add(welcLabel);
             }catch (SQLException e) {
@@ -118,7 +118,7 @@ public class AdminController {
         accountDetails.setVisible(false);
         accountDetails.setDisable(true);
         try (final Connection conn = Database.getConnection()) {
-            String users = SQLProcedures.getUsers(conn);
+            String users = SQLProcedures.getEntityList(conn, 1);
             userList.getChildren().clear();
             if(users != null){
                 totalUsers = users.split("\n");
@@ -144,10 +144,10 @@ public class AdminController {
                         selUserfName.setVisible(true);
                         try (Connection conn2 = Database.getConnection();) {
                             userEmail = emailField.getText();
-                            selUserfName.setText(SQLProcedures.getFirstName(conn2, userEmail));
-                            selUserlName.setText(SQLProcedures.getLastName(conn2, userEmail));
+                            selUserfName.setText(SQLProcedures.getUserInfo(conn2, userEmail, 1));
+                            selUserlName.setText(SQLProcedures.getUserInfo(conn2, userEmail, 2));
                             selUserEmail.setText(userEmail);
-                            selUserPhone.setText(SQLProcedures.getPhone(conn2, userEmail));
+                            selUserPhone.setText(SQLProcedures.getUserInfo(conn2, userEmail, 3));
                             role = SQLProcedures.getRole(conn2, userEmail);
                             selUserRole.setText(role);
                         } catch(SQLException ex){
@@ -165,7 +165,7 @@ public class AdminController {
                         Optional<ButtonType> result = alert.showAndWait();
                         if(result.isPresent() && result.get() == ButtonType.OK){
                             try (Connection conn2 = Database.getConnection()) {
-                                SQLProcedures.deleteUser(conn2, email); // implementation to delete a user? i shall try it soon
+                                SQLProcedures.deleteEntity(conn2, 1, email); // implementation to delete a user? i shall try it soon
                                 userList.getChildren().remove(row);
                                 accountDetails.setVisible(false);
                                 accountDetails.setDisable(true);
@@ -236,7 +236,7 @@ public class AdminController {
         resDetails.setVisible(false);
         resDetails.setDisable(true);
         try (final Connection conn = Database.getConnection()) {
-            String ress = SQLProcedures.getRes(conn);
+            String ress = SQLProcedures.getEntityList(conn, 4);
             resList.getChildren().clear();
             if(ress != null){
                 totalRes = ress.split("\n");
@@ -260,10 +260,10 @@ public class AdminController {
                         resDetails.setDisable(false);
                         try (Connection conn2 = Database.getConnection();) {
                             resID = resField.getText();
-                            selResGEmail.setText(SQLProcedures.getGuestEmail(conn2, resID));
+                            selResGEmail.setText(SQLProcedures.getFieldById(conn2, resID,1,1));
                             selResID.setText(resID);
-                            selResCheckIn.setValue(SQLProcedures.getCheckIn(conn2, resID).toLocalDate());
-                            selResCheckOut.setValue(SQLProcedures.getCheckOut(conn2, resID).toLocalDate());
+                            selResCheckIn.setValue(SQLProcedures.getCheckIn(conn2, resID));
+                            selResCheckOut.setValue(SQLProcedures.getCheckOut(conn2, resID));
                             selResCheckOut.setEditable(false);
                             selResCheckIn.setEditable(false);
                             resRoomList.getChildren().clear();
@@ -299,7 +299,7 @@ public class AdminController {
                         Optional<ButtonType> result = alert.showAndWait();
                         if(result.isPresent() && result.get() == ButtonType.OK){
                             try (Connection conn2 = Database.getConnection()) {
-                                SQLProcedures.deleteRes(conn2, Integer.parseInt(res));
+                                SQLProcedures.deleteEntity(conn2, 2, res);
                                 resList.getChildren().remove(row);
                                 resDetails.setVisible(false);
                                 resDetails.setDisable(true);
@@ -351,9 +351,9 @@ public class AdminController {
         roomManager.setDisable(false);
 
         try (Connection conn = Database.getConnection()){
-            manageSinglePrice.setText(String.valueOf(SQLProcedures.getSinglePrice(conn)));
-            manageDoublePrice.setText(String.valueOf(SQLProcedures.getDoublePrice(conn)));
-            manageSuitePrice.setText(String.valueOf(SQLProcedures.getSuitePrice(conn)));
+            manageSinglePrice.setText(String.valueOf(SQLProcedures.getPriceByType(conn,1)));
+            manageDoublePrice.setText(String.valueOf(SQLProcedures.getPriceByType(conn,2)));
+            manageSuitePrice.setText(String.valueOf(SQLProcedures.getPriceByType(conn,3)));
         }catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Failed to load room prices", e);
         }
@@ -372,7 +372,7 @@ public class AdminController {
         billDetails.setVisible(false);
         billDetails.setDisable(true);
         try (final Connection conn = Database.getConnection()) {
-            String bills = SQLProcedures.getBills(conn);
+            String bills = SQLProcedures.getEntityList(conn,3);
             billList.getChildren().clear();
             if(bills != null){
                 totalBills = bills.split("\n");
@@ -397,21 +397,21 @@ public class AdminController {
                         try (Connection conn2 = Database.getConnection();) {
                             billID = billfield.getText();
                             selBillID.setText(billID);
-                            String resID = SQLProcedures.getRIDbyBILLID(conn2, billID);
+                            String resID = SQLProcedures.getFieldById(conn2, billID, 2, 5);
                             selBillRID.setText(resID);
-                            String email = SQLProcedures.getGuestEmail(conn2, resID);
+                            String email = SQLProcedures.getFieldById(conn2, resID, 1 ,1);
                             selBillEmail.setText(email);
-                            selBillFname.setText(SQLProcedures.getFirstName(conn2, email));
-                            selBillLname.setText(SQLProcedures.getLastName(conn2, email));
-                            selBillAmount.setText(String.valueOf(SQLProcedures.getAmount(conn2, resID))+"€");
-                            paydate = SQLProcedures.getPayDate(conn2, billID);
+                            selBillFname.setText(SQLProcedures.getUserInfo(conn2, email, 1));
+                            selBillLname.setText(SQLProcedures.getUserInfo(conn2, email, 2));
+                            selBillAmount.setText(String.valueOf(SQLProcedures.getFieldById(conn2, resID, 2, 4))+"€");
+                            paydate = Timestamp.valueOf(SQLProcedures.getFieldById(conn2, billID, 2, 6));
                             if (paydate != null) {
                                 java.time.format.DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
                                 selBillPayDate.setText(paydate.toLocalDateTime().format(formatter));
                             }else{
                                 selBillPayDate.setText("");
                             }
-                            selBillMethod.setText(SQLProcedures.getMethod(conn2, billID));
+                            selBillMethod.setText(SQLProcedures.getFieldById(conn2, billID, 2, 7));
 
                         }catch(SQLException ex){
                             LOGGER.log(Level.SEVERE, "Failed to load res info", ex);

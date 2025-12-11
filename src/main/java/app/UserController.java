@@ -90,7 +90,7 @@ public class UserController {
 
         Platform.runLater(()->{
             try (Connection conn = Database.getConnection()){
-                helloLabel.setText("Welcome "+ SQLProcedures.getFirstName(conn, Application.appEmail) + "!");
+                helloLabel.setText("Welcome "+ SQLProcedures.getUserInfo(conn, Application.appEmail, 1) + "!");
             }catch (SQLException e) {
                 LOGGER.log(Level.SEVERE, "Error retrieving First Name", e);
             }});
@@ -143,9 +143,9 @@ public class UserController {
         });
 
         try (Connection conn = Database.getConnection()) {
-            cachedSinglePrice = SQLProcedures.getSinglePrice(conn);
-            cachedDoublePrice = SQLProcedures.getDoublePrice(conn);
-            cachedSuitePrice = SQLProcedures.getSuitePrice(conn);
+            cachedSinglePrice = SQLProcedures.getPriceByType(conn,1);
+            cachedDoublePrice = SQLProcedures.getPriceByType(conn,2);
+            cachedSuitePrice = SQLProcedures.getPriceByType(conn,3);
 
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error fetching room prices", e);
@@ -184,9 +184,9 @@ public class UserController {
             checkOutDate.valueProperty().addListener((_, _, _) -> {
                 generatePrice();
                 try (Connection conn = Database.getConnection()){
-                    singleAv.setText("Current Availability: " + SQLProcedures.getAvailableSingle(conn, checkInDate.getValue(), checkOutDate.getValue()));
-                    doubleAv.setText("Current Availability: " + SQLProcedures.getAvailableDouble(conn, checkInDate.getValue(), checkOutDate.getValue()));
-                    suiteAv.setText("Current Availability: " + SQLProcedures.getAvailableSuite(conn, checkInDate.getValue(), checkOutDate.getValue()));
+                    singleAv.setText("Current Availability: " + SQLProcedures.getAvailableRooms(conn, checkInDate.getValue(), checkOutDate.getValue(), 1));
+                    doubleAv.setText("Current Availability: " + SQLProcedures.getAvailableRooms(conn, checkInDate.getValue(), checkOutDate.getValue(), 2));
+                    suiteAv.setText("Current Availability: " + SQLProcedures.getAvailableRooms(conn, checkInDate.getValue(), checkOutDate.getValue(), 3));
                 }catch (SQLException e) {LOGGER.log(Level.SEVERE, "Error fetching room availability", e);}
             });
 
@@ -269,9 +269,9 @@ public class UserController {
         myAccountPane.setDisable(false);
         editEmail.setText(Application.appEmail);
         try (Connection conn = Database.getConnection()){
-            editFname.setText(SQLProcedures.getFirstName(conn, Application.appEmail));
-            editLname.setText(SQLProcedures.getLastName(conn, Application.appEmail));
-            editPhone.setText(SQLProcedures.getPhone(conn, Application.appEmail));
+            editFname.setText(SQLProcedures.getUserInfo(conn, Application.appEmail, 1));
+            editLname.setText(SQLProcedures.getUserInfo(conn, Application.appEmail, 2));
+            editPhone.setText(SQLProcedures.getUserInfo(conn, Application.appEmail, 3));
         }catch (SQLException e) {LOGGER.log(Level.SEVERE, "Error retrieving user info", e);}
 
     }
@@ -283,7 +283,7 @@ public class UserController {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             try (Connection conn = Database.getConnection()){
-                SQLProcedures.deleteUser(conn, Application.appEmail);
+                SQLProcedures.deleteEntity(conn, 1, Application.appEmail);
                 logOut();
             }catch (SQLException e) {LOGGER.log(Level.SEVERE, "Error deleting user", e);}
         }
@@ -393,12 +393,12 @@ public class UserController {
                         resDetails.setDisable(false);
                         try (Connection conn2 = Database.getConnection()){
                             resID = resField.getText();
-                            selResEmail.setText(SQLProcedures.getGuestEmail(conn2, resID));
-                            selResCheckIn.setValue(SQLProcedures.getCheckIn(conn2, resID).toLocalDate());
-                            selResCheckOut.setValue(SQLProcedures.getCheckOut(conn2, resID).toLocalDate());
+                            selResEmail.setText(SQLProcedures.getFieldById(conn2, resID, 1, 1));
+                            selResCheckIn.setValue(SQLProcedures.getCheckIn(conn2, resID));
+                            selResCheckOut.setValue(SQLProcedures.getCheckOut(conn2, resID));
                             selResCheckOut.setEditable(false);
                             selResCheckIn.setEditable(false);
-                            selResAmount.setText(String.valueOf(SQLProcedures.getAmount(conn2, resID))+"€");
+                            selResAmount.setText(String.valueOf(SQLProcedures.getFieldById(conn2, resID, 1 ,4))+"€");
                             resRoomList.getChildren().clear();
                             String ressRooms = SQLProcedures.getResRooms(conn2, resID);
                             totalResRooms = ressRooms.split("\n");
@@ -430,7 +430,7 @@ public class UserController {
                         Optional<ButtonType> result = alert.showAndWait();
                         if (result.isPresent() && result.get() == ButtonType.OK) {
                             try(Connection conn2 = Database.getConnection()){
-                                SQLProcedures.deleteRes(conn2, Integer.parseInt(res));
+                                SQLProcedures.deleteEntity(conn2, 2, String.valueOf(Integer.parseInt(res)));
                                 resList.getChildren().remove(row);
                                 resDetails.setVisible(false);
                                 resDetails.setDisable(true);
