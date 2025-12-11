@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="StaffRootPane" prefHeight="800.0" prefWidth="1280.0" styleClass="style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.StaffController">
+<AnchorPane fx:id="StaffRootPane" prefHeight="800.0" prefWidth="1280.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.StaffController">
     <children>
         <SplitPane fx:id="rootSplitPane" dividerPositions="0.3" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" scaleShape="false" stylesheets="@style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <items>
-                <AnchorPane fx:id="adminButtonPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="420.0" prefHeight="802.0" prefWidth="420.0">
+                <AnchorPane fx:id="adminButtonPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="420.0" prefHeight="802.0" prefWidth="420.0" styleClass="buttonPane">
                     <children>
                         <StackPane prefHeight="65.0" prefWidth="387.0">
                             <children>
@@ -48,7 +55,7 @@
                             </children>
                         </VBox>
                     </children></AnchorPane>
-                <AnchorPane fx:id="adminContentPane" minHeight="720.0" minWidth="860.0" prefHeight="160.0" prefWidth="100.0">
+                <AnchorPane fx:id="adminContentPane" minHeight="720.0" minWidth="860.0" prefHeight="160.0" prefWidth="100.0" styleClass="contentPane">
                     <children>
                         <StackPane fx:id="adminStackPane" prefHeight="800.0" prefWidth="860.0">
                      <children>
@@ -56,7 +63,7 @@
                            <children>
                               <ScrollPane layoutY="49.0" prefHeight="749.0" prefWidth="520.0">
                                  <content>
-                                    <VBox fx:id="resList" prefHeight="741.0" prefWidth="500.0" />
+                                    <VBox fx:id="resList" prefHeight="741.0" prefWidth="500.0" style="-fx-background-color: #101b3b;" />
                                  </content></ScrollPane>
                               <Label alignment="CENTER" layoutX="2.0" layoutY="1.0" prefHeight="47.0" prefWidth="520.0" text="Reservations">
                                  <font>
@@ -92,7 +99,7 @@
                                     </Label>
                                     <ScrollPane layoutX="2.0" layoutY="266.0" prefHeight="530.0" prefWidth="330.0">
                                        <content>
-                                          <VBox fx:id="resRoomList" prefHeight="527.0" prefWidth="324.0" />
+                                          <VBox fx:id="resRoomList" prefHeight="527.0" prefWidth="324.0" style="-fx-background-color: #101b3b;" />
                                        </content>
                                     </ScrollPane>
                                     <TextField fx:id="selResGEmail" layoutX="108.0" layoutY="65.0" prefHeight="25.0" prefWidth="221.0" />
@@ -138,11 +145,11 @@
                               </Label>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="guestArea" disable="true" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" visible="false">
+                        <AnchorPane fx:id="guestArea" disable="true" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0">
                            <children>
                               <ScrollPane layoutY="49.0" prefHeight="749.0" prefWidth="520.0">
                                  <content>
-                                    <VBox fx:id="guestList" prefHeight="741.0" prefWidth="500.0" />
+                                    <VBox fx:id="guestList" prefHeight="741.0" prefWidth="500.0" style="-fx-background-color: #101b3b;" />
                                  </content>
                               </ScrollPane>
                               <Label alignment="CENTER" layoutX="2.0" layoutY="1.0" prefHeight="47.0" prefWidth="520.0" text="Guests">

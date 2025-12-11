@@ -216,9 +216,9 @@ public class StaffController {
 
             roomAvailCheckOut.valueProperty().addListener((_, _, _) -> {
                 try (Connection conn = Database.getConnection()){
-                    availSingle.setText("Current Availability: " + SQLProcedures.getAvailableSingle(conn, roomAvailCheckIn.getValue(), roomAvailCheckOut.getValue()));
-                    availDouble.setText("Current Availability: " + SQLProcedures.getAvailableDouble(conn, roomAvailCheckIn.getValue(), roomAvailCheckOut.getValue()));
-                    availSuite.setText("Current Availability: " + SQLProcedures.getAvailableSuite(conn, roomAvailCheckIn.getValue(), roomAvailCheckOut.getValue()));
+                    availSingle.setText("Single Room Availability: " + SQLProcedures.getAvailableSingle(conn, roomAvailCheckIn.getValue(), roomAvailCheckOut.getValue()));
+                    availDouble.setText("Double Room Availability: " + SQLProcedures.getAvailableDouble(conn, roomAvailCheckIn.getValue(), roomAvailCheckOut.getValue()));
+                    availSuite.setText("Luxury Suite Availability: " + SQLProcedures.getAvailableSuite(conn, roomAvailCheckIn.getValue(), roomAvailCheckOut.getValue()));
                 }catch (SQLException e) {LOGGER.log(Level.SEVERE, "Error fetching room availability", e);}
             });
 
