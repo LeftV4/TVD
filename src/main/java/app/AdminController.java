@@ -126,12 +126,12 @@ public class AdminController {
                     // create an HBox for each user row
 
                     HBox row = new HBox();
-                    row.setSpacing(10);
+                    row.setSpacing(5);
                     row.setStyle("-fx-padding: 5; -fx-alignment: CENTER_LEFT;");
 
                     // label containing the user email
                     Label emailField = new Label();
-                    emailField.setPrefWidth(200);
+                    emailField.setPrefWidth(180);
                     emailField.setStyle("-fx-font-size: 16px;");
                     emailField.setText(email);
 
@@ -403,7 +403,7 @@ public class AdminController {
                             selBillEmail.setText(email);
                             selBillFname.setText(SQLProcedures.getUserInfo(conn2, email, 1));
                             selBillLname.setText(SQLProcedures.getUserInfo(conn2, email, 2));
-                            selBillAmount.setText(String.valueOf(SQLProcedures.getFieldById(conn2, resID, 2, 4))+"€");
+                            selBillAmount.setText((SQLProcedures.getFieldById(conn2, resID, 1, 4))+"€");
                             paydate = Timestamp.valueOf(SQLProcedures.getFieldById(conn2, billID, 2, 6));
                             if (paydate != null) {
                                 java.time.format.DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
