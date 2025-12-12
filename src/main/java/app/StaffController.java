@@ -178,6 +178,7 @@ public class StaffController {
         roomAvailArea.setVisible(true);
         roomAvailArea.setDisable(false);
         roomAvailCheckIn.setValue(null);
+        roomAvailCheckOut.setDisable(true);
         roomAvailCheckOut.setValue(null);
         availSingle.setText("");
         availDouble.setText("");
