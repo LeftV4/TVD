@@ -295,6 +295,7 @@ public class UserController {
         try(Connection conn = Database.getConnection()){
             role = SQLProcedures.getRole(conn, Application.appEmail);
             status = SQLProcedures.updateInfo(conn, editFname.getText(), editLname.getText(), editPhone.getText(), role, Application.appEmail, editEmail.getText());
+            Application.appEmail = editEmail.getText();
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Failed to update user", e);
         }
