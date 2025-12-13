@@ -35,6 +35,7 @@ public class signInController {
     @FXML AnchorPane rootPane;
     @FXML TextField loginEmail;
     @FXML TextField loginPassword;
+    @FXML Button aboutButton;
 
     private final ExecutorService executor = Executors.newSingleThreadExecutor(r -> {
         Thread t = new Thread(r);
@@ -82,12 +83,16 @@ public class signInController {
         registerBox.setDisable(false);
         startBox.setVisible(false);
         startBox.setDisable(true);
+        aboutButton.setDisable(true);
+        aboutButton.setVisible(false);
     }
     public void startLogin(){
         loginBox.setVisible(true);
         loginBox.setDisable(false);
         startBox.setVisible(false);
         startBox.setDisable(true);
+        aboutButton.setDisable(true);
+        aboutButton.setVisible(false);
     }
     public void backStart(){
         loginBox.setVisible(false);
@@ -98,6 +103,8 @@ public class signInController {
         startBox.setDisable(false);
         infoBox.setVisible(false);
         infoBox.setDisable(true);
+        aboutButton.setDisable(false);
+        aboutButton.setVisible(true);
     }
     public void logIn(){
         boolean connTest = testConnection();
@@ -132,7 +139,14 @@ public class signInController {
         Application.appEmail = email;
     }
 
-
+    @FXML
+    public void gotoAbout(){
+        try {
+            new SceneSwitch(rootPane, "/aboutPanel.fxml");
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Incapability to leave Scene", e);
+        }
+    }
 
 
     public void registerUser(){

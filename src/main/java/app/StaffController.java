@@ -177,6 +177,12 @@ public class StaffController {
         adminStackPane.getChildren().forEach(node -> node.setDisable(true));
         roomAvailArea.setVisible(true);
         roomAvailArea.setDisable(false);
+        roomAvailCheckIn.setValue(null);
+        roomAvailCheckOut.setDisable(true);
+        roomAvailCheckOut.setValue(null);
+        availSingle.setText("");
+        availDouble.setText("");
+        availSuite.setText("");
 
         roomAvailCheckIn.setDayCellFactory(_ -> new DateCell() {
             @Override
