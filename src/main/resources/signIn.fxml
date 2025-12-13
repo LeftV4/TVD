@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="rootPane" onMouseMoved="#check" prefHeight="800.0" prefWidth="1280.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.signInController">
+<AnchorPane fx:id="rootPane" onMouseMoved="#check" prefHeight="800.0" prefWidth="1280.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.signInController">
       <Label layoutX="403.0" layoutY="82.0" style="-fx-font-size: 36;" styleClass="signInLabel" text="Hotel Management System">
          <font>
             <Font name="Century Gothic" size="36.0" />
@@ -105,7 +98,7 @@
                 </font>
             </Button>
         </VBox>
-        <VBox fx:id="infoBox" alignment="CENTER" disable="true" prefHeight="355.0" prefWidth="242.0" spacing="10.0" visible="false">
+        <VBox fx:id="infoBox" alignment="CENTER" prefHeight="355.0" prefWidth="242.0" spacing="10.0" visible="false">
             <Label text="Please Register your info:">
                 <font>
                     <Font size="18.0" />
@@ -150,5 +143,5 @@
             </Button>
         </VBox>
     </StackPane>
-   <Button layoutX="1007.0" layoutY="722.0" mnemonicParsing="false" text="About the App" />
+   <Button fx:id="aboutButton" layoutX="1007.0" layoutY="722.0" mnemonicParsing="false" onMouseClicked="#gotoAbout" text="About the App" />
 </AnchorPane>

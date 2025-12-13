@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="aboutRootPane" prefHeight="800.0" prefWidth="1280.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.AboutController">
+   <children>
+      <Label alignment="CENTER" layoutX="137.0" layoutY="71.0" prefHeight="73.0" prefWidth="813.0" styleClass="signInLabel" stylesheets="@style.css" text="ABOUT SECTION" textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
+         <font>
+            <Font size="26.0" />
+         </font></Label>
+      <Button layoutX="1057.0" layoutY="368.0" mnemonicParsing="false" onMouseClicked="#logOut" prefHeight="65.0" prefWidth="143.0" text="Return" />
+      <Label alignment="TOP_LEFT" layoutX="137.0" layoutY="179.0" prefHeight="220.0" prefWidth="813.0" styleClass="signInLabel" stylesheets="@style.css" text="This is an App, made with the IDE of Intellij, utilizing JavaFX and postgresql, by Eleftherios Vourvoutsiotis, and Alexios Karagiannis. It was made for the 7th Semester subject named: &quot;Database Technologies&quot;." textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" layoutX="137.0" layoutY="431.0" prefHeight="73.0" prefWidth="813.0" styleClass="signInLabel" stylesheets="@style.css" text="CREDIT SECTION" textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" layoutX="137.0" layoutY="538.0" prefHeight="220.0" prefWidth="813.0" styleClass="signInLabel" stylesheets="@style.css" text="SignIn picture from: Vecteezy.com" textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
