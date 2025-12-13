@@ -1,3 +1,4 @@
+--
 CREATE or REPLACE FUNCTION register_user(
     r_email VARCHAR,
     r_role VARCHAR,
@@ -21,6 +22,7 @@ EXCEPTION
 END;
 $$;
 
+--
 create or replace function register_info(
     r_fname VARCHAR,
     r_lname VARCHAR,
@@ -54,7 +56,7 @@ END;
 $$;
 
 
-
+--
 create or replace function update_info(
     r_fname VARCHAR,
     r_lname VARCHAR,
@@ -96,6 +98,7 @@ EXCEPTION
 END;
 $$;
 
+--
 create or replace function delete_entity(
     entity_id INT,
     identifier VARCHAR
@@ -147,8 +150,7 @@ EXCEPTION
 end;
 $$;
 
-
-
+--
 create or replace function login(
     r_email VARCHAR,
     r_password VARCHAR
@@ -170,6 +172,7 @@ EXCEPTION
 END
 $$;
 
+--
 CREATE OR REPLACE FUNCTION get_entity_list(
     entity_id INT -- 1: all users, 2: guests, 3: bills, 4: reservations
 )
@@ -198,10 +201,9 @@ BEGIN
             table_name := 'reservations';
             select_column := 'reservation_id';
         ELSE
-            RETURN NULL; -- Άγνωστος ID
+            RETURN NULL;
         END CASE;
 
-    -- Σύνθεση του δυναμικού ερωτήματος
     query_string := 'SELECT STRING_AGG(CAST(' || quote_ident(select_column) || ' AS VARCHAR), E''\n'') FROM ' || quote_ident(table_name) || where_clause;
 
     EXECUTE query_string INTO result_str;
@@ -266,7 +268,7 @@ EXCEPTION
 END;
 $$;
 
-
+--
 CREATE OR REPLACE FUNCTION get_user_info_by_email(
     r_email VARCHAR,
     field_id INT
@@ -312,46 +314,7 @@ EXCEPTION
 END;
 $$;
 
-
-CREATE OR REPLACE FUNCTION get_reservations()
-    RETURNS VARCHAR
-    LANGUAGE plpgsql
-AS $$
-BEGIN
-    RETURN (SELECT STRING_AGG(CAST(reservation_id AS VARCHAR), E'\n') FROM reservations);
-
-
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        RETURN NULL;
-END;
-$$;
-
-CREATE OR REPLACE FUNCTION get_reservations_by_email(r_email VARCHAR)
-    RETURNS VARCHAR
-    LANGUAGE plpgsql
-AS $$
-BEGIN
-    RETURN (SELECT STRING_AGG(CAST(reservation_id AS VARCHAR), E'\n') FROM reservations where guest_email = r_email);
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        RETURN NULL;
-END;
-$$;
-
-CREATE OR REPLACE FUNCTION get_reservation_rooms(r_resid int)
-    RETURNS VARCHAR
-    LANGUAGE plpgsql
-AS $$
-BEGIN
-    return(select STRING_AGG(CAST(room_number AS VARCHAR), E'\n') from reservation_rooms where reservation_id = r_resid);
-
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        RETURN NULL;
-END;
-$$;
-
+--
 CREATE OR REPLACE FUNCTION get_field_by_id(
     id_value VARCHAR,
     id_type INT,
@@ -394,7 +357,6 @@ BEGIN
             RETURN NULL;
         END CASE;
 
-    -- 2. Δυναμική Εκτέλεση
     query_string := 'SELECT CAST(' || quote_ident(select_column) || ' AS VARCHAR) FROM ' || quote_ident(table_name) || ' WHERE ' || quote_ident(filter_column) || ' = $1';
 
     EXECUTE query_string INTO result_val USING id_int;
@@ -411,116 +373,7 @@ EXCEPTION
 END;
 $$;
 
-
-create or replace function get_amount_by_resid(r_resid int)
-    returns double precision
-    language plpgsql
-as $$
-begin
-    return (select amount from payments where reservation_id = r_resid);
-end;
-$$;
-
-CREATE OR REPLACE FUNCTION get_guest_email_by_resid(r_resid int)
-    RETURNS VARCHAR
-    LANGUAGE plpgsql
-AS $$
-DECLARE
-     r_email VARCHAR;
-BEGIN
-    select guest_email into r_email from reservations where reservation_id = r_resid;
-    return r_email;
-
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        RETURN NULL;
-END;
-$$;
-
-CREATE OR REPLACE FUNCTION get_checkIn_by_resid(r_resid int)
-    RETURNS VARCHAR
-    LANGUAGE plpgsql
-AS $$
-DECLARE
-    r_checkIn DATE;
-BEGIN
-    select check_in into r_checkIn from reservations where reservation_id = r_resid;
-    return r_checkIn;
-
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        RETURN NULL;
-END;
-$$;
-
-CREATE OR REPLACE FUNCTION get_checkOut_by_resid(r_resid int)
-    RETURNS VARCHAR
-    LANGUAGE plpgsql
-AS $$
-DECLARE
-    r_checkOut DATE;
-BEGIN
-    select check_out into r_checkOut from reservations where reservation_id = r_resid;
-    return r_checkOut;
-
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        RETURN NULL;
-END;
-$$;
-
-create or replace function get_resid_by_paymentid(r_paymentid int)
-    returns int
-    language plpgsql
-as $$
-    DECLARE
-        resid INT;
-begin
-    select reservation_id into resid from payments where payment_id = r_paymentid;
-    return resid;
-
-    EXCEPTION
-        WHEN OTHERS THEN
-            RAISE NOTICE 'Error: %', SQLERRM;
-            RETURN 1;
-end;
-$$;
-
-create or replace function get_paydate_by_paymentid(r_paymentid int)
-    returns timestamp
-    language plpgsql
-as $$
-    DECLARE
-        paydate timestamp;
-begin
-    select payment_date into paydate from payments where payment_id = r_paymentid;
-    return paydate;
-
-    exception
-    when others then
-            raise notice 'Error: %', SQLERRM;
-            return null;
-end;
-$$;
-
-create or replace function get_method_by_paymentid(r_paymentid int)
-    returns varchar
-    language plpgsql
-as $$
-DECLARE
-    r_method varchar;
-begin
-    select method into r_method from payments where payment_id = r_paymentid;
-    return r_method;
-
-exception
-    when others then
-        raise notice 'Error: %', SQLERRM;
-        return null;
-end;
-$$;
-
-
+--
 CREATE OR REPLACE FUNCTION get_price_by_type(
     p_type_id INT
 )
@@ -537,6 +390,8 @@ BEGIN
 END;
 $$;
 
+
+--
 CREATE OR REPLACE FUNCTION make_reservation(
     p_guest_email VARCHAR,
     p_check_in DATE,
@@ -603,6 +458,7 @@ EXCEPTION
 END;
 $$ LANGUAGE plpgsql;
 
+--
 CREATE OR REPLACE FUNCTION register_payment(
     p_reservation_id INT,
     p_amount DOUBLE PRECISION,
@@ -615,7 +471,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
+--
 CREATE OR REPLACE FUNCTION count_available(
     p_check_in DATE,
     p_check_out DATE,
@@ -648,20 +504,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-
-
-CREATE OR REPLACE FUNCTION register_payment(
-    p_reservation_id INT,
-    p_amount DOUBLE PRECISION,
-    p_method VARCHAR
-)
-    RETURNS VOID AS $$
-BEGIN
-    INSERT INTO payments(reservation_id, amount, method)
-    VALUES (p_reservation_id, p_amount, p_method);
-END;
-$$ LANGUAGE plpgsql;
-
+--
 CREATE OR REPLACE FUNCTION update_room_prices(
     p_price1 NUMERIC(10,2),
     p_price2 NUMERIC(10,2),
@@ -669,14 +512,19 @@ CREATE OR REPLACE FUNCTION update_room_prices(
 )
     RETURNS VOID AS $$
 BEGIN
+    IF p_price1 IS NULL OR p_price2 IS NULL OR p_price3 IS NULL THEN
+        RAISE EXCEPTION 'Prices must not be NULL';
+    END IF;
+
+    IF p_price1 <= 0 OR p_price2 <= 0 OR p_price3 <= 0 THEN
+        RAISE EXCEPTION 'All prices must be > 0';
+    END IF;
+
     EXECUTE 'UPDATE room_types SET price_per_night = $1 WHERE type_id = 1' USING p_price1;
     EXECUTE 'UPDATE room_types SET price_per_night = $1 WHERE type_id = 2' USING p_price2;
     EXECUTE 'UPDATE room_types SET price_per_night = $1 WHERE type_id = 3' USING p_price3;
 END;
 $$ LANGUAGE plpgsql;
-
-
-
 
 
 --LOG FILE FUNCTIONS
@@ -752,7 +600,7 @@ CREATE TRIGGER log_rooms_changes
     AFTER INSERT OR UPDATE OR DELETE ON rooms
     FOR EACH ROW EXECUTE FUNCTION log_changes_function();
 
-CREATE TRIGGER log_rooms_changes
+CREATE TRIGGER log_res_rooms_changes
     AFTER INSERT OR UPDATE OR DELETE ON reservation_rooms
     FOR EACH ROW EXECUTE FUNCTION log_changes_function();
 
