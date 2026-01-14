@@ -116,7 +116,7 @@ public class StaffController {
                         resDetails.setDisable(false);
                         try (Connection conn2 = Database.getConnection();) {
                             resID = resField.getText();
-                            selResGEmail.setText(SQLProcedures.getFieldById(conn2, resID, 1 , 2));
+                            selResGEmail.setText(SQLProcedures.getFieldById(conn2, resID, 1 , 1));
                             selResID.setText(resID);
                             selResCheckIn.setValue(SQLProcedures.getCheckIn(conn2, resID));
                             selResCheckOut.setValue(SQLProcedures.getCheckOut(conn2, resID));

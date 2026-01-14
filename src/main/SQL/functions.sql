@@ -570,6 +570,31 @@ $$;
 
 
 
+CREATE OR REPLACE FUNCTION get_reservations_by_email(r_email VARCHAR)
+    RETURNS VARCHAR
+    LANGUAGE plpgsql
+AS $$
+BEGIN
+    RETURN (SELECT STRING_AGG(CAST(reservation_id AS VARCHAR), E'\n') FROM reservations where guest_email = r_email);
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN NULL;
+END;
+$$;
+
+
+CREATE OR REPLACE FUNCTION get_reservation_rooms(r_resid int)
+    RETURNS VARCHAR
+    LANGUAGE plpgsql
+AS $$
+BEGIN
+    return(select STRING_AGG(CAST(room_number AS VARCHAR), E'\n') from reservation_rooms where reservation_id = r_resid);
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN NULL;
+END;
+$$;
+
 DROP TRIGGER IF EXISTS log_users_changes ON users;
 CREATE TRIGGER log_users_changes
     AFTER INSERT OR UPDATE OR DELETE ON users

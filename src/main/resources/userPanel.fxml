@@ -1,30 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Spinner?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="userRootPane" prefHeight="800.0" prefWidth="1280.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.UserController">
+<AnchorPane fx:id="userRootPane" prefHeight="800.0" prefWidth="1280.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.UserController">
     <SplitPane fx:id="rootSplitPane" dividerPositions="0.3" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" scaleShape="false" stylesheets="@style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <AnchorPane fx:id="userButtonPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="420.0" prefHeight="802.0" prefWidth="420.0" styleClass="buttonPane">
             <StackPane prefHeight="65.0" prefWidth="387.0">
                 <VBox fx:id="WelcomeBox" alignment="CENTER" minHeight="-Infinity" minWidth="420.0" prefHeight="90.0" prefWidth="420.0">
                     <Label fx:id="helloLabel" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="47.0" prefWidth="286.0">
                         <font>
-                            <Font size="32.0" />
+                            <Font name="Century Gothic" size="32.0" />
                         </font>
                     </Label>
                 </VBox>
@@ -35,22 +24,22 @@
                         <Insets />
                     </VBox.margin>
                     <font>
-                        <Font size="24.0" />
+                        <Font name="Century Gothic" size="24.0" />
                     </font>
                 </Button>
                 <Button cacheShape="false" centerShape="false" layoutX="48.0" layoutY="324.0" mnemonicParsing="false" onMouseClicked="#showReservations" prefHeight="84.0" prefWidth="360.0" text="Manage Reservations">
                     <font>
-                        <Font size="24.0" />
+                        <Font name="Century Gothic" size="24.0" />
                     </font>
                 </Button>
                 <Button cacheShape="false" centerShape="false" layoutX="48.0" layoutY="366.0" mnemonicParsing="false" onMouseClicked="#enterMyAccount" prefHeight="84.0" prefWidth="360.0" text="My Account">
                     <font>
-                        <Font size="24.0" />
+                        <Font name="Century Gothic" size="24.0" />
                     </font>
                 </Button>
                 <Button cacheShape="false" centerShape="false" layoutX="48.0" layoutY="492.0" mnemonicParsing="false" onMouseClicked="#logOut" prefHeight="84.0" prefWidth="360.0" stylesheets="@style.css" text="Log Out" textAlignment="CENTER">
                     <font>
-                        <Font size="24.0" />
+                        <Font name="Century Gothic" size="24.0" />
                     </font>
                 </Button>
             </VBox>
@@ -65,7 +54,7 @@
                             </opaqueInsets>
                             <Label layoutX="57.0" layoutY="14.0" text="Single Room">
                                 <font>
-                                    <Font size="28.0" />
+                                    <Font name="Century Gothic" size="28.0" />
                                 </font>
                             </Label>
                             <ImageView fitHeight="186.0" fitWidth="280.0" layoutX="1.0" layoutY="122.0" preserveRatio="true">
@@ -73,45 +62,45 @@
                             </ImageView>
                             <Label layoutX="62.0" layoutY="319.0" text="Ideal for 1 Adult">
                                 <font>
-                                    <Font size="20.0" />
+                                    <Font name="Century Gothic" size="20.0" />
                                 </font>
                             </Label>
                             <Label fx:id="singleAv" layoutX="13.0" layoutY="361.0" text="Current Availability: ">
                                 <font>
-                                    <Font size="22.0" />
+                                    <Font name="Century Gothic" size="22.0" />
                                 </font>
                             </Label>
                             <Label fx:id="singleAvailability" layoutX="13.0" layoutY="382.0">
                                 <font>
-                                    <Font size="18.0" />
+                                    <Font name="Century Gothic" size="18.0" />
                                 </font>
                             </Label>
                      <Spinner fx:id="singleSpinner" layoutX="178.0" layoutY="433.0" prefHeight="30.0" prefWidth="70.0" />
                      <Label layoutX="34.0" layoutY="433.0" text="Select Amount:">
                         <font>
-                           <Font size="18.0" />
+                           <Font name="Century Gothic" size="18.0" />
                         </font>
                      </Label>
                         </AnchorPane>
                         <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="280.0" styleClass="card">
                             <Label layoutX="47.0" layoutY="14.0" text="Double Room">
                                 <font>
-                                    <Font size="28.0" />
+                                    <Font name="Century Gothic" size="28.0" />
                                 </font>
                             </Label>
                             <Label layoutX="57.0" layoutY="318.0" text="Ideal for 2 Adults">
                                 <font>
-                                    <Font size="20.0" />
+                                    <Font name="Century Gothic" size="20.0" />
                                 </font>
                             </Label>
                             <Label fx:id="doubleAvailability" layoutX="12.0" layoutY="382.0">
                                 <font>
-                                    <Font size="18.0" />
+                                    <Font name="Century Gothic" size="18.0" />
                                 </font>
                             </Label>
                             <Label fx:id="doubleAv" layoutX="12.0" layoutY="361.0" text="Current Availability: ">
                                 <font>
-                                    <Font size="22.0" />
+                                    <Font name="Century Gothic" size="22.0" />
                                 </font>
                             </Label>
                             <ImageView fitHeight="186.0" fitWidth="279.0" layoutX="1.0" layoutY="122.0" preserveRatio="true">
@@ -120,29 +109,29 @@
                      <Spinner fx:id="doubleSpinner" layoutX="173.0" layoutY="433.0" prefHeight="30.0" prefWidth="70.0" />
                      <Label layoutX="33.0" layoutY="433.0" text="Select Amount:">
                         <font>
-                           <Font size="18.0" />
+                           <Font name="Century Gothic" size="18.0" />
                         </font>
                      </Label>
                         </AnchorPane>
                         <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="280.0" styleClass="card">
                             <Label layoutX="62.0" layoutY="14.0" text="Luxury Suite">
                                 <font>
-                                    <Font size="28.0" />
+                                    <Font name="Century Gothic" size="28.0" />
                                 </font>
                             </Label>
                             <Label layoutX="53.0" layoutY="319.0" text="Ideal for 2-4 Adults">
                                 <font>
-                                    <Font size="20.0" />
+                                    <Font name="Century Gothic" size="20.0" />
                                 </font>
                             </Label>
                             <Label fx:id="suiteAv" layoutX="14.0" layoutY="361.0" text="Current Availability: ">
                                 <font>
-                                    <Font size="22.0" />
+                                    <Font name="Century Gothic" size="22.0" />
                                 </font>
                             </Label>
                             <Label fx:id="suiteAvailability" layoutX="14.0" layoutY="382.0">
                                 <font>
-                                    <Font size="18.0" />
+                                    <Font name="Century Gothic" size="18.0" />
                                 </font>
                             </Label>
                             <ImageView fitHeight="186.0" fitWidth="280.0" layoutY="122.0" preserveRatio="true">
@@ -151,21 +140,21 @@
                      <Spinner fx:id="suiteSpinner" layoutX="175.0" layoutY="433.0" prefHeight="30.0" prefWidth="70.0" />
                      <Label layoutX="35.0" layoutY="433.0" text="Select Amount:">
                         <font>
-                           <Font size="18.0" />
+                           <Font name="Century Gothic" size="18.0" />
                         </font>
                      </Label>
                         </AnchorPane>
                     </HBox>
                     <Label fx:id="totalCost" layoutX="560.0" layoutY="679.0" text="Total Cost: 0€" textAlignment="RIGHT">
                         <font>
-                            <Font size="24.0" />
+                            <Font name="Century Gothic" size="24.0" />
                         </font>
                     </Label>
                     <Button layoutX="489.0" layoutY="714.0" mnemonicParsing="false" onMouseClicked="#moveCheckout" text="Proceed to Checkout" />
                     <VBox fx:id="cartVbox" layoutX="14.0" layoutY="610.0" prefHeight="169.0" prefWidth="357.0" style="-fx-font-size: 18px;">
                         <Label text="My Cart:">
                             <font>
-                                <Font size="24.0" />
+                                <Font name="Century Gothic" size="24.0" />
                             </font>
                         </Label>
                     </VBox>
@@ -173,24 +162,24 @@
                     <DatePicker fx:id="checkOutDate" layoutX="497.0" layoutY="50.0" />
                     <Label layoutX="215.0" layoutY="24.0" text="Check In:">
                         <font>
-                            <Font size="14.0" />
+                            <Font name="Century Gothic" size="14.0" />
                         </font>
                     </Label>
                     <Label layoutX="545.0" layoutY="24.0" text="Check Out:">
                         <font>
-                            <Font size="14.0" />
+                            <Font name="Century Gothic" size="14.0" />
                         </font>
                     </Label>
                 </AnchorPane>
                 <AnchorPane fx:id="checkoutPane" disable="true" prefHeight="200.0" prefWidth="200.0" visible="false">
                     <Label layoutX="187.0" layoutY="47.0" style="-fx-font-size: 36;" text="You are about to purchase:">
                         <font>
-                            <Font size="36.0" />
+                            <Font name="Century Gothic" size="36.0" />
                         </font>
                     </Label>
                     <Label fx:id="receiptTotal" layoutX="276.0" layoutY="324.0" text="For the total cost of: X€">
                         <font>
-                            <Font size="30.0" />
+                            <Font name="Century Gothic" size="30.0" />
                         </font>
                     </Label>
                     <Button layoutX="122.0" layoutY="388.0" mnemonicParsing="false" onMouseClicked="#payByCash" text="Cash at the Hotel" />
@@ -201,19 +190,19 @@
                 <AnchorPane fx:id="thankPanel" disable="true" prefHeight="200.0" prefWidth="200.0" visible="false">
                     <Label layoutX="232.0" layoutY="332.0" text="Thank you for the reservation!">
                         <font>
-                            <Font size="30.0" />
+                            <Font name="Century Gothic" size="30.0" />
                         </font>
                     </Label>
                     <Label fx:id="resNumber" layoutX="249.0" layoutY="433.0" text="You may exit the app safely">
                         <font>
-                            <Font size="30.0" />
+                            <Font name="Century Gothic" size="30.0" />
                         </font>
                     </Label>
                 </AnchorPane>
                 <AnchorPane fx:id="reservationsPane" disable="true" prefHeight="200.0" prefWidth="200.0" visible="false">
                     <Label alignment="CENTER" prefHeight="60.0" prefWidth="471.0" text="My Reservations">
                         <font>
-                            <Font size="24.0" />
+                            <Font name="Century Gothic" size="24.0" />
                         </font>
                     </Label>
                     <ScrollPane layoutY="60.0" prefHeight="738.0" prefWidth="471.0">
@@ -222,25 +211,25 @@
                     <AnchorPane fx:id="resDetails" layoutX="470.0" prefHeight="798.0" prefWidth="390.0">
                         <Label alignment="CENTER" prefHeight="60.0" prefWidth="389.0" text="Reservation Details">
                             <font>
-                                <Font size="24.0" />
+                                <Font name="Century Gothic" size="24.0" />
                             </font>
                         </Label>
                         <Label alignment="CENTER" layoutX="19.0" layoutY="71.0" prefHeight="45.0" prefWidth="75.0" text="Email:">
                             <font>
-                                <Font size="16.0" />
+                                <Font name="Century Gothic" size="16.0" />
                             </font>
                         </Label>
                         <TextField fx:id="selResEmail" editable="false" layoutX="94.0" layoutY="76.0" prefHeight="35.0" prefWidth="282.0" />
                         <Label alignment="CENTER" layoutX="19.0" layoutY="129.0" prefHeight="45.0" prefWidth="75.0" text="Check In:">
                             <font>
-                                <Font size="16.0" />
+                                <Font name="Century Gothic" size="16.0" />
                             </font>
                         </Label>
                         <DatePicker fx:id="selResCheckIn" layoutX="94.0" layoutY="134.0" prefHeight="35.0" prefWidth="280.0" />
                         <DatePicker fx:id="selResCheckOut" layoutX="96.0" layoutY="200.0" prefHeight="35.0" prefWidth="279.0" />
                         <Label alignment="CENTER" layoutX="9.0" layoutY="195.0" prefHeight="45.0" prefWidth="85.0" text="Check Out:">
                             <font>
-                                <Font size="16.0" />
+                                <Font name="Century Gothic" size="16.0" />
                             </font>
                         </Label>
                         <ScrollPane layoutX="-4.0" layoutY="298.0" prefHeight="501.0" prefWidth="390.0">
@@ -248,7 +237,7 @@
                         </ScrollPane>
                         <Label alignment="CENTER" layoutX="9.0" layoutY="253.0" prefHeight="45.0" prefWidth="85.0" text="Amount: ">
                             <font>
-                                <Font size="16.0" />
+                                <Font name="Century Gothic" size="16.0" />
                             </font>
                         </Label>
                         <TextField fx:id="selResAmount" editable="false" layoutX="92.0" layoutY="258.0" prefHeight="35.0" prefWidth="282.0" />
@@ -260,49 +249,49 @@
                             <VBox alignment="CENTER" prefHeight="400.0" prefWidth="426.0" spacing="10.0">
                                 <Label text="Edit Account Information" textAlignment="CENTER">
                                     <font>
-                                        <Font size="24.0" />
+                                        <Font name="Century Gothic" size="24.0" />
                                     </font>
                                 </Label>
                                 <TextField fx:id="editEmail" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="Century Gothic" size="14.0" />
                            </font></TextField>
                                 <TextField fx:id="editFname" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="Century Gothic" size="14.0" />
                            </font></TextField>
                                 <TextField fx:id="editLname" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="Century Gothic" size="14.0" />
                            </font></TextField>
                                 <TextField fx:id="editPhone" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="Century Gothic" size="14.0" />
                            </font></TextField>
                                 <Button mnemonicParsing="false" onMouseClicked="#updateMyUser" text="Save Changes" />
                             </VBox>
                             <VBox alignment="CENTER" layoutY="398.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="426.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="398.0">
                                 <Label text="Change your Password">
                                     <font>
-                                        <Font size="28.0" />
+                                        <Font name="Century Gothic" size="28.0" />
                                     </font>
                                 </Label>
                                 <PasswordField fx:id="editOldPass" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" promptText="Enter old Password">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="Century Gothic" size="14.0" />
                            </font></PasswordField>
                                 <PasswordField fx:id="editNewPass" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" promptText="Enter New Password">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="Century Gothic" size="14.0" />
                            </font></PasswordField>
                                 <PasswordField fx:id="editConfirmPass" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" promptText="Confirm New Password">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="Century Gothic" size="14.0" />
                            </font></PasswordField>
                                 <Button mnemonicParsing="false" onMouseClicked="#changePassword" text="Save Password" />
                         <Label fx:id="messLabel" layoutX="82.0" layoutY="107.0" textFill="RED">
                            <font>
-                              <Font size="28.0" />
+                              <Font name="Century Gothic" size="28.0" />
                            </font>
                         </Label>
                             </VBox>

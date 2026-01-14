@@ -114,6 +114,8 @@ public class UserController {
         reserveRoomPane.setVisible(true);
         reserveRoomPane.setDisable(false);
         checkOutDate.setDisable(true);
+        checkOutDate.setValue(null);
+        checkInDate.setValue(null);
 
         singleSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 12));
         doubleSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 15));
