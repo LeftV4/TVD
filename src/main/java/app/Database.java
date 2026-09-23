@@ -12,16 +12,25 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Database {
-    private static final String URL = "jdbc:postgresql://dblabs.iee.ihu.gr:5432/elevvour";
-    private static final String USER = "elevvour";
-    private static final String PASSWORD = "smth2025";
+    private static final String URL = requireEnv("DB_URL");
+    private static final String USER = requireEnv("DB_USER");
+    private static final String PASSWORD = requireEnv("DB_PASSWORD");
     private static final Logger LOGGER = Logger.getLogger(Database.class.getName());
+
+    private static String requireEnv(String name) {
+        String value = System.getenv(name);
+        if (value == null || value.isBlank()) {
+            throw new IllegalStateException("Missing required environment variable: " + name);
+        }
+        return value;
+    }
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
-    public static boolean checking=false;
+    public static boolean checking = false;
+
     @FXML
     public static void connectDB(Label connLabel, ExecutorService executor) {
         if (Database.checking) return;
@@ -32,7 +41,7 @@ public class Database {
 
             try (Connection conn = Database.getConnection()) {
                 connected = conn.isValid(2);
-            } catch (SQLException e) {
+            } catch (SQLException | IllegalStateException e) {
                 LOGGER.log(Level.SEVERE, "Unable to establish database connection", e);
                 connected = false;
             }
@@ -52,8 +61,4 @@ public class Database {
             });
         });
     }
-
-
 }
-
-
